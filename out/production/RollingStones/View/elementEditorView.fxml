@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+
+<GridPane hgap="10.0" prefHeight="800.0" prefWidth="300.0" style="-fx-background-color: steelblue;" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+   <columnConstraints>
+      <ColumnConstraints />
+      <ColumnConstraints />
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+      <RowConstraints />
+   </rowConstraints>
+   <children>
+      <Label text="Editor">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label text="Position" GridPane.rowIndex="1" />
+      <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Label alignment="CENTER" text="X" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+      <Label alignment="CENTER" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+   </children>
+</GridPane>
