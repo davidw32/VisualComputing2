@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<MenuBar prefHeight="40.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OptionBarController">
-    <menus>
-        <Menu fx:id="sceneMenu" mnemonicParsing="false" text="Scene">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Neue Szene" />
-                <MenuItem fx:id="loadScene" mnemonicParsing="false" onAction="#loadScene" text="Szene laden" />
-                <MenuItem mnemonicParsing="false" text="Szene speichern" />
-                <MenuItem mnemonicParsing="false" text="Programm Beenden" />
-            </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Object">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-        </Menu>
-        <Menu mnemonicParsing="false" text="Options">
-            <items>
-                <MenuItem mnemonicParsing="false" text="Action 1" />
-            </items>
-        </Menu>
-    </menus>
-</MenuBar>
+
+<HBox minWidth="1600" minHeight="40" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.OptionBarController" >
+    <MenuBar fx:id="MenuBarOption"  BorderPane.alignment="BASELINE_LEFT"  minHeight="40" minWidth="1600"  prefWidth="1920">
+        <menus>
+            <Menu  fx:id="sceneMenu" text="Szene">
+                <items >
+                    <MenuItem  fx:id="sceneMenuStart" text="Delete"/>
+                    <MenuItem fx:id="sceneMenuRestart" text="Load Scene"/>
+                    <SeparatorMenuItem  />
+                    <MenuItem  text="Exit Scene"/>
+                </items>
+            </Menu>
+            <Menu text="Objekt">
+                <items>
+                    <MenuItem fx:id="createObject"   text="Create Object"/>
+                    <MenuItem fx:id="createCustomObject"  text="Create Custom Object"/>
+                    <MenuItem fx:id="scaleObject" text="Scale Object"/>
+                    <MenuItem fx:id="rotateObject" text="Rotate Object"/>
+                    <MenuItem fx:id="translateObject"  text="Translate Object"/>
+                    <MenuItem fx:id="copyObject"  text="Copy Object"/>
+                    <MenuItem fx:id="deleteObject" text="Delete Object"/>
+                </items>
+            </Menu>
+            <Menu text="Fenster">
+                <items>
+                    <MenuItem fx:id="toolWindow" text="Element Window" />
+                    <MenuItem fx:id="advancedOptions"  text="Advanced Options" />
+                    <MenuItem fx:id="help" text="Help" />
+                </items>
+            </Menu>
+        </menus>
+    </MenuBar>
+</HBox>
+
