@@ -75,12 +75,12 @@ public class GraphicSceneController {
             System.out.println("mauspressed");
             initX = event.getSceneX();
             initY = event.getSceneY();
-            initTranslateX = ((Circle) (event.getSource())).getTranslateX();
-            initTranslateY = ((Circle) (event.getSource())).getTranslateY();
+            initTranslateX = ((Circle) (event.getSource())).getCenterX();
+            initTranslateY = ((Circle) (event.getSource())).getCenterY();
         });
 
-        returnBall.getElementView().addEventFilter(DragEvent.DRAG_DROPPED, event -> {
-
+        returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            System.out.println("mause dropped" );
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
 
@@ -88,6 +88,8 @@ public class GraphicSceneController {
             double newTranslateY = initTranslateY + offsetY;
             ((Circle) (event.getSource())).setCenterX(newTranslateX);
             ((Circle) (event.getSource())).setCenterY(newTranslateY);
+            returnBall.setXPosition(newTranslateX);
+            returnBall.setYPosition(newTranslateY);
 
 
         });

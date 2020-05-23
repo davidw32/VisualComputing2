@@ -17,6 +17,11 @@ public class StartController {
     public void initialize(){
 
         myGraphicScene = new GraphicScene();
+        myGraphicScene.setElementEditorController(elementEditorController);
+        myGraphicScene.setGraphicSceneController(graphicSceneController);
+        myGraphicScene.setElementBarController(elementBarController);
+        myGraphicScene.setPlayerController(playerController);
+        myGraphicScene.setOptionBarController(optionBarController);
 
         playerController.setStartController(this);
         playerController.setGraphicScene(myGraphicScene);
@@ -30,7 +35,7 @@ public class StartController {
         elementBarController.setStartController(this);
         elementBarController.setGraphicScene(myGraphicScene);
 
-        myGraphicScene.setElementEditorController(elementEditorController);
+
 
     }
 
