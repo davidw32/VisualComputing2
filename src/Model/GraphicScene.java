@@ -1,6 +1,6 @@
 package Model;
 
-import Controller.ElementEditorController;
+import Controller.*;
 
 import java.util.LinkedList;
 
@@ -10,6 +10,11 @@ public class GraphicScene {
     private LinkedList<GraphicsObject> elementsInScene = new LinkedList<>();
     private GraphicsObject activeElement;
     private ElementEditorController elementEditorController;
+    private ElementBarController elementBarController;
+    private GraphicSceneController graphicSceneController;
+    private OptionBarController optionBarController;
+    private PlayerController playerController;
+
 
     // die eigendliche Animationsloop
     public void updateScene(){
@@ -59,5 +64,37 @@ public class GraphicScene {
 
     public void setElementEditorController(ElementEditorController elementEditorController) {
         this.elementEditorController = elementEditorController;
+    }
+
+    public ElementBarController getElementBarController() {
+        return elementBarController;
+    }
+
+    public void setElementBarController(ElementBarController elementBarController) {
+        this.elementBarController = elementBarController;
+    }
+
+    public GraphicSceneController getGraphicSceneController() {
+        return graphicSceneController;
+    }
+
+    public void setGraphicSceneController(GraphicSceneController graphicSceneController) {
+        this.graphicSceneController = graphicSceneController;
+    }
+
+    public OptionBarController getOptionBarController() {
+        return optionBarController;
+    }
+
+    public void setOptionBarController(OptionBarController optionBarController) {
+        this.optionBarController = optionBarController;
+    }
+
+    public PlayerController getPlayerController() {
+        return playerController;
+    }
+
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
     }
 }
