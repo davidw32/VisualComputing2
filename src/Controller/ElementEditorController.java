@@ -63,8 +63,8 @@ public class ElementEditorController {
         System.out.println("InitValues");
         activeElement = graphicScene.getActiveElement();
 
-
         graphicScene.getActiveElementProperty().addListener((observableValue, oldValue, newValue) -> {
+
             System.out.println(observableValue.getValue());
             System.out.println("old: " + oldValue);
             System.out.println("new: " +newValue);
