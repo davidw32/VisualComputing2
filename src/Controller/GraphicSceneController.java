@@ -6,19 +6,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class GraphicSceneController {
-    @FXML
-    Pane graphicPane;
-    @FXML
-    private StartController startController;
+
+    @FXML Pane graphicPane;
 
     private GraphicScene graphicScene;
 
@@ -36,6 +30,7 @@ public class GraphicSceneController {
                 event.consume();
             }
         });
+
         graphicPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -111,13 +106,6 @@ public class GraphicSceneController {
 
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;
-    }
-
-    public void setStartController(StartController startController) {
-        this.startController = startController;
-    }
-
-    public void setElementEditorController(ElementEditorController elementEditorController) {
     }
 }
 

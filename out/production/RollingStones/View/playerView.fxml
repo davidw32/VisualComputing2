@@ -24,17 +24,17 @@
 
         <children>
             <Label fx:id="timeFactorText" GridPane.columnIndex="0">1x</Label>
-            <Button  GridPane.columnIndex="1" alignment="BASELINE_CENTER"  minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"  >
+            <Button  GridPane.columnIndex="1" alignment="BASELINE_CENTER"  minWidth="40" onAction="#decreaseAnimationSpeed" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"  >
                 <graphic>
                     <Label>slower</Label>
                 </graphic>
             </Button>
-            <Button  GridPane.columnIndex="2" alignment="BASELINE_CENTER"  minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;" >
+            <Button  GridPane.columnIndex="2" alignment="BASELINE_CENTER" onAction="#increaseAnimationSpeed"  minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;" >
                 <graphic>
                     <Label>faster</Label>
                 </graphic>
             </Button>
-            <Button GridPane.columnIndex="3" minWidth="30" minHeight="30" style="-fx-background-color: grey;-fx-cursor: hand;" fx:id="start"   >
+            <Button GridPane.columnIndex="3" minWidth="30" minHeight="30" onAction="#startSimulation" style="-fx-background-color: grey;-fx-cursor: hand;" fx:id="start"   >
                 <graphic>
                     <GridPane alignment="CENTER">
                         <HBox visible="false" fx:id="pauseIcon" spacing="5" alignment="CENTER">
@@ -54,12 +54,12 @@
                     </GridPane>
                 </graphic>
             </Button>
-            <Button  GridPane.columnIndex="4" alignment="BASELINE_CENTER"  minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"  >
+            <Button  GridPane.columnIndex="4" alignment="BASELINE_CENTER" onAction="#resetSimulation" minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"  >
                 <graphic>
                     <Label>Reset</Label>
                 </graphic>
             </Button>
-            <Button  GridPane.columnIndex="5" alignment="BASELINE_CENTER"  minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"   >
+            <Button  GridPane.columnIndex="5" alignment="BASELINE_CENTER"  onAction="#stopSimulation" minWidth="40" minHeight="40" style="-fx-background-color: grey;-fx-cursor: hand;"   >
                 <graphic>
                     <Rectangle  height="15" width="15"></Rectangle>
                 </graphic>

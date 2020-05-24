@@ -9,16 +9,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class ElementBarController {
 
-    @FXML
-    private StartController startController;
-    @FXML
-    private Circle ballDummy;
-    @FXML
-    private Rectangle blockDummy;
+    @FXML private Circle ballDummy;
+    @FXML private Rectangle blockDummy;
 
     private GraphicScene graphicScene;
 
@@ -61,10 +56,6 @@ public class ElementBarController {
 
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;
-    }
-
-    public void setStartController(StartController startController) {
-        this.startController = startController;
     }
 }
 

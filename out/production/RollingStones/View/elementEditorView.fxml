@@ -10,7 +10,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.image.ImageView?>
-<ScrollPane  fitToWidth="true" fx:id="toolWindow" xmlns="http://javafx.com/javafx" style="-fx-background-color: red;" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.ElementEditorController"  minHeight="800" minWidth="300">
+<ScrollPane fx:id="elementWindow" xmlns="http://javafx.com/javafx" style="-fx-background-color: red;" xmlns:fx="http://javafx.com/fxml" fx:controller="Controller.ElementEditorController"  minHeight="800" minWidth="300">
 
    <VBox minHeight="600" minWidth="300.0">
       <children>

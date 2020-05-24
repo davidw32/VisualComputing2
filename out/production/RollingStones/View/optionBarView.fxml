@@ -9,10 +9,8 @@
         <menus>
             <Menu  fx:id="sceneMenu" text="Szene">
                 <items >
-                    <MenuItem  fx:id="sceneMenuStart" text="Delete"/>
-                    <MenuItem fx:id="sceneMenuRestart" text="Load Scene"/>
-                    <SeparatorMenuItem  />
-                    <MenuItem  text="Exit Scene"/>
+                    <MenuItem  fx:id="sceneMenuDelete" text="Delete"/>
+                    <MenuItem fx:id="sceneMenuLoad" text="Load Scene"/>
                 </items>
             </Menu>
             <Menu text="Objekt">
@@ -28,9 +26,9 @@
             </Menu>
             <Menu text="Fenster">
                 <items>
-                    <MenuItem fx:id="toolWindow" text="Element Window" />
-                    <MenuItem fx:id="advancedOptions"  text="Advanced Options" />
-                    <MenuItem fx:id="help" text="Help" />
+                    <MenuItem fx:id="elementWindow" onAction="#openElementWindow" text="Element Window" />
+                    <MenuItem fx:id="advancedOptions" onAction="#openAdvancedOption" text="Advanced Options" />
+                    <MenuItem fx:id="help" onAction="#openHelp" text="Help" />
                 </items>
             </Menu>
         </menus>

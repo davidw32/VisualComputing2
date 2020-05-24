@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.*;
+import javafx.animation.Timeline;
 
 import java.util.LinkedList;
 
@@ -8,6 +9,8 @@ public class GraphicScene {
 
     // die Elemente in der Szene
     private LinkedList<GraphicsObject> elementsInScene = new LinkedList<>();
+    private Timeline timeline;
+    private SceneTime timer = new SceneTime();
     private GraphicsObject activeElement;
     private ElementEditorController elementEditorController;
     private ElementBarController elementBarController;
@@ -45,56 +48,21 @@ public class GraphicScene {
     }
 
 
-    public LinkedList<GraphicsObject> getElementsInScene() {
-        return elementsInScene;
-    }
+    public SceneTime getTimer() { return timer; }
+    public LinkedList<GraphicsObject> getElementsInScene() { return elementsInScene; }
+    public void setElementsInScene(LinkedList<GraphicsObject> _elements) { this.elementsInScene = _elements; }
+    public GraphicsObject getActiveElement() { return activeElement; }
+    public ElementEditorController getElementEditorController() { return elementEditorController; }
+    public Timeline getTimeline() { return timeline; }
 
-    public void setElementsInScene(LinkedList<GraphicsObject> _elements) {
-        this.elementsInScene = _elements;
-    }
-
-    public GraphicsObject getActiveElement() {
-        return activeElement;
-    }
-
-
-    public ElementEditorController getElementEditorController() {
-        return elementEditorController;
-    }
-
-    public void setElementEditorController(ElementEditorController elementEditorController) {
-        this.elementEditorController = elementEditorController;
-    }
-
-    public ElementBarController getElementBarController() {
-        return elementBarController;
-    }
-
-    public void setElementBarController(ElementBarController elementBarController) {
-        this.elementBarController = elementBarController;
-    }
-
-    public GraphicSceneController getGraphicSceneController() {
-        return graphicSceneController;
-    }
-
-    public void setGraphicSceneController(GraphicSceneController graphicSceneController) {
-        this.graphicSceneController = graphicSceneController;
-    }
-
-    public OptionBarController getOptionBarController() {
-        return optionBarController;
-    }
-
-    public void setOptionBarController(OptionBarController optionBarController) {
-        this.optionBarController = optionBarController;
-    }
-
-    public PlayerController getPlayerController() {
-        return playerController;
-    }
-
-    public void setPlayerController(PlayerController playerController) {
-        this.playerController = playerController;
-    }
+    public void setElementEditorController(ElementEditorController elementEditorController) { this.elementEditorController = elementEditorController; }
+    public ElementBarController getElementBarController() { return elementBarController; }
+    public void setElementBarController(ElementBarController elementBarController) { this.elementBarController = elementBarController; }
+    public GraphicSceneController getGraphicSceneController() { return graphicSceneController; }
+    public void setGraphicSceneController(GraphicSceneController graphicSceneController) { this.graphicSceneController = graphicSceneController; }
+    public OptionBarController getOptionBarController() { return optionBarController; }
+    public void setOptionBarController(OptionBarController optionBarController) { this.optionBarController = optionBarController; }
+    public PlayerController getPlayerController() { return playerController; }
+    public void setPlayerController(PlayerController playerController) { this.playerController = playerController; }
+    public void setTimeline(Timeline timeline) { this.timeline = timeline; }
 }

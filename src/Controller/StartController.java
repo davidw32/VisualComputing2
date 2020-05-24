@@ -13,8 +13,7 @@ public class StartController {
 
     private GraphicScene myGraphicScene;
 
-    @FXML
-    public void initialize(){
+    @FXML public void initialize(){
 
         myGraphicScene = new GraphicScene();
         myGraphicScene.setElementEditorController(elementEditorController);
@@ -23,19 +22,11 @@ public class StartController {
         myGraphicScene.setPlayerController(playerController);
         myGraphicScene.setOptionBarController(optionBarController);
 
-        playerController.setStartController(this);
         playerController.setGraphicScene(myGraphicScene);
-        elementEditorController.setStartController(this);
         elementEditorController.setGraphicScene(myGraphicScene);
-        optionBarController.setStartController(this);
         optionBarController.setGraphicScene(myGraphicScene);
-        graphicSceneController.setStartController(this);
         graphicSceneController.setGraphicScene(myGraphicScene);
-
-        elementBarController.setStartController(this);
         elementBarController.setGraphicScene(myGraphicScene);
-
-
 
     }
 
