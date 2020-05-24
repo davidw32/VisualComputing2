@@ -1,45 +1,101 @@
 package Model;
 
 import Controller.*;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
 
 import java.util.LinkedList;
 
 public class GraphicScene {
 
     // die Elemente in der Szene
-    private LinkedList<GraphicsObject> elementsInScene = new LinkedList<>();
-    private GraphicsObject activeElement;
+    private LinkedList<GraphicsObject> elementsInScene ;
+    // ausgewähltes Objekt in der Szene
+    //private GraphicsObject activeElement;
+
     private ElementEditorController elementEditorController;
     private ElementBarController elementBarController;
     private GraphicSceneController graphicSceneController;
     private OptionBarController optionBarController;
     private PlayerController playerController;
 
+    // das Aktive Element als Property
+    private final SimpleObjectProperty<GraphicsObject> activeElement;
+
+
+    public GraphicScene(){
+        elementsInScene= new LinkedList<>();
+        Ball placeholder = new Ball(0,0);
+        activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
+
+    }
 
     // die eigendliche Animationsloop
     public void updateScene(){
         System.out.println("GraphicScene updateScen()");
     }
 
+    /**
+     *  hier wird ein neues GraphicsObjekt in die Liste eingefügt
+     *
+     * @param _graphicsObject
+     */
     public void addElement(GraphicsObject _graphicsObject){
-        System.out.println("Element hinzugefügt");
+
         elementsInScene.add(_graphicsObject);
+
     }
 
-    public void setActiveElement(GraphicsObject _graphicsObject) {
-        activeElement = _graphicsObject;
-        System.out.println("GraphicScene setActiveElement");
-        elementEditorController.bindActiveElement(activeElement);
+    /**
+     * getter für die Property "activeElement"
+     * @return ativeElement-Property
+     */
+    public SimpleObjectProperty<GraphicsObject> getActiveElementProperty(){
+        return activeElement;
     }
+
+    /**
+     * hier wird das angeklickte Element als Aktiv gesetzt, dabei werden die Werte im ElementEditor angepasst
+     * die Listener vom Vorgänger müssen entfernt und auf das neue Objekt gesetzt werden.
+     * @param _graphicsObject
+     */
+    public final void setActiveElement(GraphicsObject _graphicsObject) {
+
+        this.activeElement.set(_graphicsObject);
+        System.out.println("GraphicScene setActiveElement");
+        elementEditorController.bindActiveElement(_graphicsObject);
+    }
+
+    /**
+     * gibt das aktive Element zurück
+     * @return
+     */
+    public final GraphicsObject getActiveElement(){
+        return activeElement.get();
+    }
+
+
+    /**
+     * Hier wird das übergebene Element aus der Liste gelöscht, und die Listener werden entfernt
+     * @param _graphicsObject
+     */
 
     public void removeElement(GraphicsObject _graphicsObject){
 
     }
 
+    /**
+     * alle Elemente werden auf ihre Startwerte zurückgesetzt
+     */
     public void resetAllElements(){
-
+        for (GraphicsObject go: elementsInScene){
+            go.resetElement();
+        }
     }
 
+    /**
+     * hier wird die gesammte Szene gelöscht
+     */
     public void clearScene(){
 
     }
@@ -49,13 +105,14 @@ public class GraphicScene {
         return elementsInScene;
     }
 
+    /**
+     * wird aufgerufen eine vorhande Szene geladen wird
+     * @param _elements
+     */
     public void setElementsInScene(LinkedList<GraphicsObject> _elements) {
         this.elementsInScene = _elements;
     }
 
-    public GraphicsObject getActiveElement() {
-        return activeElement;
-    }
 
 
     public ElementEditorController getElementEditorController() {

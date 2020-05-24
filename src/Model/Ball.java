@@ -8,19 +8,26 @@ import javafx.scene.shape.Shape;
 public class Ball extends GraphicsObject
 {
 
-    private Shape elementView;
+
 
     public Ball(double _initXPosition, double _initYPosition) {
+
         super(_initXPosition, _initYPosition);
-        elementView = new Circle(getXPosition(), getYPosition(), 30, Color.PLUM);
-        //kann man hier die Properties der Shape bidirectional an die Poperties des Ballobjektes binden???
+
+        elementView = new Circle(getXPosition(), getYPosition(), getRadius(), Color.PLUM);
+
+        //hier werden die Properties des Objektes an die der Shape getackert
         ((Circle) elementView).centerXProperty().bindBidirectional(xPositionProperty());
         ((Circle) elementView).centerYProperty().bindBidirectional(yPositionProperty());
+        ((Circle) elementView).radiusProperty().bindBidirectional(radiusProperty());
+
+        // ein Ball kann nur proportional skaliert werden.
+        xScaleProperty().bindBidirectional(yScaleProperty());
+
+
     }
 
 
 
-    public Shape getElementView(){
-        return elementView;
-    }
+
 }

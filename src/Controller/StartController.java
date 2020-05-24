@@ -15,7 +15,7 @@ public class StartController {
 
     @FXML
     public void initialize(){
-
+        // die GraphicScene erhält Referenzen auf alle Controller
         myGraphicScene = new GraphicScene();
         myGraphicScene.setElementEditorController(elementEditorController);
         myGraphicScene.setGraphicSceneController(graphicSceneController);
@@ -27,6 +27,7 @@ public class StartController {
         playerController.setGraphicScene(myGraphicScene);
         elementEditorController.setStartController(this);
         elementEditorController.setGraphicScene(myGraphicScene);
+        elementEditorController.initValues();
         optionBarController.setStartController(this);
         optionBarController.setGraphicScene(myGraphicScene);
         graphicSceneController.setStartController(this);

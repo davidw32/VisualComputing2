@@ -26,7 +26,7 @@ public class GraphicSceneController {
     private double initX, initY, initTranslateX, initTranslateY;
 
     public void initialize(){
-
+        // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -36,6 +36,7 @@ public class GraphicSceneController {
                 event.consume();
             }
         });
+        // durch "DragDropped" wird ein neues GraphicsObject angelegt und in der Szene eingefügt
         graphicPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -46,9 +47,13 @@ public class GraphicSceneController {
 
                     if (db.getString().equals("ballDummy")){
                         System.out.println(event.getX()+" "+ event.getY());
+                        //neues Element erzeugen
                         Ball newBall = createBall(event.getX(), event.getY());
+                        // in der Liste einfügen
                         graphicScene.addElement(newBall);
+                        // als "aktive" setzten
                         graphicScene.setActiveElement(newBall);
+                        // in der Szene anzeigen
                         graphicPane.getChildren().add(newBall.getElementView());
 
                         success = true;
@@ -63,24 +68,24 @@ public class GraphicSceneController {
 
 
     }
-
+    //neues Ball-Objekt anlegen und die entsprechenden Listener hinzufügen.
     private Ball createBall(double xPosition, double yPosition){
+
         System.out.println("neuen Ball erzeugt");
         Ball returnBall = new Ball(xPosition, yPosition);
 
-        returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            System.out.println("mausklkick");
-        });
+
+        //hier wird der Drag-and-drop innerhalb der Szene initialisiert
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            System.out.println("mauspressed");
+
             initX = event.getSceneX();
             initY = event.getSceneY();
             initTranslateX = ((Circle) (event.getSource())).getCenterX();
             initTranslateY = ((Circle) (event.getSource())).getCenterY();
         });
-
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            System.out.println("mause dropped" );
+
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
 
@@ -95,17 +100,23 @@ public class GraphicSceneController {
         });
 
 
-
+        //hier werden die Changelistener für die Werte des GraphicsObjects gesetzt
         returnBall.xPositionProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                System.out.println("xPositionProperty changed. Oldvalue: "+oldValue+" new Value: " +newValue);
+               // System.out.println("xPositionProperty changed. Oldvalue: "+oldValue+" new Value: " +newValue);
+            }
+        });
+        returnBall.yPositionProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                //System.out.println("xPositionProperty changed. Oldvalue: "+oldValue+" new Value: " +newValue);
             }
         });
 
-
         return returnBall;
     }
+
 
 
 
