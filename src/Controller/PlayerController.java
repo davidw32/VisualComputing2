@@ -25,7 +25,7 @@ public class PlayerController {
 
     @FXML
     public void startSimulation(){
-        System.out.println("Animation gestartet");
+
         if(isPaused) {
             play_pause.setText("Pause");
             if (!isRunning) {

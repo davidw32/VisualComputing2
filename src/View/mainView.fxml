@@ -5,7 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:id="Start" fx:controller="Controller.StartController" style="-fx-background-color: steelblue; -fx-border-color: black;" prefHeight="900.0" prefWidth="1600.0"
+<BorderPane fx:id="Start" fx:controller="Controller.StartController" style="-fx-background-color: powderblue; -fx-border-color: black;" prefHeight="900.0" prefWidth="1600.0"
             xmlns:fx="http://javafx.com/fxml" >
     <right>
         <fx:include fx:id = "elementEditor" source="elementEditorView.fxml"></fx:include>

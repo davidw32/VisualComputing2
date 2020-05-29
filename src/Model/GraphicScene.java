@@ -25,9 +25,9 @@ public class GraphicScene {
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
     Line line1 = new Line(0,220,400,220);
-     Line line2 = new Line(400,220,500,200);
-     Line line3 = new Line(500,200,700,300);
-     Line line4 = new Line(700,300,900,300);
+    Line line2 = new Line(400,220,500,200);
+    Line line3 = new Line(500,200,700,300);
+    Line line4 = new Line(700,300,900,300);
     Line[] lines = new Line[5];
 
     public GraphicScene(){
