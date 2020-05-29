@@ -41,11 +41,6 @@ public class ElementEditorController {
     private GraphicScene graphicScene;
 
 
-
-
-
-
-
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;
     }
@@ -55,11 +50,8 @@ public class ElementEditorController {
     }
 
     public void initialize(){
-        System.out.println("Init ElementController");
-
-
+      //  System.out.println("Init ElementController");
     }
-
 
 
     /**

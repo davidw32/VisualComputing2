@@ -14,6 +14,7 @@ public Block(double _initX, double _initY){
     super(_initX, _initY);
     width = new SimpleDoubleProperty(this, "width", 80);
     height = new SimpleDoubleProperty(this, "height",20);
+    setIsMoving(false);
     // Initialisierung der View
     elementView = new Rectangle(_initX, _initY, 80,20);
     elementView.setFill(Color.SEAGREEN);

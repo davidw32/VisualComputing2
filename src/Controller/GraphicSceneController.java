@@ -9,6 +9,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 public class GraphicSceneController {
@@ -20,9 +21,13 @@ public class GraphicSceneController {
     private GraphicScene graphicScene;
 
 
+
+
     private double initX, initY, initTranslateX, initTranslateY;
 
     public void initialize(){
+
+
         // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -33,7 +38,7 @@ public class GraphicSceneController {
                 event.consume();
             }
         });
-        // durch "DragDropped" wird ein neues GraphicsObject angelegt und in der Szene eingefügt
+        // durch "DragDropped" wird ein neues GraphicsObject erzeugt und in der Szene eingefügt
         graphicPane.setOnDragDropped(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -51,7 +56,6 @@ public class GraphicSceneController {
                         // das aktive Element wechseln
                         graphicScene.getActiveElement().setIsSelected(false);
                         graphicScene.setActiveElement(newBall);
-
                         // in der Szene anzeigen
                         graphicPane.getChildren().add(newBall.getElementView());
 
@@ -63,6 +67,7 @@ public class GraphicSceneController {
                         graphicScene.getActiveElement().setIsSelected(false);
                         graphicScene.setActiveElement(newBlock);
                         graphicPane.getChildren().add(newBlock.getElementView());
+                        success = true;
                     }
 
                 }
@@ -84,39 +89,45 @@ public class GraphicSceneController {
 
         //hier wird der Drag-and-drop innerhalb der Szene initialisiert
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            //Element als Actives Element definieren
             graphicScene.getActiveElement().setIsSelected(false);
             returnBall.setIsSelected(true);
             graphicScene.setActiveElement(returnBall);
 
+            // Position Mauszeiger
             initX = event.getSceneX();
             initY = event.getSceneY();
+            //Position des Elements
             initTranslateX = ((Circle) (event.getSource())).getCenterX();
             initTranslateY = ((Circle) (event.getSource())).getCenterY();
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-
+            //Verschiebung berechnen
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
-
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
             ((Circle) (event.getSource())).setCenterX(newTranslateX);
             ((Circle) (event.getSource())).setCenterY(newTranslateY);
-            returnBall.setXPosition(newTranslateX);
-            returnBall.setYPosition(newTranslateY);
+
         });
 
 
         return returnBall;
     }
+
     private Block createBlock(double _xPosition, double _yPosition){
+
         Block returnBlock = new Block(_xPosition,_yPosition);
+
         returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            // Durch Mausklick als Aktives Element setzen
             graphicScene.getActiveElement().setIsSelected(false);
             returnBlock.setIsSelected(true);
             graphicScene.setActiveElement(returnBlock);
-
+            // Werte für das Drag-and-Drop speichern
             initX = event.getSceneX();
             initY = event.getSceneY();
             initTranslateX = ((Rectangle) (event.getSource())).getX();
@@ -124,19 +135,17 @@ public class GraphicSceneController {
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-
+            //Verschiebung berechnen
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
 
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
             ((Rectangle) (event.getSource())).setX(newTranslateX);
             ((Rectangle) (event.getSource())).setY(newTranslateY);
-            returnBlock.setXPosition(newTranslateX);
-            returnBlock.setYPosition(newTranslateY);
+
         });
-
-
 
         return returnBlock;
     }

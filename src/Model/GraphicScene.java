@@ -3,6 +3,8 @@ package Model;
 import Controller.*;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.fxml.FXML;
+import javafx.scene.shape.Line;
 
 import java.util.LinkedList;
 
@@ -22,6 +24,11 @@ public class GraphicScene {
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
+    Line line1 = new Line(0,220,400,220);
+     Line line2 = new Line(400,220,500,200);
+     Line line3 = new Line(500,200,700,300);
+     Line line4 = new Line(700,300,900,300);
+    Line[] lines = new Line[5];
 
     public GraphicScene(){
         elementsInScene= new LinkedList<>();
@@ -29,12 +36,22 @@ public class GraphicScene {
         Ball placeholder = new Ball(0,0);
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
 
+        lines[0] = line1;
+        lines[1] = line2;
+        lines[2] = line3;
+        lines[3] = line4;
+        //Unterer Rand
+        lines[4] = new Line(0,820,1115,820);
+
+
     }
 
     // die eigendliche Animationsloop
     public void updateScene(){
-        System.out.println("GraphicScene updateScene()");
         for (GraphicsObject graphicsObject: elementsInScene){
+            if ( graphicsObject instanceof Ball){
+                ((Ball)graphicsObject).collisionDetection(lines);
+            }
             graphicsObject.moveElement();
         }
 
@@ -47,6 +64,7 @@ public class GraphicScene {
      */
     public void addElement(GraphicsObject _graphicsObject){
         elementsInScene.add(_graphicsObject);
+        _graphicsObject.setStartValues();
     }
 
     /**

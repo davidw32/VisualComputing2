@@ -22,6 +22,7 @@ public abstract class GraphicsObject {
                                  friction, weight, angle;
 
     protected boolean isMoving;
+    protected double time = 0.01666;
     private final BooleanProperty isSelected;
 
 
@@ -63,7 +64,7 @@ public abstract class GraphicsObject {
     public DoubleProperty yAccelerationProperty() { return yAcceleration; }
 
     public final void setXAcceleration(double _xAcceleration){ this.xAcceleration.set(_xAcceleration);}
-    public final void setYAcceleration(double _yAcceleration){ this.xAcceleration.set(_yAcceleration);}
+    public final void setYAcceleration(double _yAcceleration){ this.yAcceleration.set(_yAcceleration);}
 
     public final double xAcceleration(){return this.xAcceleration.get();}
     public final double yAcceleration(){return this.yAcceleration.get();}
@@ -72,7 +73,7 @@ public abstract class GraphicsObject {
     public DoubleProperty yVelocityProperty() { return yVelocity; }
 
     public final void setXVelocity(double _xVelocity){ this.xVelocity.set(_xVelocity);}
-    public final void setYVelocity(double _yVelocity){ this.xVelocity.set(_yVelocity);}
+    public final void setYVelocity(double _yVelocity){ this.yVelocity.set(_yVelocity);}
 
     public final double xVelocity(){return this.xVelocity.get();}
     public final double yVelocity(){return this.yVelocity.get();}
@@ -94,7 +95,7 @@ public abstract class GraphicsObject {
 
     public DoubleProperty angleProperty() { return angle;}
     public final void setAngle(double _angle){this.angle.set(_angle);}
-    public final double angle(){ return this.angle.get();}
+    public final double getAngle(){ return this.angle.get();}
 
     public BooleanProperty isSelectedProperty(){ return isSelected;}
     public final void setIsSelected(Boolean _isSelected){ this.isSelected.set(_isSelected); }
@@ -112,7 +113,7 @@ public abstract class GraphicsObject {
     public boolean isMoving() { return isMoving; }
 
     // hier werden die Werte für das Reset festgelegt
-    public void setStartValues(){
+    public final void setStartValues(){
 
         startX = this.xPosition();
         startY = this.yPosition();
@@ -120,12 +121,12 @@ public abstract class GraphicsObject {
         startAccY =  this.yAcceleration();
         startVelX = this.xVelocity();
         startVelY = this.yVelocity();
-        System.out.println("Starx: "+startX +" startY: "+startY);
+
 
     }
 
     // das Element wird auf die Startwerte zurückgesetzt
-    public void resetElement(){
+    public final void resetElement(){
         setXPosition(startX);
         setYPosition(startY);
         setXAcceleration(startAccX);
@@ -135,6 +136,7 @@ public abstract class GraphicsObject {
     }
 
     public void moveElement(){}
+
 
     @Override
     public String toString(){
