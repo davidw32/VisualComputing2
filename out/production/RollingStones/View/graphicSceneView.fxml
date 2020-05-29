@@ -11,7 +11,7 @@
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.shape.Line?>
 <Pane fx:id="graphicPane" style="-fx-background-color: ivory" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="Controller.GraphicSceneController" minHeight="800.0" minWidth="1100.0">
+      fx:controller="Controller.GraphicSceneController" minHeight="800.0" minWidth="1150.0">
 
 
 

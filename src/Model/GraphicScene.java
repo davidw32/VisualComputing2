@@ -25,6 +25,7 @@ public class GraphicScene {
 
     public GraphicScene(){
         elementsInScene= new LinkedList<>();
+        // placeholder um die Textfelder im ElementEditor miteinander zu verknüpfen
         Ball placeholder = new Ball(0,0);
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
 
@@ -32,7 +33,11 @@ public class GraphicScene {
 
     // die eigendliche Animationsloop
     public void updateScene(){
-        System.out.println("GraphicScene updateScen()");
+        System.out.println("GraphicScene updateScene()");
+        for (GraphicsObject graphicsObject: elementsInScene){
+            graphicsObject.moveElement();
+        }
+
     }
 
     /**
@@ -41,9 +46,7 @@ public class GraphicScene {
      * @param _graphicsObject
      */
     public void addElement(GraphicsObject _graphicsObject){
-
         elementsInScene.add(_graphicsObject);
-
     }
 
     /**
@@ -63,7 +66,7 @@ public class GraphicScene {
 
         this.activeElement.set(_graphicsObject);
         System.out.println("GraphicScene setActiveElement");
-        elementEditorController.bindActiveElement(_graphicsObject);
+        //elementEditorController.bindActiveElement(_graphicsObject);
     }
 
     /**
@@ -94,13 +97,25 @@ public class GraphicScene {
     }
 
     /**
+     * bei allen Elementen werden die Startwerte gespeichert
+     */
+    public void setAllStartValues(){
+        for (GraphicsObject go: elementsInScene){
+            go.setStartValues();
+        }
+    }
+
+    /**
      * hier wird die gesammte Szene gelöscht
      */
     public void clearScene(){
 
     }
 
-
+    /**
+     * um die Liste speichern zu können
+     * @return
+     */
     public LinkedList<GraphicsObject> getElementsInScene() {
         return elementsInScene;
     }

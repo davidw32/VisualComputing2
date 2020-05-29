@@ -1,18 +1,15 @@
 package Controller;
 
 import Model.Ball;
+import Model.Block;
 import Model.GraphicScene;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class GraphicSceneController {
     @FXML
@@ -51,12 +48,21 @@ public class GraphicSceneController {
                         Ball newBall = createBall(event.getX(), event.getY());
                         // in der Liste einfügen
                         graphicScene.addElement(newBall);
-                        // als "aktive" setzten
+                        // das aktive Element wechseln
+                        graphicScene.getActiveElement().setIsSelected(false);
                         graphicScene.setActiveElement(newBall);
+
                         // in der Szene anzeigen
                         graphicPane.getChildren().add(newBall.getElementView());
 
                         success = true;
+                    }
+                    if(db.getString().equals("blockDummy")){
+                        Block newBlock = createBlock(event.getX(), event.getY());
+                        graphicScene.addElement(newBlock);
+                        graphicScene.getActiveElement().setIsSelected(false);
+                        graphicScene.setActiveElement(newBlock);
+                        graphicPane.getChildren().add(newBlock.getElementView());
                     }
 
                 }
@@ -72,11 +78,15 @@ public class GraphicSceneController {
     private Ball createBall(double xPosition, double yPosition){
 
         System.out.println("neuen Ball erzeugt");
+
         Ball returnBall = new Ball(xPosition, yPosition);
 
 
         //hier wird der Drag-and-drop innerhalb der Szene initialisiert
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            graphicScene.getActiveElement().setIsSelected(false);
+            returnBall.setIsSelected(true);
+            graphicScene.setActiveElement(returnBall);
 
             initX = event.getSceneX();
             initY = event.getSceneY();
@@ -95,26 +105,40 @@ public class GraphicSceneController {
             ((Circle) (event.getSource())).setCenterY(newTranslateY);
             returnBall.setXPosition(newTranslateX);
             returnBall.setYPosition(newTranslateY);
-
-
         });
 
-
-        //hier werden die Changelistener für die Werte des GraphicsObjects gesetzt
-        returnBall.xPositionProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-               // System.out.println("xPositionProperty changed. Oldvalue: "+oldValue+" new Value: " +newValue);
-            }
-        });
-        returnBall.yPositionProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                //System.out.println("xPositionProperty changed. Oldvalue: "+oldValue+" new Value: " +newValue);
-            }
-        });
 
         return returnBall;
+    }
+    private Block createBlock(double _xPosition, double _yPosition){
+        Block returnBlock = new Block(_xPosition,_yPosition);
+        returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            graphicScene.getActiveElement().setIsSelected(false);
+            returnBlock.setIsSelected(true);
+            graphicScene.setActiveElement(returnBlock);
+
+            initX = event.getSceneX();
+            initY = event.getSceneY();
+            initTranslateX = ((Rectangle) (event.getSource())).getX();
+            initTranslateY = ((Rectangle) (event.getSource())).getY();
+        });
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
+        returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+
+            double offsetX = event.getSceneX() - initX;
+            double offsetY = event.getSceneY() - initY;
+
+            double newTranslateX = initTranslateX + offsetX;
+            double newTranslateY = initTranslateY + offsetY;
+            ((Rectangle) (event.getSource())).setX(newTranslateX);
+            ((Rectangle) (event.getSource())).setY(newTranslateY);
+            returnBlock.setXPosition(newTranslateX);
+            returnBlock.setYPosition(newTranslateY);
+        });
+
+
+
+        return returnBlock;
     }
 
 
