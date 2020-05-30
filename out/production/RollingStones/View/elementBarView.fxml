@@ -7,6 +7,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox fx:id="preview" alignment="TOP_CENTER" prefHeight="820.0" prefWidth="100.0" spacing="10.0" style="-fx-background-color: powderblue; " xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementBarController">
 
@@ -19,12 +20,36 @@
 
         <Circle fx:id="ballDummy" fill="PLUM" radius="30.0">
          <effect>
-            <DropShadow offsetX="2" offsetY="2"/>
+            <DropShadow offsetX="2" offsetY="2" />
          </effect></Circle>
         <Rectangle fx:id="blockDummy" fill="SEAGREEN" height="20.0" width="80.0">
          <effect>
-            <DropShadow offsetX="2" offsetY="2"/>
+            <DropShadow offsetX="2" offsetY="2" />
          </effect></Rectangle>
+      <Text fx:id="springboardDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Springboard">
+         <effect>
+            <DropShadow offsetX="2" offsetY="2"/>
+         </effect>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="spinnerDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Spinner">
+         <effect>
+            <DropShadow offsetX="2" offsetY="2"/>
+         </effect>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <Text fx:id="seasawDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Seasaw">
+         <effect>
+            <DropShadow offsetX="2" offsetY="2"/>
+         </effect>
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
 
 
     </children>

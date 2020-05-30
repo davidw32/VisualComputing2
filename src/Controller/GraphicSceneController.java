@@ -1,16 +1,15 @@
 package Controller;
 
-import Model.Ball;
-import Model.Block;
-import Model.GraphicScene;
+import Model.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.RadialGradient;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+
+import javax.swing.*;
 
 public class GraphicSceneController {
     @FXML
@@ -43,7 +42,6 @@ public class GraphicSceneController {
                 if(db.hasString()){
 
                     if (db.getString().equals("ballDummy")){
-                        System.out.println(event.getX()+" "+ event.getY());
                         //neues Element erzeugen
                         Ball newBall = createBall(event.getX(), event.getY());
                         // in der Liste einfügen
@@ -65,6 +63,26 @@ public class GraphicSceneController {
                         success = true;
                     }
 
+                    //Platzhalter für Drag-and-Drop bis die Elemente implementiert wurden
+                    if(db.getString().equals("springboardDummy")){
+                        Text placeholder = createPlaceholder(event.getX(),event.getY());
+                        placeholder.setText("Springboard");
+                        graphicPane.getChildren().add(placeholder);
+                        success = true;
+                    }
+                    if(db.getString().equals("spinnerDummy")){
+                        Text placeholder = createPlaceholder(event.getX(), event.getY());
+                        placeholder.setText("Spinner");
+                        graphicPane.getChildren().add(placeholder);
+                        success = true;
+                    }
+                    if(db.getString().equals("seasawDummy")){
+                        Text placeholder = createPlaceholder(event.getX(), event.getY());
+                        placeholder.setText("Seasaw");
+                        graphicPane.getChildren().add(placeholder);
+                        success = true;
+                    }
+
                 }
                 event.setDropCompleted(success);
                 event.consume();
@@ -74,13 +92,40 @@ public class GraphicSceneController {
 
 
     }
+
+    private Text createPlaceholder(double x, double y){
+        Text placeholder = new Text();
+        placeholder.setX(x);
+        placeholder.setY(y);
+        placeholder.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+
+            // Position Mauszeiger
+            initX = event.getSceneX();
+            initY = event.getSceneY();
+            //Position des Elements
+            initTranslateX = ((Text) (event.getSource())).getX();
+            initTranslateY = ((Text) (event.getSource())).getY();
+        });
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
+       placeholder.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            //Verschiebung berechnen
+            double offsetX = event.getSceneX() - initX;
+            double offsetY = event.getSceneY() - initY;
+            double newTranslateX = initTranslateX + offsetX;
+            double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
+            ((Text) (event.getSource())).setX(newTranslateX);
+            ((Text) (event.getSource())).setY(newTranslateY);
+
+        });
+        return placeholder;
+
+    }
+
     //neues Ball-Objekt anlegen und die entsprechenden Listener hinzufügen.
     private Ball createBall(double xPosition, double yPosition){
 
-        System.out.println("neuen Ball erzeugt");
-
         Ball returnBall = new Ball(xPosition, yPosition);
-
 
         //hier wird der Drag-and-drop innerhalb der Szene initialisiert
         returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
@@ -108,7 +153,6 @@ public class GraphicSceneController {
             ((Circle) (event.getSource())).setCenterY(newTranslateY);
 
         });
-
 
         return returnBall;
     }
@@ -144,6 +188,16 @@ public class GraphicSceneController {
         });
 
         return returnBlock;
+    }
+
+    private Spinner createSpinner(double _xPosition, double _yPosition){
+        return new Spinner(_xPosition,_yPosition);
+    }
+    private Seasaw createSeasaw(double _xPosition, double _yPosition){
+        return new Seasaw(_xPosition,_yPosition);
+    }
+    private Springboard createSpringboard(double _xPosition, double _yPosition){
+        return new Springboard(_xPosition,_yPosition);
     }
 
     public void setGraphicScene(GraphicScene graphicScene) {
