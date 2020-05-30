@@ -8,8 +8,7 @@
 
 <?import javafx.scene.text.Font?>
 <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1600.0"
-      spacing="20.0" style="-fx-border-color: black;
-      -fx-background-color: steelblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PlayerController">
+      spacing="20.0" style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PlayerController">
 
     <children>
         <Label text="Player">
@@ -18,8 +17,7 @@
             </font>
         </Label>
         <Button  mnemonicParsing="false" onAction="#stopSimulation" text="Stop" />
-        <Button  mnemonicParsing="false" onAction="#pauseSimulation" text="Pause" />
-        <Button  mnemonicParsing="false" onAction="#startSimulation" text="Play" />
+        <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#startSimulation" text="Play" />
         <Button  mnemonicParsing="false" onAction="#resetSimulation" text="Reset" />
         <Button  mnemonicParsing="false" onAction="#setOnTimeLapse" text="Timelapse" />
         <Button  mnemonicParsing="false" onAction="#setOnSlowMotion" text="SlowMotion" />

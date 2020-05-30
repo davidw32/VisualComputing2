@@ -1,4 +1,4 @@
-package Model;
+package Helpers;
 
 
 /**
@@ -7,5 +7,5 @@ package Model;
  */
 public class Config {
 
-    public static float GRAVITY = 981f;
+    public static double GRAVITY = 981;
 }

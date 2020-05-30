@@ -13,8 +13,10 @@ import javafx.scene.text.Text;
 
 public class ElementBarController {
 
-    @FXML
-    private StartController startController;
+
+    public Text springboardDummy;
+    public Text spinnerDummy;
+    public Text seasawDummy;
     @FXML
     private Circle ballDummy;
     @FXML
@@ -53,6 +55,46 @@ public class ElementBarController {
                 event.consume();
             }
         });
+        springboardDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Dragboard db = springboardDummy.startDragAndDrop(TransferMode.COPY);
+
+                ClipboardContent content = new ClipboardContent();
+                content.putString(springboardDummy.getId());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+        seasawDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Dragboard db = seasawDummy.startDragAndDrop(TransferMode.COPY);
+
+                ClipboardContent content = new ClipboardContent();
+                content.putString(seasawDummy.getId());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+        spinnerDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Dragboard db = spinnerDummy.startDragAndDrop(TransferMode.COPY);
+
+                ClipboardContent content = new ClipboardContent();
+                content.putString(spinnerDummy.getId());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+
     }
 
 
@@ -63,8 +105,6 @@ public class ElementBarController {
         this.graphicScene = graphicScene;
     }
 
-    public void setStartController(StartController startController) {
-        this.startController = startController;
-    }
+
 }
 

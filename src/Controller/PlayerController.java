@@ -1,57 +1,79 @@
 package Controller;
 
 import Model.GraphicScene;
+import Model.GraphicsObject;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.util.Duration;
 
 public class PlayerController {
 
-    @FXML
-    private StartController startController;
+    @FXML private Button playPauseButton;
 
-    private GraphicSceneController graphicSceneController;
     private GraphicScene graphicScene;
 
     private Timeline timeline;
     private boolean isRunning = false;
+    private boolean isPaused = true;
 
     @FXML
     public void startSimulation(){
-        System.out.println("Animation gestartet");
-        timeline = new Timeline( new KeyFrame(
-                Duration.millis(16), event -> {
-                    graphicScene.updateScene();
-        }));
-        isRunning=true;
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        //starte die Simulation
+        if(isPaused) {
+            playPauseButton.setText("Pause");
+            if (!isRunning) {
+                for (GraphicsObject graphicsObject : graphicScene.getElementsInScene()) {
+                    graphicsObject.setStartValues();
+                }
+            }
 
+            timeline = new Timeline(new KeyFrame(
+                    Duration.millis(16), event -> {
+
+                graphicScene.updateScene();
+            }));
+
+            timeline.setCycleCount(Animation.INDEFINITE);
+            isRunning = true;
+            isPaused = false;
+
+            System.out.println(isRunning);
+            timeline.play();
+        } else { //mache Pause
+            if (isRunning){
+                timeline.pause();
+                isPaused = true;
+                playPauseButton.setText("Play");
+            }
+        }
     }
+
+
     @FXML
     public void stopSimulation(){
+        // stop und reset
         if(isRunning){
             timeline.stop();
             isRunning = false;
+            isPaused = true;
+            playPauseButton.setText("Play");
+            graphicScene.resetAllElements();
         }
+
     }
-    @FXML
-    public void pauseSimulation(){
-        if(isRunning){
-            timeline.pause();
-            isRunning = false;
-        }
-    }
+
     @FXML
     public void resetSimulation(){
         if(isRunning){
-            timeline.stop();
-            isRunning = false;
+
+            graphicScene.resetAllElements();
+
         }
-        graphicScene.resetAllElements();
+
     }
 
     public void setOnTimeLapse(ActionEvent actionEvent) {
@@ -60,11 +82,6 @@ public class PlayerController {
 
     public void setOnSlowMotion(ActionEvent actionEvent) {
         System.out.println("SlowMotion-Modus");
-    }
-
-
-    public void setStartController(StartController control){
-        this.startController = control;
     }
 
     public void setGraphicScene(GraphicScene graphicScene) {

@@ -1,23 +1,42 @@
 package Controller;
 
 import Model.GraphicScene;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 public class OptionBarController {
-    @FXML
-    private StartController startController;
-    private GraphicScene graphicScene;
+
 
     @FXML
     public void loadScene(){
         System.out.println("Szene laden");
     }
 
-    public void setGraphicScene(GraphicScene graphicScene) {
-        this.graphicScene = graphicScene;
+
+    public void goBack(ActionEvent actionEvent) {
     }
 
-    public void setStartController(StartController startController) {
-        this.startController = startController;
+    public void scenePause(ActionEvent actionEvent) {
+    }
+
+    public void sceneRestart(ActionEvent actionEvent) {
+    }
+
+    public void sceneStart(ActionEvent actionEvent) {
+    }
+
+    public void copyObject(ActionEvent actionEvent) {
+    }
+
+    public void deleteObject(ActionEvent actionEvent) {
+    }
+
+    public void opentoolWindow(ActionEvent actionEvent) {
+    }
+
+    public void openAdvancedOption(ActionEvent actionEvent) {
+    }
+
+    public void openHelp(ActionEvent actionEvent) {
     }
 }
