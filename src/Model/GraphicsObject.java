@@ -11,6 +11,8 @@ public abstract class GraphicsObject {
 
 
     protected Shape elementView;
+    protected boolean isMoving;
+    protected double time = 0.01666;
 
     // Werte für das Reset
     private double startX, startY, startVelX, startVelY, startAccX, startAccY;
@@ -21,13 +23,13 @@ public abstract class GraphicsObject {
                                  xScale, yScale,
                                  friction, weight, angle;
 
-    protected boolean isMoving;
-    protected double time = 0.01666;
     private final BooleanProperty isSelected;
 
 
-    public GraphicsObject(double initialX, double initialY) {
 
+
+    public GraphicsObject(double initialX, double initialY) {
+        //die Properties des GraphicsObject werden erzeugt
         this.xPosition = new SimpleDoubleProperty(this, "xPosition", initialX);
         this.yPosition = new SimpleDoubleProperty(this, "yPosition", initialY);
         this.xAcceleration = new SimpleDoubleProperty(this,"xAcceleration",0);
@@ -38,7 +40,6 @@ public abstract class GraphicsObject {
         this.yScale = new SimpleDoubleProperty(this, "yScale", 1);
         this.weight = new SimpleDoubleProperty(this,"weight",0);
         this.friction = new SimpleDoubleProperty(this, "friction", 0);
-
         this.angle = new SimpleDoubleProperty(this,"angle", 0);
         this.isSelected = new SimpleBooleanProperty(this, "isSelected", true);
     }
@@ -53,10 +54,10 @@ public abstract class GraphicsObject {
         this.yPosition.set(_yPosition);
     }
 
-    public final double xPosition(){
+    public final double getXPosition(){
             return xPosition.get();
     }
-    public final double yPosition(){
+    public final double getYPosition(){
             return yPosition.get();
     }
 
@@ -66,8 +67,8 @@ public abstract class GraphicsObject {
     public final void setXAcceleration(double _xAcceleration){ this.xAcceleration.set(_xAcceleration);}
     public final void setYAcceleration(double _yAcceleration){ this.yAcceleration.set(_yAcceleration);}
 
-    public final double xAcceleration(){return this.xAcceleration.get();}
-    public final double yAcceleration(){return this.yAcceleration.get();}
+    public final double getXAcceleration(){return this.xAcceleration.get();}
+    public final double getYAcceleration(){return this.yAcceleration.get();}
 
     public DoubleProperty xVelocityProperty() { return xVelocity; }
     public DoubleProperty yVelocityProperty() { return yVelocity; }
@@ -75,8 +76,8 @@ public abstract class GraphicsObject {
     public final void setXVelocity(double _xVelocity){ this.xVelocity.set(_xVelocity);}
     public final void setYVelocity(double _yVelocity){ this.yVelocity.set(_yVelocity);}
 
-    public final double xVelocity(){return this.xVelocity.get();}
-    public final double yVelocity(){return this.yVelocity.get();}
+    public final double getXVelocity(){return this.xVelocity.get();}
+    public final double getYVelocity(){return this.yVelocity.get();}
 
     public DoubleProperty xScaleProperty() { return xScale; }
     public DoubleProperty yScaleProperty() { return yScale; }
@@ -84,10 +85,12 @@ public abstract class GraphicsObject {
     public final void setXScale(double _xScale){ this.xScale.set(_xScale);}
     public final void setYScale(double _yScale){ this.xScale.set(_yScale);}
 
-    public final double xScale(){return this.xScale.get();}
-    public final double yScale(){return this.yScale.get();}
+    public final double getXScale(){return this.xScale.get();}
+    public final double getYScale(){return this.yScale.get();}
 
-
+    public DoubleProperty frictionProperty() { return friction; }
+    public final void setFriction(double _friction){ this.friction.set(_friction); }
+    public final double getFriction() { return this.friction.get(); }
 
     public DoubleProperty weightProperty() { return weight; }
     public final void setWeight(double _weight){ this.weight.set(_weight); }
@@ -100,7 +103,6 @@ public abstract class GraphicsObject {
     public BooleanProperty isSelectedProperty(){ return isSelected;}
     public final void setIsSelected(Boolean _isSelected){ this.isSelected.set(_isSelected); }
     public final boolean getIsSelected(){ return isSelected.get(); }
-
 
     public Shape getElementView() {
         return elementView;
@@ -115,13 +117,12 @@ public abstract class GraphicsObject {
     // hier werden die Werte für das Reset festgelegt
     public final void setStartValues(){
 
-        startX = this.xPosition();
-        startY = this.yPosition();
-        startAccX = this.xAcceleration();
-        startAccY =  this.yAcceleration();
-        startVelX = this.xVelocity();
-        startVelY = this.yVelocity();
-
+        startX = this.getXPosition();
+        startY = this.getYPosition();
+        startAccX = this.getXAcceleration();
+        startAccY =  this.getYAcceleration();
+        startVelX = this.getXVelocity();
+        startVelY = this.getYVelocity();
 
     }
 
@@ -135,12 +136,12 @@ public abstract class GraphicsObject {
         setYVelocity(startVelY);
     }
 
-    public void moveElement(){}
+    public void moveElement(){};
 
 
     @Override
     public String toString(){
-        return "xProperty: "+ xPosition() +" yProperty: "+ yPosition();
+        return "xProperty: "+ getXPosition() +" yProperty: "+ getYPosition();
     }
 
 }

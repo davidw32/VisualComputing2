@@ -24,19 +24,17 @@ public class ElementEditorController {
 
     @FXML private TextField textFieldXPosition;
     @FXML private TextField textFieldYPosition;
-    @FXML public TextField textFieldScaleX;
-    @FXML public TextField textFieldScaleY;
-    @FXML public TextField textFieldVelocityX;
-    @FXML public TextField textFieldVelocityY;
-    @FXML public TextField textFieldAccelerationX;
-    @FXML public TextField textFieldAccelerationY;
-    @FXML public TextField textFieldRotate;
-    @FXML public TextField textFieldWeight;
-    @FXML public ColorPicker colorPicker;
-    @FXML public ChoiceBox choiceBoxPattern;
+    @FXML private TextField textFieldScaleX;
+    @FXML private TextField textFieldScaleY;
+    @FXML private TextField textFieldVelocityX;
+    @FXML private TextField textFieldVelocityY;
+    @FXML private TextField textFieldAccelerationX;
+    @FXML private TextField textFieldAccelerationY;
+    @FXML private TextField textFieldRotate;
+    @FXML private TextField textFieldWeight;
+    @FXML private ColorPicker colorPicker;
+    @FXML private ChoiceBox choiceBoxPattern;
 
-
-    @FXML StartController startController;
 
     private GraphicScene graphicScene;
 
@@ -45,14 +43,9 @@ public class ElementEditorController {
         this.graphicScene = graphicScene;
     }
 
-    public void setStartController(StartController startController) {
-        this.startController = startController;
-    }
-
     public void initialize(){
       //  System.out.println("Init ElementController");
     }
-
 
     /**
      * die Textfelder werden an das "Aktive Element" der Graphic Scene gebunden
@@ -70,7 +63,7 @@ public class ElementEditorController {
         });
     }
 
-
+    // die Changelistener für die Textfelder
     private void changed(ObservableValue<? extends GraphicsObject> observableValue, GraphicsObject oldValue, GraphicsObject newValue) {
 
         colorPicker.setValue((Color)newValue.getElementView().getFill());

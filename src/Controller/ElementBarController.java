@@ -13,8 +13,7 @@ import javafx.scene.text.Text;
 
 public class ElementBarController {
 
-    @FXML
-    private StartController startController;
+
     @FXML
     private Circle ballDummy;
     @FXML
@@ -63,8 +62,6 @@ public class ElementBarController {
         this.graphicScene = graphicScene;
     }
 
-    public void setStartController(StartController startController) {
-        this.startController = startController;
-    }
+
 }
 

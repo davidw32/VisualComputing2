@@ -24,6 +24,7 @@ public class GraphicScene {
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
+    //für die erste Szene
     Line line1 = new Line(0,220,400,220);
     Line line2 = new Line(400,220,500,200);
     Line line3 = new Line(500,200,700,300);
@@ -36,6 +37,7 @@ public class GraphicScene {
         Ball placeholder = new Ball(0,0);
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
 
+        //für die erste Szene
         lines[0] = line1;
         lines[1] = line2;
         lines[2] = line3;
@@ -48,8 +50,11 @@ public class GraphicScene {
 
     // die eigendliche Animationsloop
     public void updateScene(){
+
         for (GraphicsObject graphicsObject: elementsInScene){
+
             if ( graphicsObject instanceof Ball){
+                //wie sollen wir das allgemein lösen?????
                 ((Ball)graphicsObject).collisionDetection(lines);
             }
             graphicsObject.moveElement();
@@ -60,7 +65,7 @@ public class GraphicScene {
     /**
      *  hier wird ein neues GraphicsObjekt in die Liste eingefügt
      *
-     * @param _graphicsObject
+     * @param _graphicsObject - das GraphicsObjekt, dass neu eingefügt werden soll
      */
     public void addElement(GraphicsObject _graphicsObject){
         elementsInScene.add(_graphicsObject);
@@ -78,7 +83,7 @@ public class GraphicScene {
     /**
      * hier wird das angeklickte Element als Aktiv gesetzt, dabei werden die Werte im ElementEditor angepasst
      * die Listener vom Vorgänger müssen entfernt und auf das neue Objekt gesetzt werden.
-     * @param _graphicsObject
+     * @param _graphicsObject - das per Mausklick ausgewählte Element
      */
     public final void setActiveElement(GraphicsObject _graphicsObject) {
 
@@ -89,7 +94,7 @@ public class GraphicScene {
 
     /**
      * gibt das aktive Element zurück
-     * @return
+     * @return das aktuelle aktive (ausgewählte) Element
      */
     public final GraphicsObject getActiveElement(){
         return activeElement.get();
@@ -109,8 +114,8 @@ public class GraphicScene {
      * alle Elemente werden auf ihre Startwerte zurückgesetzt
      */
     public void resetAllElements(){
-        for (GraphicsObject go: elementsInScene){
-            go.resetElement();
+        for (GraphicsObject graphicsObject: elementsInScene){
+            graphicsObject.resetElement();
         }
     }
 
@@ -118,8 +123,8 @@ public class GraphicScene {
      * bei allen Elementen werden die Startwerte gespeichert
      */
     public void setAllStartValues(){
-        for (GraphicsObject go: elementsInScene){
-            go.setStartValues();
+        for (GraphicsObject graphicsObject: elementsInScene){
+            graphicsObject.setStartValues();
         }
     }
 

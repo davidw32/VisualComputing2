@@ -8,7 +8,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
-import static Model.Config.GRAVITY;
+import static Helpers.Config.GRAVITY;
 
 public class Ball extends GraphicsObject
 {
@@ -27,7 +27,7 @@ public class Ball extends GraphicsObject
         setWeight(10);
         setIsMoving(true);
 
-        elementView = new Circle(xPosition(), yPosition(), radius(), Color.PLUM);
+        elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
 
@@ -75,8 +75,8 @@ public class Ball extends GraphicsObject
         collision = false;
         bounce = false;
 
-        double x = xPosition();
-        double y = yPosition();
+        double x = getXPosition();
+        double y = getYPosition();
 
         for(Line line : lines){
             // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b
@@ -124,7 +124,7 @@ public class Ball extends GraphicsObject
                 double angleNew = detectAngle(line.getStartX(),line.getStartY(),line.getEndX(),line.getEndY());
 
                 if(angleNew == 0){
-                    if(Math.abs(yVelocity()*time) > 0.5) {
+                    if(Math.abs(getYVelocity()*time) > 0.5) {
                         bounce = true;
                     }
                     else {
@@ -156,12 +156,12 @@ public class Ball extends GraphicsObject
         //Reibung [m/s^2]
         double reibung = 0;
 
-        double x = xPosition();
+        double x = getXPosition();
 
         if (collision) {
             // Reibungsberechnung bei gerade Ebene
             if (getAngle() == 0) {
-                if (xVelocity() == 0) {
+                if (getXVelocity() == 0) {
                     //System.out.println("HAFTREIBUNG");
                     frictionLock = haftReibung(getWeight(), GRAVITY, frictionCoefficient);
                 }
@@ -178,21 +178,21 @@ public class Ball extends GraphicsObject
         }
 
         // [m/s^2] Beschleunigungen werden hier summiert
-        double accelerationSum = (xAcceleration() + reibung);
+        double accelerationSum = (getXAcceleration() + reibung);
 
-        if(x+ radius() >= 1130 && xVelocity() > 0){
-            setXVelocity(-1 * xVelocity()) ;
+        if(x+ radius() >= 1130 && getXVelocity() > 0){
+            setXVelocity(-1 * getXVelocity()) ;
 
         }
-        else if(x-radius() <= 0 && xVelocity() < 0){
-            setXVelocity(-1 * xVelocity()) ;
+        else if(x-radius() <= 0 && getXVelocity() < 0){
+            setXVelocity(-1 * getXVelocity()) ;
         }
 
 
         // [m] s = s0 + v * t + 1/2 * a * t^2
-        setXPosition(xPosition() + xVelocity() * time + 0.5f * accelerationSum * Math.pow(time,2));
+        setXPosition(getXPosition() + getXVelocity() * time + 0.5f * accelerationSum * Math.pow(time,2));
         // [m/s] v = v0 + a * t
-        setXVelocity( xVelocity()+accelerationSum*time);
+        setXVelocity( getXVelocity()+accelerationSum*time);
         velocityText.setX((x -radius())/2);
 
 
@@ -204,33 +204,33 @@ public class Ball extends GraphicsObject
     public void moveY()
     {
         // //[m/s^2] Reibung
-        double y = yPosition();
+        double y = getYPosition();
         double force = frictionY(getWeight(),GRAVITY,frictionCoefficient,getAngle());
 
         //[m/s^2]
         double accelerationSum = 0;
         if (!collision) {
 
-            setYVelocity( yVelocity() + GRAVITY * time);
+            setYVelocity( getYVelocity() + GRAVITY * time);
             setYAcceleration(GRAVITY);
-            accelerationSum = yAcceleration();
+            accelerationSum = getYAcceleration();
         }
         else {
-            accelerationSum = (yAcceleration() + force);
+            accelerationSum = (getYAcceleration() + force);
         }
 
-        if(bounce && yVelocity() > 0) {
-            setYVelocity(-1 * yVelocity() * 0.6);
+        if(bounce && getYVelocity() > 0) {
+            setYVelocity(-1 * getYVelocity() * 0.6);
             bounce = false;
         }
 
         //[m] s = s0 + v * t + 1/2 * a * t^2
-        setYPosition( yPosition() + yVelocity() * time + 0.5 * accelerationSum * Math.pow(time,2));
+        setYPosition( getYPosition() + getYVelocity() * time + 0.5 * accelerationSum * Math.pow(time,2));
         //[m/s] Geschwindigkeit v = v0 + a * t
-        setYVelocity( yVelocity() +accelerationSum*time);
+        setYVelocity( getYVelocity() +accelerationSum*time);
 
         velocityText.setY(y - ((Circle) elementView).getRadius()-10);
-        velocityText.setText(String.format("%.2f",Math.sqrt(Math.pow(xVelocity(),2)+Math.pow(yVelocity(),2))));
+        velocityText.setText(String.format("%.2f",Math.sqrt(Math.pow(getXVelocity(),2)+Math.pow(getYVelocity(),2))));
     }
 
     /**
@@ -244,7 +244,7 @@ public class Ball extends GraphicsObject
     {
         //Kraft geschwindigkeit
         // [m/s^2]  a = v / t
-        double VN = xVelocity() / time;
+        double VN = getXVelocity() / time;
         // [N] F = m * a
         VN = getWeight()* VN;
         //[N] Normalkraft
@@ -276,7 +276,7 @@ public class Ball extends GraphicsObject
     {
         //Kraft der Geschwindigkeit (VelocityX)
         // [m/s^2] a = v / t
-        double VN = xVelocity() / time;
+        double VN = getXVelocity() / time;
         // [N] F = m * a
         VN = getWeight() * VN;
 
@@ -287,7 +287,7 @@ public class Ball extends GraphicsObject
 
 
         //Es kommt zum Stillstand,sobald Geschwindigkeit < 0.25 und Beschleunigung < 0.25f
-        if(Math.abs(xVelocity()) < 2.5 && Math.abs(xAcceleration()) < 2.5 )
+        if(Math.abs(getXVelocity()) < 2.5 && Math.abs(getXAcceleration()) < 2.5 )
         {
             setXVelocity(0);
             setXAcceleration(0);
@@ -297,13 +297,13 @@ public class Ball extends GraphicsObject
         }
 
         //System.out.println("GLEIT TRUE");
-        if(xVelocity() < 0)
+        if(getXVelocity() < 0)
         {
             // [m/s^2]
             double acceleration = FR / getWeight();
             return acceleration;
         }
-        else if(xVelocity() > 0)
+        else if(getXVelocity() > 0)
         {
             // [m/s^2]
             double acceleration =  FR / getWeight();

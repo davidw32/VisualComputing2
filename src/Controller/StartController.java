@@ -23,17 +23,10 @@ public class StartController {
         myGraphicScene.setPlayerController(playerController);
         myGraphicScene.setOptionBarController(optionBarController);
 
-        playerController.setStartController(this);
         playerController.setGraphicScene(myGraphicScene);
-        elementEditorController.setStartController(this);
         elementEditorController.setGraphicScene(myGraphicScene);
         elementEditorController.initValues();
-        optionBarController.setStartController(this);
-        optionBarController.setGraphicScene(myGraphicScene);
-        graphicSceneController.setStartController(this);
         graphicSceneController.setGraphicScene(myGraphicScene);
-
-        elementBarController.setStartController(this);
         elementBarController.setGraphicScene(myGraphicScene);
 
 

@@ -55,4 +55,9 @@ public Block(double _initX, double _initY){
 
         } else elementView.setStroke(null);
     }
+
+
+
+
+
 }

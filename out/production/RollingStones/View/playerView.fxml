@@ -17,7 +17,7 @@
             </font>
         </Label>
         <Button  mnemonicParsing="false" onAction="#stopSimulation" text="Stop" />
-        <Button  fx:id="play_pause" mnemonicParsing="false" onAction="#startSimulation" text="Play" />
+        <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#startSimulation" text="Play" />
         <Button  mnemonicParsing="false" onAction="#resetSimulation" text="Reset" />
         <Button  mnemonicParsing="false" onAction="#setOnTimeLapse" text="Timelapse" />
         <Button  mnemonicParsing="false" onAction="#setOnSlowMotion" text="SlowMotion" />

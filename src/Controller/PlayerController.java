@@ -12,11 +12,8 @@ import javafx.util.Duration;
 
 public class PlayerController {
 
-    @FXML
-    private StartController startController;
-    @FXML private Button play_pause;
+    @FXML private Button playPauseButton;
 
-    private GraphicSceneController graphicSceneController;
     private GraphicScene graphicScene;
 
     private Timeline timeline;
@@ -25,9 +22,9 @@ public class PlayerController {
 
     @FXML
     public void startSimulation(){
-
+        //starte die Simulation
         if(isPaused) {
-            play_pause.setText("Pause");
+            playPauseButton.setText("Pause");
             if (!isRunning) {
                 for (GraphicsObject graphicsObject : graphicScene.getElementsInScene()) {
                     graphicsObject.setStartValues();
@@ -46,22 +43,24 @@ public class PlayerController {
 
             System.out.println(isRunning);
             timeline.play();
-        } else {
+        } else { //mache Pause
             if (isRunning){
                 timeline.pause();
                 isPaused = true;
-                play_pause.setText("Play");
+                playPauseButton.setText("Play");
             }
         }
     }
+
+
     @FXML
     public void stopSimulation(){
-
+        // stop und reset
         if(isRunning){
             timeline.stop();
             isRunning = false;
             isPaused = true;
-            play_pause.setText("Play");
+            playPauseButton.setText("Play");
             graphicScene.resetAllElements();
         }
 
@@ -83,11 +82,6 @@ public class PlayerController {
 
     public void setOnSlowMotion(ActionEvent actionEvent) {
         System.out.println("SlowMotion-Modus");
-    }
-
-
-    public void setStartController(StartController control){
-        this.startController = control;
     }
 
     public void setGraphicScene(GraphicScene graphicScene) {

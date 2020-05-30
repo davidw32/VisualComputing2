@@ -15,13 +15,8 @@ import javafx.scene.shape.Rectangle;
 public class GraphicSceneController {
     @FXML
     Pane graphicPane;
-    @FXML
-    private StartController startController;
 
     private GraphicScene graphicScene;
-
-
-
 
     private double initX, initY, initTranslateX, initTranslateY;
 
@@ -118,6 +113,7 @@ public class GraphicSceneController {
         return returnBall;
     }
 
+    //neues Block-Objekt erzeugen und Listener setzen
     private Block createBlock(double _xPosition, double _yPosition){
 
         Block returnBlock = new Block(_xPosition,_yPosition);
@@ -150,19 +146,10 @@ public class GraphicSceneController {
         return returnBlock;
     }
 
-
-
-
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;
     }
 
-    public void setStartController(StartController startController) {
-        this.startController = startController;
-    }
-
-    public void setElementEditorController(ElementEditorController elementEditorController) {
-    }
 }
 
 
