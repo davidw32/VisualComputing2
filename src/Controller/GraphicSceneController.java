@@ -7,6 +7,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 import javax.swing.*;
@@ -70,10 +71,16 @@ public class GraphicSceneController {
                         graphicPane.getChildren().add(placeholder);
                         success = true;
                     }
+
                     if(db.getString().equals("spinnerDummy")){
-                        Text placeholder = createPlaceholder(event.getX(), event.getY());
-                        placeholder.setText("Spinner");
-                        graphicPane.getChildren().add(placeholder);
+                        //Text placeholder = createPlaceholder(event.getX(), event.getY());
+                        Spinner newSpinner = createSpinner(event.getX(), event.getY());
+                        //placeholder.setText("Spinner");
+                        graphicScene.addElement(newSpinner);
+                        graphicScene.getActiveElement().setIsSelected(false);
+                        graphicScene.setActiveElement(newSpinner);
+
+                        graphicPane.getChildren().add(newSpinner.getElementView());
                         success = true;
                     }
                     if(db.getString().equals("seasawDummy")){
@@ -191,8 +198,37 @@ public class GraphicSceneController {
     }
 
     private Spinner createSpinner(double _xPosition, double _yPosition){
-        return new Spinner(_xPosition,_yPosition);
+        Spinner returnSpinner = new Spinner(_xPosition, _yPosition);
+        returnSpinner.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            // Durch Mausklick als Aktives Element setzen
+            graphicScene.getActiveElement().setIsSelected(false);
+            returnSpinner.setIsSelected(true);
+            graphicScene.setActiveElement(returnSpinner);
+            // Werte für das Drag-and-Drop speichern
+            initX = event.getSceneX();
+            initY = event.getSceneY();
+            initTranslateX = ((Shape)event.getSource()).getTranslateX();
+            initTranslateY = ((Shape)event.getSource()).getTranslateY();
+        });
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
+        returnSpinner.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            //Verschiebung berechnen
+            double offsetX = event.getSceneX() - initX;
+            double offsetY = event.getSceneY() - initY;
+
+            double newTranslateX = initTranslateX + offsetX;
+            double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
+            ((Shape) (event.getSource())).setTranslateX(newTranslateX);
+            ((Shape) (event.getSource())).setTranslateY(newTranslateY);
+
+        });
+
+        return returnSpinner;
+
     }
+
+
     private Seasaw createSeasaw(double _xPosition, double _yPosition){
         return new Seasaw(_xPosition,_yPosition);
     }

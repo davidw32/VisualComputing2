@@ -15,7 +15,7 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
 
     // Werte für das Reset
-    private double startX, startY, startVelX, startVelY, startAccX, startAccY;
+    private double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight;
 
     private final DoubleProperty xPosition, yPosition,
                                  xAcceleration, yAcceleration,
@@ -123,6 +123,11 @@ public abstract class GraphicsObject {
         startAccY =  this.getYAcceleration();
         startVelX = this.getXVelocity();
         startVelY = this.getYVelocity();
+        startAngle = this.getAngle();
+        startScaleX = this.getXScale();
+        startScaleY = this.getYScale();
+        startWeight = this.getWeight();
+
 
     }
 
@@ -134,6 +139,10 @@ public abstract class GraphicsObject {
         setYAcceleration(startAccY);
         setXVelocity(startVelX);
         setYVelocity(startVelY);
+        setAngle(startAngle);
+        setXScale(startScaleX);
+        setYScale(startScaleY);
+        setWeight(startWeight);
     }
 
     public void moveElement(){};
