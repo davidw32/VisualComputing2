@@ -62,6 +62,19 @@ public class VectorMath {
         return normal;
     }
 
+    // Richtungskosinus für den Vektor bestimmen
+    public double directionCosine(double x_0, double x_1) {
+        double returnValue = 0;
+
+        if (vectorLength(x_0, x_1) != 0) {
+            returnValue = Math.acos(x_0 / vectorLength(x_0, x_1));
+            if (x_1 < 0) { //3. und 4.Quadrant
+                returnValue = 2 * Math.PI - returnValue;
+            }
+        }
+        return returnValue;
+    }
+
 
     /**
      * Rotiert den Vector gegen den Uhrzeigersinn um den Ursprung
