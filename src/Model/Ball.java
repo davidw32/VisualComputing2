@@ -10,6 +10,10 @@ import javafx.scene.text.Text;
 
 import static Helpers.Config.GRAVITY;
 
+/**
+ * @Author: Patrick Pavlenko,David Waelsch,Pamela Trowe
+ * Animierte Ball Klasse (Kugel) für die grafische Szene
+ */
 public class Ball extends GraphicsObject
 {
 

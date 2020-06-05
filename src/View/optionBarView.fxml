@@ -25,7 +25,6 @@
         <Menu text="Fenster">
             <items>
                 <MenuItem fx:id="toolWindow" onAction="#opentoolWindow" text="Element Window" />
-                <MenuItem fx:id="advancedOptions"  onAction="#openAdvancedOption" text="Advanced Options" />
                 <MenuItem fx:id="help" onAction="#openHelp" text="Help" />
             </items>
         </Menu>

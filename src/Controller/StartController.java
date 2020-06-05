@@ -28,6 +28,7 @@ public class StartController {
         elementEditorController.initValues();
         graphicSceneController.setGraphicScene(myGraphicScene);
         elementBarController.setGraphicScene(myGraphicScene);
+        optionBarController.setGraphicScene(myGraphicScene);
 
 
 
