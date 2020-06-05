@@ -20,6 +20,9 @@ public class GraphicScene {
     private GraphicSceneController graphicSceneController;
     private OptionBarController optionBarController;
     private PlayerController playerController;
+    private StartScreenController startScreenController;
+    private StartController startController;
+    private Ball placeholder;
 
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
@@ -32,9 +35,13 @@ public class GraphicScene {
     Line[] lines = new Line[5];
 
     public GraphicScene(){
+        System.out.println("klasse graphicScene");
         elementsInScene= new LinkedList<>();
         // placeholder um die Textfelder im ElementEditor miteinander zu verknüpfen
-        Ball placeholder = new Ball(0,0);
+        placeholder = new Ball(0,0);
+        placeholder.setWeight(0);
+        placeholder.setRadius(0);
+
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
 
         //für die erste Szene
@@ -102,12 +109,15 @@ public class GraphicScene {
 
 
     /**
-     * Hier wird das übergebene Element aus der Liste gelöscht, und die Listener werden entfernt
-     * @param _graphicsObject
+     * Hier wird das aktive Element aus der Liste gelöscht
      */
 
-    public void removeElement(GraphicsObject _graphicsObject){
+    public void deleteActiveElement(){
 
+        getActiveElement().getElementView().setVisible(false);
+
+        setActiveElement(placeholder);
+        elementsInScene.remove(getActiveElement());
     }
 
     /**
@@ -132,6 +142,11 @@ public class GraphicScene {
      * hier wird die gesammte Szene gelöscht
      */
     public void clearScene(){
+        for (GraphicsObject graphicsObject: elementsInScene){
+            graphicsObject.getElementView().setVisible(false);
+        }
+        elementsInScene.clear();
+        setActiveElement(placeholder);
 
     }
 
@@ -191,5 +206,21 @@ public class GraphicScene {
 
     public void setPlayerController(PlayerController playerController) {
         this.playerController = playerController;
+    }
+
+    public void setStartScreenController(StartScreenController startScreenController) {
+    }
+    public StartScreenController getStartScreenController(){ return startScreenController; }
+
+    public void setStartController(StartController startController) {
+        this.startController = startController;
+    }
+
+    public StartController getStartController() {
+        return startController;
+    }
+
+    public Ball getPlaceholder() {
+        return placeholder;
     }
 }

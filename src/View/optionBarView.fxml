@@ -5,27 +5,27 @@
 <?import javafx.scene.control.MenuItem?>
 
 <?import javafx.scene.control.SeparatorMenuItem?>
-<MenuBar minHeight="20.0" minWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OptionBarController">
+<MenuBar fx:id="optionBar" minHeight="20.0" minWidth="1600.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OptionBarController">
     <menus>
         <Menu  fx:id="sceneMenu" text="Szene">
             <items >
-                <MenuItem onAction="#sceneStart"  fx:id="sceneMenuStart" text="Start Scene"/>
-                <MenuItem onAction="#sceneRestart" fx:id="sceneMenuRestart" text="Restart Scene"/>
-                <MenuItem onAction="#scenePause" fx:id="sceneMenuPause" text="Pause Scene"/>
+                <MenuItem onAction="#openScene"  fx:id="sceneMenuOpen" text="Open Scene"/>
+                <MenuItem onAction="#saveScene" fx:id="sceneMenuSave" text="Save Scene"/>
+                <MenuItem onAction="#clearScene" fx:id="sceneMenuClear" text="Clear Scene"/>
                 <SeparatorMenuItem  />
-                <MenuItem   onAction="#goBack" text="Exit Scene"/>
+                <MenuItem   onAction="#closeApplication" text="Exit"/>
             </items>
         </Menu>
         <Menu text="Objekt">
             <items>
                 <MenuItem fx:id="copyObject" onAction="#copyObject" text="Copy Object"/>
                 <MenuItem fx:id="deleteObject" onAction="#deleteObject"  text="Delete Object"/>
+                <MenuItem fx:id="showBoundingBox" onAction="#showBoundingBox"  text="Show Bounding-Box"/>
             </items>
         </Menu>
         <Menu text="Fenster">
             <items>
-                <MenuItem fx:id="toolWindow" onAction="#opentoolWindow" text="Element Window" />
-                <MenuItem fx:id="advancedOptions"  onAction="#openAdvancedOption" text="Advanced Options" />
+                <MenuItem fx:id="camera" onAction="#takeSnapshot" text="Snapshot" />
                 <MenuItem fx:id="help" onAction="#openHelp" text="Help" />
             </items>
         </Menu>

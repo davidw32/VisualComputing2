@@ -9,7 +9,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane  hgap="10.0" prefHeight="820.0" prefWidth="350.0" style="-fx-background-color: powderblue;" vgap="10.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<StackPane fx:id="elementEditor" minHeight="820.0" minWidth="350.0" maxHeight="820.0" maxWidth="350.0"
+           style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+
+   <GridPane fx:id= "editor" hgap="10.0" vgap="10.0">
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
@@ -62,4 +70,42 @@
       <ChoiceBox fx:id="choiceBoxPattern" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
    </children>
-</GridPane>
+  </GridPane>
+
+   <GridPane fx:id="helpText" maxHeight="820.0" maxWidth="350.0" prefHeight="820.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+      <columnConstraints>
+         <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
+      </rowConstraints>
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="I need somebody(Help!) not just anybody(Help!) you know I need someoneHelp!I never needed anybody's help in any wayBut now these days are gone, I'm not so self assured (but now these days are gone)(And now I find) Now I find I've changed my mind and opened up the doorsHelp me if you can, I'm feeling downAnd I do appreciate you being 'roundHelp me get my feet back on the groundWon't you please, please help me?And now my life has changed in oh so many ways (and now my life has changed)My independence seems to vanish in the hazeBut every now and then I feel so insecure (I know that I)I know that I just need you like I've never done beforeHelp me if you can, I'm feeling downAnd I do appreciate you being 'roundHelp me get my feet back on the…" wrappingWidth="350.22900390625" GridPane.columnIndex="3" GridPane.rowIndex="2">
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Text>
+         <Label prefHeight="17.0" prefWidth="60.0" text="Help" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onClose" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="3">
+            <GridPane.margin>
+               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </GridPane.margin>
+         </Button>
+      </children>
+   </GridPane>
+
+
+</StackPane>

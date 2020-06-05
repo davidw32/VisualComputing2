@@ -8,17 +8,22 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 public class PlayerController {
 
     @FXML private Button playPauseButton;
-
+    @FXML  private HBox player;
     private GraphicScene graphicScene;
 
     private Timeline timeline;
     private boolean isRunning = false;
     private boolean isPaused = true;
+
+    public void initialize(){
+        System.out.println("init player");
+    }
 
     @FXML
     public void startSimulation(){
@@ -88,6 +93,6 @@ public class PlayerController {
         this.graphicScene = graphicScene;
     }
 
-
+    public HBox getPlayer(){return player;}
 
 }

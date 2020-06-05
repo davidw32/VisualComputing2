@@ -1,0 +1,31 @@
+#clock
+{
+    -fx-font-size: 30px;
+}
+
+.startScreenBtn:hover
+{
+    -fx-border-color: #ffd700;
+    -fx-cursor: hand;
+
+}
+
+.startScreenBtn
+{
+    -fx-border-color: black;
+    -fx-background-color: rgba(0,0,0,0);
+}
+
+#sceneSubmitBtn
+{
+    -fx-background-radius: 20;
+    -fx-border-width: 5;
+    -fx-border-radius: 20;
+    -fx-background-color: #31C85D;
+}
+
+#sceneSubmitBtn:hover
+{
+
+    -fx-cursor: hand;
+}

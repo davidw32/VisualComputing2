@@ -444,7 +444,7 @@ public class Ball extends GraphicsObject {
     }
 
     private void elastischerStoss2D(Ball ball2) {
-
+        // gemäß Formeln auf Wikipedia
         //bestimme v1_neu und v2_neu (Geschwindigkeiten von Ball1 und Ball2)
 
         //Steigungen der Zentralrichtung und der Berührtangente
