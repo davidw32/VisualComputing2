@@ -9,10 +9,12 @@ import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.converter.PaintConverter;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
@@ -34,9 +36,13 @@ public class ElementEditorController {
     @FXML private TextField textFieldWeight;
     @FXML private ColorPicker colorPicker;
     @FXML private ChoiceBox choiceBoxPattern;
+    @FXML private GridPane editor;
+    @FXML private GridPane helpText;
 
 
     private GraphicScene graphicScene;
+
+
 
 
     public void setGraphicScene(GraphicScene graphicScene) {
@@ -44,7 +50,8 @@ public class ElementEditorController {
     }
 
     public void initialize(){
-      //  System.out.println("Init ElementController");
+        System.out.println("Init ElementController");
+
     }
 
     /**
@@ -52,6 +59,7 @@ public class ElementEditorController {
      * und der Wechsel des aktiven Elements entsprechend beobachtet
      */
     public void initValues() {
+
         // für die Textfelder
         graphicScene.getActiveElementProperty().addListener(this::changed);
         // für den Colorpicker
@@ -94,5 +102,18 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldRotate.textProperty(), newValue.angleProperty(), converter);
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
 
+    }
+
+    public GridPane getEditor() {
+        return editor;
+    }
+
+    public GridPane getHelpText() {
+        return helpText;
+    }
+    //Schließt das Hilfefenster
+    public void onClose(ActionEvent actionEvent) {
+        helpText.setVisible(false);
+        editor.setVisible(true);
     }
 }

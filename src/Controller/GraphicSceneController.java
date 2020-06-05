@@ -14,7 +14,7 @@ import javax.swing.*;
 
 public class GraphicSceneController {
     @FXML
-    Pane graphicPane;
+    private Pane graphicPane;
 
     private GraphicScene graphicScene;
 
@@ -22,8 +22,8 @@ public class GraphicSceneController {
 
     public void initialize(){
 
-
-        // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
+        System.out.println("init Graphicscene");
+    // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
             public void handle(DragEvent event) {
@@ -240,6 +240,9 @@ public class GraphicSceneController {
         this.graphicScene = graphicScene;
     }
 
+    public Pane getGraphicPane() {
+        return graphicPane;
+    }
 }
 
 
