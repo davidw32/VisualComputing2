@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
@@ -7,21 +8,18 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Text?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<StackPane fx:id="elementEditor" minHeight="820.0" minWidth="350.0" maxHeight="820.0" maxWidth="350.0"
-           style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1"
-           xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+<?import javafx.scene.text.Text?>
+<StackPane fx:id="elementEditor" maxHeight="820.0" maxWidth="350.0" minHeight="820.0" minWidth="350.0" style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
 
-   <GridPane fx:id= "editor" hgap="10.0" vgap="10.0">
+   <GridPane fx:id="editor" hgap="10.0" vgap="10.0">
    <columnConstraints>
       <ColumnConstraints />
-      <ColumnConstraints />
-      <ColumnConstraints />
+      <ColumnConstraints percentWidth="30.0" prefWidth="50.0" />
+      <ColumnConstraints percentWidth="30.0" />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
@@ -39,6 +37,8 @@
       <RowConstraints />
       <RowConstraints />
       <RowConstraints />
+         <RowConstraints />
+         <RowConstraints />
    </rowConstraints>
    <children>
       <Label text="Editor">
@@ -51,25 +51,30 @@
       <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
       <Label alignment="CENTER" text="X" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
       <Label alignment="CENTER" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-      <Label text="Scale" GridPane.rowIndex="2" />
-      <Label text="Velocity" GridPane.rowIndex="5" />
+      <Label text="Scalefactor" GridPane.rowIndex="2" />
+      <Label text="Velocity [m/s]" GridPane.rowIndex="3" />
       <TextField fx:id="textFieldScaleX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <TextField fx:id="textFieldScaleY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-      <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-      <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <Label text="Acceleration" GridPane.rowIndex="6" />
-      <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-      <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-      <Label text="Rotate" GridPane.rowIndex="3" />
-      <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <Label text="Weight" GridPane.rowIndex="4" />
-      <TextField fx:id="textFieldWeight" prefHeight="27.0" prefWidth="83.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Label text="Color" GridPane.rowIndex="7" />
-      <ColorPicker fx:id="colorPicker" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-      <Label text="Pattern" GridPane.rowIndex="8" />
-      <ChoiceBox fx:id="choiceBoxPattern" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+      <Label text="Acceleration [cm/s^2]" GridPane.rowIndex="4" />
+      <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+      <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <Label text="Rotate [Degree]" GridPane.rowIndex="7" />
+      <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+      <Label text="Weight [g]" GridPane.rowIndex="6" />
+      <TextField fx:id="textFieldWeight" prefHeight="27.0" prefWidth="83.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+      <Label text="Color" GridPane.rowIndex="10" />
+      <ColorPicker fx:id="colorPicker" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" />
+      <Label text="Pattern" GridPane.rowIndex="11" />
+      <ChoiceBox fx:id="choiceBoxPattern" prefWidth="150.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="11" />
+         <Label text="Frictioncoefficient" GridPane.rowIndex="8" />
+         <TextField fx:id="textFieldFriction" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
    </children>
+      <StackPane.margin>
+         <Insets bottom="10.0" left="10.0" top="10.0" />
+      </StackPane.margin>
   </GridPane>
 
    <GridPane fx:id="helpText" maxHeight="820.0" maxWidth="350.0" prefHeight="820.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" >

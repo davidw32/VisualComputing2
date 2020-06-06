@@ -34,6 +34,7 @@ public class ElementEditorController {
     @FXML private TextField textFieldAccelerationY;
     @FXML private TextField textFieldRotate;
     @FXML private TextField textFieldWeight;
+    @FXML private TextField textFieldFriction;
     @FXML private ColorPicker colorPicker;
     @FXML private ChoiceBox choiceBoxPattern;
     @FXML private GridPane editor;
@@ -87,6 +88,7 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldAccelerationY.textProperty(), oldValue.yAccelerationProperty());
         Bindings.unbindBidirectional(textFieldRotate.textProperty(), oldValue.angleProperty());
         Bindings.unbindBidirectional(textFieldWeight.textProperty(), oldValue.weightProperty());
+        Bindings.unbindBidirectional(textFieldFriction.textProperty(), oldValue.frictionProperty());
 
         //die Textfelder mit dem neuen Element verbinden
         StringConverter<Number> converter = new NumberStringConverter();
@@ -101,6 +103,7 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldAccelerationY.textProperty(), newValue.yAccelerationProperty(), converter);
         Bindings.bindBidirectional(textFieldRotate.textProperty(), newValue.angleProperty(), converter);
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
+        Bindings.bindBidirectional(textFieldFriction.textProperty(), newValue.frictionProperty(), converter);
 
     }
 
