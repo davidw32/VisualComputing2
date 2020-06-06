@@ -43,23 +43,20 @@ public class GraphicSceneController {
                 if(db.hasString()){
 
                     if (db.getString().equals("ballDummy")){
-                        //neues Element erzeugen
-                        Ball newBall = createBall(event.getX(), event.getY());
+                        //neues Element erzeugen und Listener hinzufügen
+                        Ball newBall = new Ball(event.getX(), event.getY());
+                        addListenersToObject(newBall);
                         // in der Liste einfügen
                         graphicScene.addElement(newBall);
-                        // das aktive Element wechseln
-                        graphicScene.getActiveElement().setIsSelected(false);
-                        graphicScene.setActiveElement(newBall);
                         // in der Szene anzeigen
                         graphicPane.getChildren().add(newBall.getElementView());
 
                         success = true;
                     }
                     if(db.getString().equals("blockDummy")){
-                        Block newBlock = createBlock(event.getX(), event.getY());
+                        Block newBlock = new Block(event.getX(), event.getY());
+                        addListenersToObject(newBlock);
                         graphicScene.addElement(newBlock);
-                        graphicScene.getActiveElement().setIsSelected(false);
-                        graphicScene.setActiveElement(newBlock);
                         graphicPane.getChildren().add(newBlock.getElementView());
                         success = true;
                     }
@@ -74,11 +71,10 @@ public class GraphicSceneController {
 
                     if(db.getString().equals("spinnerDummy")){
                         //Text placeholder = createPlaceholder(event.getX(), event.getY());
-                        Spinner newSpinner = createSpinner(event.getX(), event.getY());
+                        Spinner newSpinner = new Spinner(event.getX(), event.getY());
+                        addListenersToObject(newSpinner);
                         //placeholder.setText("Spinner");
                         graphicScene.addElement(newSpinner);
-                        graphicScene.getActiveElement().setIsSelected(false);
-                        graphicScene.setActiveElement(newSpinner);
 
                         graphicPane.getChildren().add(newSpinner.getElementView());
                         success = true;
@@ -128,6 +124,41 @@ public class GraphicSceneController {
         return placeholder;
 
     }
+
+    public void addListenersToObject(GraphicsObject _graphicsObject){
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+                    //Element als Actives Element definieren
+
+                    graphicScene.setActiveElement(_graphicsObject);
+        });
+
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+
+            // Position Mauszeiger
+            initX = event.getSceneX();
+            initY = event.getSceneY();
+            //Position des Elements
+            initTranslateX=_graphicsObject.getXPosition();
+            initTranslateY=_graphicsObject.getYPosition();
+
+        });
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            //Verschiebung berechnen
+            double offsetX = event.getSceneX() - initX;
+            double offsetY = event.getSceneY() - initY;
+            double newTranslateX = initTranslateX + offsetX;
+            double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
+            _graphicsObject.setXPosition(newTranslateX);
+            _graphicsObject.setYPosition(newTranslateY);
+
+        });
+
+    }
+
+
+
 
     //neues Ball-Objekt anlegen und die entsprechenden Listener hinzufügen.
     private Ball createBall(double xPosition, double yPosition){

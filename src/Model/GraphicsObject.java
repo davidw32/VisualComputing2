@@ -7,7 +7,7 @@ import javafx.scene.shape.Shape;
  * Parentklasse aller Elemente in der Szene
  *
  */
-public abstract class GraphicsObject implements Cloneable{
+public abstract class GraphicsObject {
 
 
     protected Shape elementView;
@@ -145,19 +145,9 @@ public abstract class GraphicsObject implements Cloneable{
         setWeight(startWeight);
     }
 
-    public void moveElement(){};
-
-    @Override
-    public GraphicsObject clone(){
-        try
-        {
-            return (GraphicsObject) super.clone();
-        }
-        catch ( CloneNotSupportedException e ) {
-            // Kann eigentlich nicht passieren, da Cloneable
-            throw new InternalError();
-        }
+    public void moveElement(){//diese Methode muss von den Objekten jeweils selbst implementiert werden
     }
+
 
     @Override
     public String toString(){
