@@ -77,6 +77,7 @@ public class GraphicScene {
     public void addElement(GraphicsObject _graphicsObject){
         elementsInScene.add(_graphicsObject);
         _graphicsObject.setStartValues();
+        setActiveElement(_graphicsObject);
     }
 
     /**
@@ -93,10 +94,11 @@ public class GraphicScene {
      * @param _graphicsObject - das per Mausklick ausgewählte Element
      */
     public final void setActiveElement(GraphicsObject _graphicsObject) {
-
+        this.getActiveElement().setIsSelected(false);
+        _graphicsObject.setIsSelected(true);
         this.activeElement.set(_graphicsObject);
-        System.out.println("GraphicScene setActiveElement");
-        //elementEditorController.bindActiveElement(_graphicsObject);
+        //System.out.println("GraphicScene setActiveElement");
+
     }
 
     /**
