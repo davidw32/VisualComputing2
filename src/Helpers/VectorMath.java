@@ -108,6 +108,23 @@ public class VectorMath {
         return returnvalue;
     }
 
+    /**
+     * Prüft, ob die beiden Vektoren parallel sind
+     *
+     * @param x_0 - x-Koordinate des ersten Vektors
+     * @param y_0 - y-Koordinate des ersten Vektors
+     * @param x_1 - x-Koordinate des zweiten Vektors
+     * @param y_1 - y-Koordinate des zweiten Vektors
+     * @return - true, wenn die beiden Vektoren parallel sind
+     */
+    public boolean areParallel(double x_0, double y_0, double x_1, double y_1){
+        double t_0 = x_0/x_1;
+        double t_1 = y_0/y_1;
+
+        if (t_0 == t_1) return true;
+
+        return false;
+    }
 
 }
 

@@ -57,7 +57,7 @@
       <TextField fx:id="textFieldScaleY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
       <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <Label text="Acceleration [m/s^2]" GridPane.rowIndex="4" />
+      <Label text="Acceleration [cm/s^2]" GridPane.rowIndex="4" />
       <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
       <Label text="Rotate [Degree]" GridPane.rowIndex="7" />
