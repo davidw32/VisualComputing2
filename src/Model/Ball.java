@@ -422,14 +422,18 @@ public class Ball extends GraphicsObject {
      * @param ball2 - die zweite Kugel
      */
     public void calculateCollisionWithBall(Ball ball2) {
+        //System.out.println("Ballkollsion wird geprüft");
         //zwischenspeicher für die neuen Velocityvektoren
         double[] vneu;
         //der Abstand ist klein genug um sich zu treffen
         if (intersecting(ball2)) {
+            System.out.println("Kugeln treffen sich");
             // die Kugeln bewegen sich auf einander zu
             if (moveTowardsEachOther(ball2)) {
+                System.out.println("rollen aufeinander zu");
                 // die Geschwindigkeitsvektoren v1 und v2 sind parallel zur Zentralrichtung
                 if (moveParallel(ball2)) {
+                    System.out.println("bewegen sich parallel");
                     //berechne Zentraler elastischer Stoss
                     vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
                     this.setXVelocity(vneu[0]);
@@ -514,15 +518,40 @@ public class Ball extends GraphicsObject {
      */
     private boolean moveParallel(Ball ball2) {
 
-        double x_0 = this.getXPosition();
-        double y_0 = this.getYPosition();
-        double x_1 = ball2.getXPosition();
-        double y_1 = ball2.getYPosition();
+        boolean returnBoolean = false;
 
-        if (calculator.areParallel(x_0, y_0, x_1-x_0, y_1-y_0)
-                && calculator.areParallel(x_1, y_1, x_1-x_0, y_1-y_0)) return true;
+        double v_x0 = this.getXVelocity();
+        double v_y0 = this.getYVelocity();
+        double v_x1 = ball2.getXVelocity();
+        double v_y1 = ball2.getYVelocity();
+        double x1_x0 = ball2.getXPosition() - this.getXPosition();
+        double y1_y0 = ball2.getYPosition() - this.getYPosition();
+        //System.out.println("x0="+v_x0+" y0="+v_y0+" x1="+v_x1+" y1="+v_y1);
 
-        else return false;
+        //falls die zweite Kugel Ruht
+        if (v_x1==0 & v_y1==0){
+           if( calculator.areParallel(v_x0,v_y0,x1_x0,y1_y0)) {
+               System.out.println("Fall1");
+               returnBoolean= true;}
+
+        }
+        // falls diese Kugel ruht
+        else if (v_x0==0 & v_y0==0){
+            System.out.println("fall2");
+            if( calculator.areParallel(v_x1,v_y1,x1_x0,y1_y0)) returnBoolean = true;
+
+        }
+        //beide Bewegen sich
+        else if( (v_x0 !=0 | v_y0!=0) | (v_x1!=0 | v_y1!=0)) {
+            //wenn sich beide parallel bewegen
+            if (calculator.areParallel(v_x0, v_y0, x1_x0, y1_y0)
+                    & calculator.areParallel(v_x1, v_y1, x1_x0, y1_y0)) {
+
+                System.out.println("Fall3");
+                returnBoolean = true;}
+        }
+
+        return returnBoolean;
     }
 
     /**
@@ -534,6 +563,7 @@ public class Ball extends GraphicsObject {
      * @return _ double[] mit vx1_neu, vy1_neu, vx2_neu, vx3_neu
      */
     private double[] zentralerStoss(double vx_2, double vy_2, double weigth2) {
+        System.out.println("zentrlarer Stoss wird berechnet");
         double[] vnew = {0,0,0,0};
         if (this.getWeight() == weigth2) {
             vnew[0] = vx_2;

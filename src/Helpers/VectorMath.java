@@ -118,12 +118,33 @@ public class VectorMath {
      * @return - true, wenn die beiden Vektoren parallel sind
      */
     public boolean areParallel(double x_0, double y_0, double x_1, double y_1){
-        double t_0 = x_0/x_1;
-        double t_1 = y_0/y_1;
+        System.out.println("Vecormath areParallel");
+        boolean returnBoolean=false;
 
-        if (t_0 == t_1) return true;
+        if (x_1 != 0 && y_1 != 0) {
+            double t_0 = x_0 / x_1;
+            double t_1 = y_0 / y_1;
 
-        return false;
+            if (Math.abs(t_0-t_1)<= 1) returnBoolean=true;
+
+
+        } else if (x_0 != 0 && y_0 != 0) {
+            double t_0 = x_1 / x_0;
+            double t_1 = y_1 / y_0;
+
+            if (Math.abs(t_0-t_1)<= 1) returnBoolean = true;
+
+
+        } else if (x_0 == 0 && x_1 ==0 && y_0!=0 && y_1 != 0){
+
+            returnBoolean = true;
+        }
+        else if (x_0 != 0 && x_1 !=0 && y_0==0 && y_1 == 0){
+
+            returnBoolean = true;
+        }
+
+        return returnBoolean;
     }
 
 }

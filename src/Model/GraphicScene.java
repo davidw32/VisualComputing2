@@ -68,12 +68,21 @@ public class GraphicScene {
 
     // die eigentliche Animationsloop
     public void updateScene(){
-
+        //
         for (GraphicsObject graphicsObject: elementsInScene){
 
             if ( graphicsObject instanceof Ball){
-                //wie sollen wir das allgemein lösen?????
+                //für den Anfang
                 ((Ball)graphicsObject).collisionDetection(lines);
+                //Prüfe ob der Ball mit weiteren Elementen kollidiert
+                for(GraphicsObject secondObject: elementsInScene){
+                    // alle anderen Elemente
+                    if (!graphicsObject.equals(secondObject)){
+                        //falls das zweite ein Ball ist
+                        if (secondObject instanceof Ball) ((Ball) graphicsObject).calculateCollisionWithBall((Ball)secondObject);
+                    }
+                }
+
             }
             graphicsObject.moveElement();
         }
