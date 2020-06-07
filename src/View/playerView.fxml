@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <?import javafx.scene.text.Font?>
-<HBox fx:id="player" alignment="CENTER_LEFT" minHeight="60.0" minWidth="1600.0" maxHeight="60.0" maxWidth="1600.0"
+
+<?import javafx.scene.shape.Polygon?>
+<?import java.lang.Double?>
+<?import javafx.scene.shape.Rectangle?>
+<HBox fx:id="player"  minHeight="60.0" minWidth="1600.0" maxHeight="60.0" maxWidth="1600.0" alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="1600.0"
       spacing="20.0" style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PlayerController">
 
     <children>
@@ -16,11 +17,34 @@
                 <Font size="18.0" />
             </font>
         </Label>
-        <Button  mnemonicParsing="false" onAction="#stopSimulation" text="Stop" />
-        <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#startSimulation" text="Play" />
+        <Button  mnemonicParsing="false" onAction="#stopSimulation"  >
+            <graphic>
+                <Rectangle  height="15" width="15"></Rectangle>
+            </graphic>
+        </Button>
+        <Button fx:id="playPauseButton" mnemonicParsing="false" onAction="#startSimulation" minWidth="40" minHeight="40" >
+            <graphic>
+                <HBox  visible="false"  fx:id="pauseIcon" spacing="5" prefHeight="40" prefWidth="40" minWidth="40" minHeight="40" alignment="CENTER">
+                    <Rectangle height="10" width="8"></Rectangle>
+                    <Rectangle height="10" width="8"></Rectangle>
+                </HBox>
+                <Polygon translateX="8" fx:id="playIcon" visible="true" scaleX="3" scaleY="3" >
+                    <points>
+                        <Double fx:value="0.0" />
+                        <Double fx:value="4.0" />
+                        <Double fx:value="5.0" />
+                        <Double fx:value="7.0" />
+                        <Double fx:value="0.0" />
+                        <Double fx:value="10.0" />
+                    </points>
+                </Polygon>
+            </graphic>
+        </Button>
         <Button  mnemonicParsing="false" onAction="#resetSimulation" text="Reset" />
         <Button  mnemonicParsing="false" onAction="#setOnTimeLapse" text="Timelapse" />
         <Button  mnemonicParsing="false" onAction="#setOnSlowMotion" text="SlowMotion" />
+        <Label alignment="BASELINE_CENTER" GridPane.columnIndex="6"  fx:id="clock"  text="00:00:00"  ></Label>
+        <Label text="1x" fx:id="timeFactor"></Label>
     </children>
 
 </HBox>

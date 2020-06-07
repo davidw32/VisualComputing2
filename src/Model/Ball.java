@@ -11,7 +11,12 @@ import javafx.scene.text.Text;
 
 import static Helpers.Config.GRAVITY;
 
-public class Ball extends GraphicsObject {
+/**
+ * @Author: Patrick Pavlenko,David Waelsch,Pamela Trowe
+ * Animierte Ball Klasse (Kugel) für die grafische Szene
+ */
+public class Ball extends GraphicsObject
+{
 
     private DoubleProperty radius;
     private boolean collision, frictionLock;
@@ -365,9 +370,9 @@ public class Ball extends GraphicsObject {
         //[m/s^2]
         double FG = m * g;
         // [N]
-        double FH = ((FG * Math.sin(Math.toRadians(angle))));
+        double FH = (( FG * Math.sin( Math.toRadians(angle)) ) );
         // [N]
-        double FN = (frictionCoff * (FG * Math.cos(Math.toRadians(angle))));
+        double FN = ( frictionCoff *( FG * Math.cos(Math.toRadians(angle)  )  )  );
 
         // [N]
         double FHy = (FH * Math.sin(Math.toRadians(angle)));
@@ -386,7 +391,6 @@ public class Ball extends GraphicsObject {
 
     /**
      * Ermitteln eines Winkel einer Geraden
-     *
      * @param x1 x Startwert der Gerade
      * @param y1 y Startwert der Gerade
      * @param x2 x Endwert der Gerade

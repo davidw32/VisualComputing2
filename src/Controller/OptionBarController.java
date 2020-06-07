@@ -134,4 +134,9 @@ public class OptionBarController {
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;
     }
+
+
+    public GraphicScene getGraphicScene() {
+        return graphicScene;
+    }
 }

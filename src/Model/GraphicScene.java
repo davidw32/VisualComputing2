@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.*;
+import Helpers.SceneTime;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -8,12 +9,22 @@ import javafx.scene.shape.Line;
 
 import java.util.LinkedList;
 
+/**
+ * @author Patrick Pavlenko,Pamela Trowe
+ * Globale Klasse, welche über mehrere Klassen gepassed wird,um essenzielle
+ * Werte / Objekte zuzugreifen zu können
+ */
 public class GraphicScene {
 
     // die Elemente in der Szene
     private LinkedList<GraphicsObject> elementsInScene ;
     // ausgewähltes Objekt in der Szene
     //private GraphicsObject activeElement;
+
+    // Zeit bzw Timer der unten im Programm gesehen werden kann
+    private SceneTime timer = new SceneTime();
+    //Faktor fuer den Zeitraffer,wecher die Anzahl der Frames bestimmt
+    private double timeFactor = 1;
 
     private ElementEditorController elementEditorController;
     private ElementBarController elementBarController;
@@ -55,7 +66,7 @@ public class GraphicScene {
 
     }
 
-    // die eigendliche Animationsloop
+    // die eigentliche Animationsloop
     public void updateScene(){
         //
         for (GraphicsObject graphicsObject: elementsInScene){
@@ -178,6 +189,13 @@ public class GraphicScene {
     }
 
 
+    public SceneTime getTimer() {
+        return timer;
+    }
+
+    public double getTimeFactor() {
+        return timeFactor;
+    }
 
     public ElementEditorController getElementEditorController() {
         return elementEditorController;
@@ -209,6 +227,10 @@ public class GraphicScene {
 
     public void setOptionBarController(OptionBarController optionBarController) {
         this.optionBarController = optionBarController;
+    }
+
+    public void setTimeFactor(double timeFactor) {
+        this.timeFactor = timeFactor;
     }
 
     public PlayerController getPlayerController() {
