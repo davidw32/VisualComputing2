@@ -48,8 +48,10 @@ public class GraphicSceneController {
                         addListenersToObject(newBall);
                         // in der Liste einfügen
                         graphicScene.addElement(newBall);
+
+
                         // in der Szene anzeigen
-                        graphicPane.getChildren().add(newBall.getElementView());
+                        graphicPane.getChildren().addAll(newBall.getElementView(), newBall.getDirectionLine());
 
                         success = true;
                     }

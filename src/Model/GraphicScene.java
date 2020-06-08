@@ -148,6 +148,9 @@ public class GraphicScene {
     public void resetAllElements(){
         for (GraphicsObject graphicsObject: elementsInScene){
             graphicsObject.resetElement();
+            if (graphicsObject instanceof Ball){
+                ((Ball) graphicsObject).resetDirectionLine();
+            }
         }
     }
 
