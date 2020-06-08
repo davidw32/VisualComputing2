@@ -8,9 +8,11 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.shape.Polygon;
+import javafx.scene.control.Label;
+
 import javafx.util.Duration;
 
 /**
@@ -21,22 +23,31 @@ public class PlayerController {
 
     @FXML private Button playPauseButton;
     @FXML private Label timeFactor;
-    @FXML private HBox pauseIcon;
-    @FXML private Polygon playIcon;
-    @FXML private Label clock;
 
+    @FXML private Label clock;
+    @FXML private ImageView playPauseIcon;
+    @FXML  private HBox player;
     private GraphicScene graphicScene;
+    private Image playI;
+    private Image pauseI;
 
     private Timeline timeline;
     private boolean isRunning = false;
     private boolean isPaused = true;
 
+    public void initialize(){
+        System.out.println("init player");
+        pauseI = new Image(getClass().getResourceAsStream("../img/Icons/Pause.png"));
+        playI = new Image(getClass().getResourceAsStream("../img/Icons/Play.png"));
+        playPauseIcon.setImage(playI);
+    }
+
     @FXML
     public void startSimulation(){
         //starte die Simulation
         if(isPaused) {
-            pauseIcon.setVisible(true);
-            playIcon.setVisible(false);
+
+            playPauseIcon.setImage(pauseI);
             if (!isRunning)
             {
                 for (GraphicsObject graphicsObject : graphicScene.getElementsInScene())
@@ -55,13 +66,15 @@ public class PlayerController {
             isRunning = true;
             isPaused = false;
 
+
             timeline.play();
         } else { //mache Pause
             if (isRunning){
                 timeline.pause();
-                pauseIcon.setVisible(false);
-                playIcon.setVisible(true);
+                playPauseIcon.setImage(playI);
+
                 isPaused = true;
+
             }
         }
     }
@@ -74,9 +87,8 @@ public class PlayerController {
             timeline.stop();
             isRunning = false;
             isPaused = true;
+            playPauseIcon.setImage(playI);
 
-            pauseIcon.setVisible(false);
-            playIcon.setVisible(true);
             graphicScene.getTimer().restartTime(clock);
             graphicScene.resetAllElements();
         }
@@ -140,6 +152,6 @@ public class PlayerController {
         this.graphicScene = graphicScene;
     }
 
-
+    public HBox getPlayer(){return player;}
 
 }

@@ -7,6 +7,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -21,12 +22,13 @@ public class ElementBarController {
     private Circle ballDummy;
     @FXML
     private Rectangle blockDummy;
+    @FXML private VBox elementBar;
 
     private GraphicScene graphicScene;
 
 
     public void initialize() {
-
+        System.out.println(" init ElementBarController");
 
         ballDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
@@ -97,9 +99,9 @@ public class ElementBarController {
 
     }
 
-
-
-
+    public VBox getElementBar() {
+        return elementBar;
+    }
 
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;

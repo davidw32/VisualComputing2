@@ -15,7 +15,7 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
 
     // Werte für das Reset
-    private double startX, startY, startVelX, startVelY, startAccX, startAccY;
+    private double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight;
 
     private final DoubleProperty xPosition, yPosition,
                                  xAcceleration, yAcceleration,
@@ -32,15 +32,15 @@ public abstract class GraphicsObject {
         //die Properties des GraphicsObject werden erzeugt
         this.xPosition = new SimpleDoubleProperty(this, "xPosition", initialX);
         this.yPosition = new SimpleDoubleProperty(this, "yPosition", initialY);
-        this.xAcceleration = new SimpleDoubleProperty(this,"xAcceleration",0);
-        this.yAcceleration = new SimpleDoubleProperty(this,"yAcceleration", 0);
-        this.xVelocity = new SimpleDoubleProperty(this, "xVelocity",0);
-        this.yVelocity = new SimpleDoubleProperty(this, "yVelocity",0);
-        this.xScale = new SimpleDoubleProperty(this, "xScale", 1);
-        this.yScale = new SimpleDoubleProperty(this, "yScale", 1);
-        this.weight = new SimpleDoubleProperty(this,"weight",0);
-        this.friction = new SimpleDoubleProperty(this, "friction", 0);
-        this.angle = new SimpleDoubleProperty(this,"angle", 0);
+        this.xAcceleration = new SimpleDoubleProperty(this,"xAcceleration",0.0);
+        this.yAcceleration = new SimpleDoubleProperty(this,"yAcceleration", 0.0);
+        this.xVelocity = new SimpleDoubleProperty(this, "xVelocity",0.0);
+        this.yVelocity = new SimpleDoubleProperty(this, "yVelocity",0.0);
+        this.xScale = new SimpleDoubleProperty(this, "xScale", 1.0);
+        this.yScale = new SimpleDoubleProperty(this, "yScale", 1.0);
+        this.weight = new SimpleDoubleProperty(this,"weight",0.0);
+        this.friction = new SimpleDoubleProperty(this, "friction", 1.0);
+        this.angle = new SimpleDoubleProperty(this,"angle", 0.0);
         this.isSelected = new SimpleBooleanProperty(this, "isSelected", true);
     }
     // statt der Werte diese als Property setzen, dann lassen sie sich mit der Gui verknüpfen
@@ -123,6 +123,11 @@ public abstract class GraphicsObject {
         startAccY =  this.getYAcceleration();
         startVelX = this.getXVelocity();
         startVelY = this.getYVelocity();
+        startAngle = this.getAngle();
+        startScaleX = this.getXScale();
+        startScaleY = this.getYScale();
+        startWeight = this.getWeight();
+
 
     }
 
@@ -134,9 +139,14 @@ public abstract class GraphicsObject {
         setYAcceleration(startAccY);
         setXVelocity(startVelX);
         setYVelocity(startVelY);
+        setAngle(startAngle);
+        setXScale(startScaleX);
+        setYScale(startScaleY);
+        setWeight(startWeight);
     }
 
-    public void moveElement(){};
+    public void moveElement(){//diese Methode muss von den Objekten jeweils selbst implementiert werden
+    }
 
 
     @Override
