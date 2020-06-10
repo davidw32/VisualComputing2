@@ -52,7 +52,7 @@
     -fx-border-width: 0;
 }
 
-#startScreenGrid .label{
+#startScreenViewTitle{
     -fx-font-size: 50;
 }
 
