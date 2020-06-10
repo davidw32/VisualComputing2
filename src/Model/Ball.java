@@ -11,12 +11,7 @@ import javafx.scene.text.Text;
 
 import static Helpers.Config.GRAVITY;
 
-/**
- * @Author: Patrick Pavlenko,David Waelsch,Pamela Trowe
- * Animierte Ball Klasse (Kugel) für die grafische Szene
- */
-public class Ball extends GraphicsObject
-{
+public class Ball extends GraphicsObject {
 
     private DoubleProperty radius;
     private boolean collision, frictionLock;
@@ -77,7 +72,7 @@ public class Ball extends GraphicsObject
         xScaleProperty().bindBidirectional(yScaleProperty());
 
         calculator = new VectorMath();
-        velocity = calculator.vectorLength(getXVelocity(),getYVelocity());
+        velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
     }
 
     public DoubleProperty radiusProperty() {
@@ -93,35 +88,36 @@ public class Ball extends GraphicsObject
     }
 
     //Die Länge des Geschwindigkeitsvektors
-    public final void setVelocity(){
-        this.velocity = calculator.vectorLength(getXVelocity(),getYVelocity());
+    public final void setVelocity() {
+        this.velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
     }
 
-    public final double getVelocity(){
-        return  this.velocity;
+    public final double getVelocity() {
+        return this.velocity;
     }
 
     public Line getDirectionLine() {
         return directionLine;
     }
+
     //wenn der Ball zurückgesetz wird
     public void resetDirectionLine() {
         directionLine.setEndX(getXPosition());
         directionLine.setEndY(getYPosition());
     }
-    //wenn sich die Geschwindigkeit ändert
-    public void updateDirectionLine(){
 
-            if(getVelocity()==0){
-                directionLine.setEndX(getXPosition());
-                directionLine.setEndY(getYPosition());
-            }else {
-                directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
-                directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
-            }
+    //wenn sich die Geschwindigkeit ändert
+    public void updateDirectionLine() {
+
+        if (getVelocity() == 0) {
+            directionLine.setEndX(getXPosition());
+            directionLine.setEndY(getYPosition());
+        } else {
+            directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
+            directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
+        }
         //System.out.println("startX: "+directionLine.getStartX()+" startY: "+directionLine.getStartY()+" endX: "+directionLine.getEndX()+ " endY: "+ directionLine.getEndY());
     }
-
 
 
     public void moveElement() {
@@ -426,9 +422,9 @@ public class Ball extends GraphicsObject
         //[m/s^2]
         double FG = m * g;
         // [N]
-        double FH = (( FG * Math.sin( Math.toRadians(angle)) ) );
+        double FH = ((FG * Math.sin(Math.toRadians(angle))));
         // [N]
-        double FN = ( frictionCoff *( FG * Math.cos(Math.toRadians(angle)  )  )  );
+        double FN = (frictionCoff * (FG * Math.cos(Math.toRadians(angle))));
 
         // [N]
         double FHy = (FH * Math.sin(Math.toRadians(angle)));
@@ -447,6 +443,7 @@ public class Ball extends GraphicsObject
 
     /**
      * Ermitteln eines Winkel einer Geraden
+     *
      * @param x1 x Startwert der Gerade
      * @param y1 y Startwert der Gerade
      * @param x2 x Endwert der Gerade
@@ -485,42 +482,46 @@ public class Ball extends GraphicsObject
         //System.out.println("Ballkollsion wird geprüft");
         //zwischenspeicher für die neuen Velocityvektoren
         double[] vneu;
+
         //der Abstand ist klein genug um sich zu treffen
         if (intersecting(ball2)) {
-            System.out.println("Kugeln treffen sich");
+           // System.out.println("Kugeln treffen sich");
+
             //diese Kugel rollt nach rechts oder links
             if (this.getXVelocity() != 0 && Math.abs(this.getYVelocity()) <= 100) {
+
                 //diese Kugel befindet sich links von der anderen Kugel
                 if (this.getXPosition() <= ball2.getXPosition()) {
                     //Ball2 ruht und dieser Ball rollt daruf zu
                     if (ball2.getXVelocity() == 0 && ball2.getYVelocity() == 0 && this.getXVelocity() > 0) {
-                        vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
+                        //berechne die neuen Geschwindigkeiten
+                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
+                        //setze die berechneten neuen Geschwindigkeiten ein
                         this.setXVelocity(vneu[0]);
                         this.setYVelocity(vneu[1]);
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
                     }
                     //Ball2 rollt nach rechts und dieser Ball auch, dieser ist schneller
-                   else if(ball2.getXVelocity()>0 && ball2.getXVelocity()<this.getXVelocity() ){
-                       vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
-                       this.setXVelocity(vneu[0]);
-                       this.setYVelocity(vneu[1]);
-                       ball2.setXVelocity(vneu[2]);
-                       ball2.setYVelocity(vneu[3]);
-                   }
+                    else if (ball2.getXVelocity() > 0 && ball2.getXVelocity() < this.getXVelocity()) {
+                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
+                        this.setXVelocity(vneu[0]);
+                        this.setYVelocity(vneu[1]);
+                        ball2.setXVelocity(vneu[2]);
+                        ball2.setYVelocity(vneu[3]);
+                    }
 
                 }
                 //andersherum
                 else if (this.getXPosition() >= ball2.getXPosition()) {
                     if (ball2.getXVelocity() == 0 && ball2.getYVelocity() == 0 && this.getXVelocity() < 0) {
-                        vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
+                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
                         this.setXVelocity(vneu[0]);
                         this.setYVelocity(vneu[1]);
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
-                    }
-                   else if(ball2.getXVelocity()>0 && ball2.getXVelocity()>this.getXVelocity() ){
-                        vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
+                    } else if (ball2.getXVelocity() > 0 && ball2.getXVelocity() > this.getXVelocity()) {
+                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
                         this.setXVelocity(vneu[0]);
                         this.setYVelocity(vneu[1]);
                         ball2.setXVelocity(vneu[2]);
@@ -528,36 +529,52 @@ public class Ball extends GraphicsObject
                     }
 
                 }
-            }
+            } else {
+                // ansonsten berechne den schiefen elastischen Stoß
+
+                if (this.getXPosition() <= ball2.getXPosition()) {
+                    //Differenzvektor der Mittelpunkte
+                    double deltaX = ball2.getXPosition() - this.getXPosition();
+                    double deltaY = ball2.getYPosition() - this.getYPosition();
+                    System.out.println("Schiefer Stoß");
+                    double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                    double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+
+                    if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                        vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+
+                        this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                        this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                        ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                        ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                    }
 
 
+                } else if (this.getXPosition() >= ball2.getXPosition()) {
+                    //Differenzvektor der Mittelpunkte
+                    double deltaX = this.getXPosition() - ball2.getXPosition();
+                    double deltaY = this.getYPosition() - ball2.getYPosition();
+                    System.out.println("Schiefer Stoß");
+                    double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                    double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
 
-           /*
+                    if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                        vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
 
-            // die Kugeln bewegen sich auf einander zu
-            if (moveTowardsEachOther(ball2)) {
-                System.out.println("rollen aufeinander zu");
+                        this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                        this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                        ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                        ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                    }
 
-                if(ball2.getXVelocity()==0 && ball2.getYVelocity()==0 && this.getYVelocity()==0)
 
-
-                // die Geschwindigkeitsvektoren v1 und v2 sind parallel zur Zentralrichtung
-                if (moveParallel(ball2)) {
-                    System.out.println("bewegen sich parallel");
-                    //berechne Zentraler elastischer Stoss
-                    vneu = zentralerStoss(ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
-                    this.setXVelocity(vneu[0]);
-                    this.setYVelocity(vneu[1]);
-                    ball2.setXVelocity(vneu[2]);
-                    ball2.setYVelocity(vneu[3]);
-
-                } else {
-                    // v1 und v2 nicht parallel, berechne dezentralen/realen Stoss
-                    dezentralerStoss(ball2);
                 }
+
+
             }
 
-            */
+
+
         }
     }
 
@@ -580,92 +597,6 @@ public class Ball extends GraphicsObject
     }
 
     /**
-     * Diese Methode überprüft anhand der Positionen und der Geschwindikeiten, ob zwei Bälle aufeinander zu rollen
-     * bisher in x-Richtung
-     *
-     * @param ball2
-     * @return - true falls die Bälle aufeinander zu rollen
-     */
-
-    private boolean moveTowardsEachOther(Ball ball2) {
-
-        boolean returnBoolean = false;
-
-        if (this.getXPosition() < ball2.getXPosition()) {
-            // dieser Ball befindet sich links von Ball2
-            if (this.getXVelocity() >= 0 && ball2.getXVelocity() <= 0) {
-                // sie rollen auf einander zu (dieser Ball rollt nach rechts, ball2 nach links)
-                returnBoolean = true;
-            } else if (this.getXVelocity() > ball2.getXVelocity() && ball2.getXVelocity() >= 0) {
-                //beide Rollen nach rechts, dieser ist schneller
-                returnBoolean = true;
-            } else if (this.getXVelocity() < ball2.getXVelocity() && this.getXVelocity() <= 0) {
-                //beide Rollen nach links, der andere ist schneller
-                returnBoolean = true;
-            }
-        } else if (this.getXPosition() > ball2.getXPosition()) {
-            //dieser Ball liegt rechts von Ball2
-            if (this.getXVelocity() <= 0 && ball2.getXVelocity() >= 0) {
-                // sie rollen auf einander zu (dieser Ball rollt nach links, ball2 nach rechts)
-                returnBoolean = true;
-            } else if (this.getXVelocity() > ball2.getXVelocity() && this.getXVelocity() <= 0) {
-                //beide Rollen nach links, dieser ist schneller
-                returnBoolean = true;
-            } else if (this.getXVelocity() < ball2.getXVelocity() && this.getXVelocity() >= 0) {
-                //beide Rollen nach rechts, der andere ist schneller
-                returnBoolean = true;
-            }
-        }
-        return returnBoolean;
-    }
-
-    /**
-     * Prüft ob die beiden Ball sich parallel zur Zentralrichtung bewegen
-     *
-     * @param ball2
-     * @return - true falls sie sich parallel zur Zentralrichtugn bewegen
-     */
-    private boolean moveParallel(Ball ball2) {
-
-        boolean returnBoolean = false;
-
-        double v_x0 = this.getXVelocity();
-        double v_y0 = this.getYVelocity();
-        double v_x1 = ball2.getXVelocity();
-        double v_y1 = ball2.getYVelocity();
-        double x1_x0 = ball2.getXPosition() - this.getXPosition();
-        double y1_y0 = ball2.getYPosition() - this.getYPosition();
-        //System.out.println("x0="+v_x0+" y0="+v_y0+" x1="+v_x1+" y1="+v_y1);
-
-        //falls die zweite Kugel Ruht
-        if (v_x1 == 0 & v_y1 == 0) {
-            if (calculator.areParallel(v_x0, v_y0, x1_x0, y1_y0)) {
-                System.out.println("Fall1");
-                returnBoolean = true;
-            }
-
-        }
-        // falls diese Kugel ruht
-        else if (v_x0 == 0 & v_y0 == 0) {
-            System.out.println("fall2");
-            if (calculator.areParallel(v_x1, v_y1, x1_x0, y1_y0)) returnBoolean = true;
-
-        }
-        //beide Bewegen sich
-        else if ((v_x0 != 0 | v_y0 != 0) | (v_x1 != 0 | v_y1 != 0)) {
-            //wenn sich beide parallel bewegen
-            if (calculator.areParallel(v_x0, v_y0, x1_x0, y1_y0)
-                    & calculator.areParallel(v_x1, v_y1, x1_x0, y1_y0)) {
-
-                System.out.println("Fall3");
-                returnBoolean = true;
-            }
-        }
-
-        return returnBoolean;
-    }
-
-    /**
      * Berechnung gemäß der Formel für den zentralen elastischen Stoss
      *
      * @param vx_2    - x-Geschwindikeit des zweiten Objekts
@@ -673,20 +604,20 @@ public class Ball extends GraphicsObject
      * @param weigth2 - Gewischt des zweiten Objekts
      * @return _ double[] mit vx1_neu, vy1_neu, vx2_neu, vx3_neu
      */
-    private double[] zentralerStoss(double vx_2, double vy_2, double weigth2) {
+    private double[] zentralerStoss(double vx_1, double vy_1, double weigth1, double vx_2, double vy_2, double weigth2) {
         System.out.println("zentrlarer Stoss wird berechnet");
         double[] vnew = {0, 0, 0, 0};
-        if (this.getWeight() == weigth2) {
+        if (weigth1 == weigth2) {
             vnew[0] = vx_2;
             vnew[1] = vy_2;
-            vnew[2] = this.getXVelocity();
-            vnew[3] = this.getYVelocity();
+            vnew[2] = vx_1;
+            vnew[3] = vy_1;
         } else {
-            double xFactor = (this.getWeight() * this.getXVelocity() + weigth2 * vx_2) / (this.getWeight() + weigth2);
-            double yFactor = (this.getWeight() * this.getYVelocity() + weigth2 * vy_2) / (this.getWeight() + weigth2);
+            double xFactor = (weigth1 * vx_1 + weigth2 * vx_2) / (weigth1 + weigth2);
+            double yFactor = (weigth1 * vy_1 + weigth2 * vy_2) / (weigth1 + weigth2);
 
-            vnew[0] = 2 * xFactor - this.getXVelocity();
-            vnew[1] = 2 * yFactor - this.getYVelocity();
+            vnew[0] = 2 * xFactor - vx_1;
+            vnew[1] = 2 * yFactor - vy_2;
             vnew[2] = 2 * xFactor - vx_2;
             vnew[3] = 2 * yFactor - vy_2;
         }
@@ -694,70 +625,5 @@ public class Ball extends GraphicsObject
         return vnew;
     }
 
-    private void dezentralerStoss(Ball ball2) {
-    }
-
-
-/*
-    private void elastischerStoss2D(Ball ball2) {
-        // gemäß Formeln auf Wikipedia
-        //bestimme v1_neu und v2_neu (Geschwindigkeiten von Ball1 und Ball2)
-
-        //Steigungen der Zentralrichtung und der Berührtangente
-        double s_z = calculator.directionCosine(ball2.getYPosition() - this.getYPosition(), ball2.getXPosition() - this.getXPosition());
-        double s_t = 1 / (-1 * s_z);
-
-        //Richtungskosinus von v1 bestimmen
-        double s_v1 = calculator.directionCosine(this.getXVelocity(), this.getYVelocity());
-        //Zerlegung von v1 in Komponente parallel zur Berührtangenten
-        double xt_v1 = this.getXVelocity() * (s_z - s_v1) / (s_z - s_t);
-        double yt_v1 = this.getXVelocity() * s_t;
-        //Komponente parallel zur Zentralrichtung
-        double xz_v1 = this.getXVelocity() * (s_t - s_v1) / (s_t - s_z);
-        double yz_v1 = xz_v1 * s_z;
-
-        //Richtungskosinus von v2 bestimmen
-        double s_v2 = calculator.directionCosine(ball2.getXVelocity(), ball2.getYVelocity());
-        //Zerlegung von v2 in Komponente parallel zur Berührtangenten
-        double xt_v2 = ball2.getXVelocity() * (s_z - s_v2) / (s_z - s_t);
-        double yt_v2 = ball2.getXVelocity() * s_t;
-        //Komponente parallel zur Zentralrichtung
-        double xz_v2 = ball2.getXVelocity() * (s_t - s_v2) / (s_t - s_z);
-        double yz_v2 = xz_v2 * s_z;
-        // für die Zentralkomponente den elastischen Stoß berechnen
-        // falls die Kugeln gleichschwer sind, werden die Werte von v1 und v2 vertauscht
-        if (this.getWeight() == ball2.getWeight()) {
-            double tempX = xz_v1;
-            double tempY = yz_v1;
-
-            xz_v1 = xz_v2;
-            yz_v1 = yz_v2;
-
-            xz_v2 = tempX;
-            yz_v2 = tempY;
-        } else {
-            //elastischen Stoß für die Zentralkomponente berechnen
-            //v1_neu = 2 * (m_1*v_1 + m_2*v_2)/(m_1+m_2) - v_1
-            //v2_neu = 2 * (m_1*v_1 + m_2*v_2)/(m_1+m_2) - v_2
-            double xz_faktor = 2 * (this.getWeight() * xz_v1 + ball2.getWeight() * xz_v2) / (this.getWeight() + ball2.getWeight());
-            double yz_faktor = 2 * (this.getWeight() * yz_v1 + ball2.getWeight() * yz_v2) / (this.getWeight() + ball2.getWeight());
-            xz_v1 = xz_faktor - xz_v1;
-            yz_v1 = yz_faktor - yz_v1;
-            xz_v2 = xz_faktor - xz_v2;
-            yz_v2 = yz_faktor - yz_v2;
-        }
-
-        // jetzt die neuen Geschwindigkeiten v1_neu und v2_neu aus vt und vz wieder zusammensetzen.
-        this.setXVelocity(xt_v1 + xz_v1);
-        this.setYVelocity(yt_v1 + yz_v1);
-        ball2.setXVelocity(xt_v2 + xz_v2);
-        ball2.setYVelocity(yt_v2 + yz_v2);
-        // jetzt noch bei Ball2 einen Wert setzen, dass die Kollision schon bestimmt wurde!!!
-
-
-    }
-
-
- */
 
 }

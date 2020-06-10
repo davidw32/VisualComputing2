@@ -38,7 +38,6 @@ public class StartController {
         optionBarController.setGraphicScene(myGraphicScene);
         elementBarController.setGraphicScene(myGraphicScene);
         startScreenController.setGraphicScene(myGraphicScene);
-        optionBarController.setGraphicScene(myGraphicScene);
 
         elementBarController.getElementBar().setVisible(false);
         elementEditorController.getEditor().setVisible(false);
