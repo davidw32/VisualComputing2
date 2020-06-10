@@ -3,7 +3,7 @@
 }
 
 .startScreenBtn:hover{
-    -fx-border-color: #ffd700;
+    -fx-border-color: #ff9910;
     -fx-cursor: hand;
 }
 
@@ -68,10 +68,10 @@
 #spinnerDummy:hover,
 #springboardDummy:hover,
 #seasawDummy:hover{
-    -fx-effect: dropshadow(three-pass-box, rgba(255, 222, 69, 0.9), 5, 0, 0, 0);
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 153, 16, 0.9), 5, 0, 0, 0);
     -fx-cursor: hand;
     -fx-stroke-width: 3;
-    -fx-stroke: orange;
+    -fx-stroke: #ff9910;
 }
 
 
@@ -100,6 +100,7 @@
     -fx-border-radius: 18;
 }
 
-.menu{
-    -fx-font-size: 15;
+
+#optionBar :hover{
+    -fx-text-fill: #ffffff;
 }
