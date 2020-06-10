@@ -81,7 +81,7 @@ public class GraphicScene {
                         //falls das zweite ein Ball ist
                         if (secondObject instanceof Ball) ((Ball) graphicsObject).calculateCollisionWithBall((Ball)secondObject);
                     }
-                    if(secondObject instanceof Block){
+                    if(secondObject instanceof Block){ // falls das Objekt ein Block ist wird mit den Kollisionskanten des Blocks geprüft
                         ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
                     }
                 }
