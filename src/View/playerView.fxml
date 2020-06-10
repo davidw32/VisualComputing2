@@ -7,32 +7,39 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 
-<HBox fx:id="player" alignment="CENTER_LEFT" maxHeight="60.0" maxWidth="1600.0" minHeight="60.0" minWidth="1600.0" prefHeight="60.0" prefWidth="1600.0" spacing="20.0" style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PlayerController">
+<HBox fx:id="player" alignment="CENTER" maxHeight="60.0" minHeight="60.0" prefHeight="60.0" prefWidth="1150" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.PlayerController">
 
     <children>
+<HBox fx:id="timeManager" alignment="CENTER_LEFT" prefWidth="383" spacing="10">
+    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnTimeLapse" text="Fast" />
+    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnSlowMotion" text="Slow" />
+</HBox>
+        <HBox fx:id="playerControl" alignment="CENTER_LEFT" prefWidth="383" spacing="10">
+            <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#stopSimulation">
+                <graphic>
+                    <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../img/Icons/Stop.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="playPauseButton" minHeight="40" minWidth="40" mnemonicParsing="false" onAction="#startSimulation">
 
-              <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#stopSimulation">
-         <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/Icons/Stop.png" />
-               </image>
-            </ImageView>
-         </graphic>
-        </Button>
-        <Button fx:id="playPauseButton" minHeight="40" minWidth="40" mnemonicParsing="false" onAction="#startSimulation">
+                <graphic>
+                    <ImageView fx:id="playPauseIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
 
-         <graphic>
-            <ImageView fx:id="playPauseIcon" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                    </ImageView>
+                </graphic>
+            </Button>
+        </HBox>
+<HBox fx:id="timeControl" alignment="CENTER_LEFT" prefWidth="383" spacing="10">
+    <Label fx:id="clock" text="00:00:00" GridPane.columnIndex="6" />
+    <Label fx:id="timeFactor" text="1x" />
+    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#resetSimulation" text="Reset" />
+</HBox>
 
-            </ImageView>
-         </graphic>
-        </Button>
-        <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#resetSimulation" text="Reset" />
-        <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnTimeLapse" text="Fast" />
-        <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnSlowMotion" text="Slow" />
-        <Label fx:id="clock" alignment="BASELINE_CENTER" text="00:00:00" GridPane.columnIndex="6" />
-        <Label fx:id="timeFactor" text="1x" />
+
     </children>
 
 </HBox>

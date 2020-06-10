@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane fx:id="startScreenGrid" gridLinesVisible="true" minHeight="820.0" minWidth="1150.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StartScreenController">
+<GridPane fx:id="startScreenGrid" gridLinesVisible="false" minHeight="820.0" minWidth="1150.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StartScreenController">
 <columnConstraints>
     <ColumnConstraints percentWidth="5.0" />
     <ColumnConstraints percentWidth="90.0" />
@@ -18,12 +18,12 @@
 </rowConstraints>
 
 <children>
-    <Label style="-fx-font-size: 50" translateX="70" GridPane.columnIndex="1" GridPane.rowIndex="1">Choose your Scene</Label>
+    <Label translateX="70" GridPane.columnIndex="1" GridPane.rowIndex="1">Choose your Scene</Label>
     <HBox alignment="CENTER" fillHeight="true" spacing="50" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <!-- Einiges der buttonstyles ist in der css -->
-        <Button fx:id="startScreenButton1" minHeight="300" minWidth="300" onAction="#openScene" style="-fx-border-width: 5;-fx-border-radius: 30; " styleClass="startScreenBtn" />
-        <Button fx:id="startScreenButton2" minHeight="300" minWidth="300" onAction="#openScene" style="-fx-border-width: 5;-fx-border-radius: 30; " styleClass="startScreenBtn" />
-        <Button fx:id="startScreenButton3" minHeight="300" minWidth="300" onAction="#openScene" style="-fx-border-width: 5;-fx-border-radius: 30; " styleClass="startScreenBtn" />
+        <Button fx:id="startScreenButton1" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
+        <Button fx:id="startScreenButton2" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
+        <Button fx:id="startScreenButton3" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
     </HBox>
 
 </children>

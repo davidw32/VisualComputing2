@@ -13,7 +13,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Text?>
-<StackPane fx:id="elementEditor" maxHeight="820.0" maxWidth="350.0" minHeight="820.0" minWidth="350.0" style="-fx-background-color: powderblue;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+<StackPane fx:id="elementEditor" maxHeight="820.0" maxWidth="350.0" minHeight="820.0" minWidth="350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
 
    <GridPane fx:id="editor" hgap="10.0" vgap="10.0">
    <columnConstraints>
@@ -41,11 +41,7 @@
          <RowConstraints />
    </rowConstraints>
    <children>
-      <Label text="Editor">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+      <Label text="Editor"></Label>
       <Label text="Position" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
@@ -100,9 +96,6 @@
             <GridPane.margin>
                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
             </GridPane.margin>
-            <font>
-               <Font size="18.0" />
-            </font>
          </Label>
          <Button fx:id="closeButton" mnemonicParsing="false" onAction="#onClose" text="Close" GridPane.columnIndex="3" GridPane.rowIndex="3">
             <GridPane.margin>
