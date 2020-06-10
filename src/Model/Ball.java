@@ -172,7 +172,7 @@ public class Ball extends GraphicsObject {
                 schnittpunktY = linePy;
             }
             else if(lineRx == 0){ // Fallunterscheidung wenn es eine vertikale Linie ist
-                abstand = Math.abs(linePx - getYPosition()) - radius()*getXScale();
+                abstand = Math.abs(linePx - getXPosition()) - radius()*getXScale();
                 schnittpunktX = linePx;
                 schnittpunktY = getYPosition();
             }
@@ -184,7 +184,7 @@ public class Ball extends GraphicsObject {
                 schnittpunktY = ballLineM * schnittpunktX + ballLineB;
 
                 // Abstand zwischen dem Mittelpunkt des Ball und dem Schnittpunkt - den Radius des Balls
-                abstand = Math.sqrt(Math.pow(getXPosition() - schnittpunktX, 2) + Math.pow(getXPosition() - schnittpunktY, 2)) - radius()*getXScale();
+                abstand = Math.sqrt(Math.pow(getXPosition() - schnittpunktX, 2) + Math.pow(getYPosition() - schnittpunktY, 2)) - radius()*getXScale();
 
             }
 
