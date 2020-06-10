@@ -41,7 +41,7 @@
          <RowConstraints />
    </rowConstraints>
    <children>
-      <Label text="Editor"></Label>
+      <Label fx:id="elementEditorTitle" text="Editor"></Label>
       <Label text="Position" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />

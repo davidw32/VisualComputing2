@@ -11,7 +11,7 @@
 <VBox fx:id="elementBar" alignment="TOP_CENTER" minHeight="820.0" minWidth="100.0" maxHeight="820.0" spacing="50.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementBarController">
 
     <children>
-        <Label text="Preview"></Label>
+        <Label fx:id="elementBarTitle" text="Preview"></Label>
 
         <Circle fx:id="ballDummy" fill="PLUM" radius="30.0"></Circle>
         <Rectangle fx:id="blockDummy" fill="SEAGREEN" height="20.0" width="80.0"></Rectangle>
