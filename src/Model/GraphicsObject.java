@@ -132,7 +132,7 @@ public abstract class GraphicsObject {
     }
 
     // das Element wird auf die Startwerte zurückgesetzt
-    public final void resetElement(){
+    public void resetElement(){
         setXPosition(startX);
         setYPosition(startY);
         setXAcceleration(startAccX);
@@ -140,8 +140,8 @@ public abstract class GraphicsObject {
         setXVelocity(startVelX);
         setYVelocity(startVelY);
         setAngle(startAngle);
-        setXScale(startScaleX);
-        setYScale(startScaleY);
+        //setXScale(startScaleX);
+        //setYScale(startScaleY);
         setWeight(startWeight);
     }
 
