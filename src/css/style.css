@@ -87,9 +87,10 @@
 
 .text-field,
 .choice-box,
-.color-picker{
-    -fx-border-radius: 5;
-    -fx-background-radius: 5;
+.color-picker,
+#player .button{
+    -fx-border-radius: 7;
+    -fx-background-radius: 7;
 }
 
 #startScreenGrid .button{
@@ -102,3 +103,6 @@
     -fx-border-width: 4;
     -fx-border-radius: 18;
 }
+
+
+
