@@ -10,7 +10,7 @@
 <?import javafx.scene.shape.Sphere?>
 <?import javafx.geometry.Point3D?>
 <?import javafx.scene.shape.Line?>
-<Pane fx:id="graphicPane" style="-fx-background-color: ivory" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<Pane fx:id="graphicPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
       fx:controller="Controller.GraphicSceneController" minHeight="820.0" minWidth="1150.0" maxHeight="820.0" maxWidth="1150.0">
 <children>
     <Line fx:id="line1" startX="0" startY="220" endX="400" endY="220"></Line>

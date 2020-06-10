@@ -29,3 +29,76 @@
 
     -fx-cursor: hand;
 }
+
+#elementBar{
+    -fx-padding: 20;
+
+}
+
+
+
+@font-face {
+    font-family: Poppins;
+    src: url('Poppins-Medium.otf');
+}
+
+.label{
+    -fx-font-size: 18;
+    -fx-font-family: Poppins;
+    -fx-text-fill: #3e3e3e;
+}
+
+
+#player,
+#start,
+#elementEditor,
+#elementBar{
+    -fx-background-color: #f2f2f2;
+}
+
+#graphicPane{
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 10.0;
+    -fx-border-radius: 10.0;
+    -fx-border-width: 0;
+}
+
+#startScreenGrid .label{
+    -fx-font-size: 50;
+}
+
+#seasawDummy,
+#ballDummy,
+#blockDummy,
+#spinnerDummy,
+#springboardDummy,
+#graphicPane,
+#startScreenGrid .button{
+    -fx-effect: dropshadow(three-pass-box, rgba(50,50,93,0.9), 5, 0, 0, 0);
+}
+
+#elementEditor .label{
+    -fx-font-size: 15;
+}
+
+.menu{
+    -fx-font-size: 15;
+}
+
+.text-field,
+.choice-box,
+.color-picker{
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+#startScreenGrid .button{
+    -fx-background-radius: 20;
+    -fx-border-width: 0;
+    -fx-background-color: #ffffff;
+}
+
+#startScreenGrid .button:hover{
+    -fx-border-width: 4;
+    -fx-border-radius: 18;
+}
