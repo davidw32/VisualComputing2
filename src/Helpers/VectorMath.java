@@ -147,5 +147,26 @@ public class VectorMath {
         return returnBoolean;
     }
 
+    /**
+     * Berechnet die Parallelkomponente des ersten Vektors in Richtung des zweitens
+     *
+     * @param x_0 - x-Koordinate des ersten Vektors
+     * @param y_0 - y-Koordinate des ersten Vektors
+     * @param x_1 - x-Koordinate des zweiten Vektors
+     * @param y_1 - x-Koordinate des zweiten Vektors
+     * @return die errechnete Parallelkomponente
+     */
+    public double[] parallelProjection(double x_0, double y_0, double x_1, double y_1){
+        double[] returnVector = {0,0};
+        double length = vectorLength( x_1, y_1);
+        if ( length !=0 ) {
+            double tmp = dotProduct(x_1, y_1, x_0, y_0) / Math.pow(length, 2);
+            returnVector[0] = tmp * x_1;
+            returnVector[1] = tmp * y_1;
+        }
+
+        return returnVector;
+    }
+
 }
 
