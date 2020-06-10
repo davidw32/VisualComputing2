@@ -136,10 +136,15 @@ public class GraphicScene {
 
     public void deleteActiveElement(){
 
-        getActiveElement().getElementView().setVisible(false);
-
+        //getActiveElement().getElementView().setVisible(false);
+        graphicSceneController.getGraphicPane().getChildren().remove(getActiveElement().getElementView());
+        if (getActiveElement() instanceof Ball) {
+            graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getDirectionLine());
+            graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getVelocityText());
+        }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
+
     }
 
     /**
@@ -168,11 +173,14 @@ public class GraphicScene {
      */
     public void clearScene(){
         for (GraphicsObject graphicsObject: elementsInScene){
-            graphicsObject.getElementView().setVisible(false);
+            graphicSceneController.getGraphicPane().getChildren().remove(graphicsObject.getElementView());
+            if (graphicsObject instanceof Ball) {
+                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getDirectionLine());
+                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getVelocityText());
+            }
         }
         elementsInScene.clear();
         setActiveElement(placeholder);
-
     }
 
     /**

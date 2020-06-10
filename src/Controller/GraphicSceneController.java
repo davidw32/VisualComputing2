@@ -51,7 +51,7 @@ public class GraphicSceneController {
 
 
                         // in der Szene anzeigen
-                        graphicPane.getChildren().addAll(newBall.getElementView(), newBall.getDirectionLine());
+                        graphicPane.getChildren().addAll(newBall.getElementView(), newBall.getDirectionLine(), newBall.getVelocityText());
 
                         success = true;
                     }
@@ -154,7 +154,9 @@ public class GraphicSceneController {
             //Element verschieben
             _graphicsObject.setXPosition(newTranslateX);
             _graphicsObject.setYPosition(newTranslateY);
-
+            if(_graphicsObject instanceof Ball){
+                ((Ball) _graphicsObject).updateDirectionLine();
+            }
         });
 
     }

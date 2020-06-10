@@ -1,14 +1,12 @@
 package Controller;
 
-import Model.Ball;
 import Model.GraphicScene;
-import Model.ElementEditorModel;
 import Model.GraphicsObject;
+import com.sun.jdi.Value;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.css.converter.PaintConverter;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
@@ -16,12 +14,16 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 
+import java.text.ParseException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
+
+import static javafx.scene.paint.Color.RED;
+import static javafx.scene.paint.Color.rgb;
 
 public class ElementEditorController {
 
@@ -67,7 +69,6 @@ public class ElementEditorController {
 
     public void initialize() {
         System.out.println("Init ElementController");
-
     }
 
     /**
@@ -75,9 +76,12 @@ public class ElementEditorController {
      * und der Wechsel des aktiven Elements entsprechend beobachtet
      */
     public void initValues() {
+        setUpValidation(textFieldXPosition);
+        setUpValidation(textFieldYPosition);
 
         // für die Textfelder
         graphicScene.getActiveElementProperty().addListener(this::changed);
+
 
         // für den Colorpicker
         colorPicker.setValue((Color) graphicScene.getActiveElement().getElementView().getFill());
@@ -108,7 +112,23 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldFriction.textProperty(), oldValue.frictionProperty());
 
         //die Textfelder mit dem neuen Element verbinden
-        StringConverter<Number> converter = new NumberStringConverter(Locale.US,"#####.###");
+        StringConverter<Number> converter = new NumberStringConverter(Locale.US, "#####.###") {
+            @Override
+            public String toString(Number object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Number fromString(String string) throws NumberFormatException {
+
+                    try {
+                        return Double.parseDouble(string);
+                    } catch (NumberFormatException ex) {
+                        return 0;
+                    }
+
+            }
+        };
 
         Bindings.bindBidirectional(textFieldXPosition.textProperty(), newValue.xPositionProperty(), converter);
         Bindings.bindBidirectional(textFieldYPosition.textProperty(), newValue.yPositionProperty(), converter);
@@ -122,8 +142,31 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
         Bindings.bindBidirectional(textFieldFriction.textProperty(), newValue.frictionProperty(), converter);
 
+    }
+
+    private void setUpValidation(final TextField tf){
+        tf.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                validate(tf);
+            }
+        });
+        validate(tf);
 
     }
+    private void validate(TextField textField){
+        ObservableList<String> styleClass = textField.getStyleClass();
+        if(!textField.getText().matches("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?")){
+            System.out.println("Falsche Zahl");
+            if( ! styleClass.contains("error")) {
+                styleClass.add("error");
+            }
+        }else {
+            styleClass.removeAll(Collections.singleton("error"));
+        }
+
+    }
+
 
     public GridPane getEditor() {
         return editor;

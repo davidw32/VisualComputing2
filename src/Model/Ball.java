@@ -9,6 +9,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.util.Locale;
+
 import static Helpers.Config.GRAVITY;
 
 public class Ball extends GraphicsObject {
@@ -21,7 +23,7 @@ public class Ball extends GraphicsObject {
     private double velocity;
 
     boolean bounce = false;
-    Text velocityText = new Text();
+    private Text velocityText = new Text();
 
     public Ball(double _initXPosition, double _initYPosition) {
 
@@ -53,7 +55,7 @@ public class Ball extends GraphicsObject {
 
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
-
+        elementView.visibleProperty().bindBidirectional(directionLine.visibleProperty());
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird
         isSelectedProperty().addListener((observable, oldValue, newValue) -> {
             setIsSelectedColor();
@@ -73,6 +75,10 @@ public class Ball extends GraphicsObject {
 
         calculator = new VectorMath();
         velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
+        velocityText.setText(String.format(Locale.US, "%.2f",velocity));
+        velocityText.setX(getXPosition() );
+        velocityText.setY(getYPosition()-radius() - 10);
+
     }
 
     public DoubleProperty radiusProperty() {
@@ -85,6 +91,10 @@ public class Ball extends GraphicsObject {
 
     public final double radius() {
         return this.radius.get();
+    }
+
+    public Text getVelocityText(){
+        return velocityText;
     }
 
     //Die Länge des Geschwindigkeitsvektors
@@ -104,14 +114,20 @@ public class Ball extends GraphicsObject {
     public void resetDirectionLine() {
         directionLine.setEndX(getXPosition());
         directionLine.setEndY(getYPosition());
+        velocityText.setText(String.format(Locale.US,"%.2f",velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition()-radius() - 10);
     }
 
     //wenn sich die Geschwindigkeit ändert
     public void updateDirectionLine() {
-
+        velocityText.setText(String.format(Locale.US, "%.2f",velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition()-radius() - 10);
         if (getVelocity() == 0) {
             directionLine.setEndX(getXPosition());
             directionLine.setEndY(getYPosition());
+
         } else {
             directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
             directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
@@ -132,8 +148,12 @@ public class Ball extends GraphicsObject {
 
             elementView.setStroke(Color.ORANGE);
             elementView.setStrokeWidth(3);
+            velocityText.setVisible(true);
 
-        } else elementView.setStroke(null);
+        } else {
+            elementView.setStroke(null);
+            velocityText.setVisible(false);
+        }
     }
 
 
@@ -251,7 +271,7 @@ public class Ball extends GraphicsObject {
         setXPosition(getXPosition() + getXVelocity() * time + 0.5f * accelerationSum * Math.pow(time, 2));
         // [m/s] v = v0 + a * t
         setXVelocity(getXVelocity() + accelerationSum * time);
-        velocityText.setX((x - radius()) / 2);
+        //velocityText.setX((x - radius()) / 2);
 
 
     }
@@ -285,8 +305,8 @@ public class Ball extends GraphicsObject {
         //[m/s] Geschwindigkeit v = v0 + a * t
         setYVelocity(getYVelocity() + accelerationSum * time);
 
-        velocityText.setY(y - ((Circle) elementView).getRadius() - 10);
-        velocityText.setText(String.format("%.2f", Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2))));
+        //velocityText.setY(y - ((Circle) elementView).getRadius() - 10);
+        //velocityText.setText(String.format("%.2f", Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2))));
     }
 
     /**
