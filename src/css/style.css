@@ -70,6 +70,8 @@
 #seasawDummy:hover{
     -fx-effect: dropshadow(three-pass-box, rgba(255, 222, 69, 0.9), 5, 0, 0, 0);
     -fx-cursor: hand;
+    -fx-stroke-width: 3;
+    -fx-stroke: orange;
 }
 
 
