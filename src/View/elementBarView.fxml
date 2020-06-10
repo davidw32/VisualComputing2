@@ -11,25 +11,35 @@
 <VBox fx:id="elementBar" alignment="TOP_CENTER" minHeight="820.0" minWidth="100.0" maxHeight="820.0" spacing="50.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementBarController">
 
     <children>
-        <Label text="Preview"></Label>
+        <Label fx:id="elementBarTitle" text="Preview"></Label>
 
-        <Circle fx:id="ballDummy" fill="PLUM" radius="30.0"></Circle>
-        <Rectangle fx:id="blockDummy" fill="SEAGREEN" height="20.0" width="80.0"></Rectangle>
+        <VBox alignment="CENTER" prefHeight="100">
+            <Circle fx:id="ballDummy" fill="PLUM" radius="40.0"></Circle>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="100">
+            <Rectangle fx:id="blockDummy" fill="SEAGREEN" height="25.0" width="90.0"></Rectangle>
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="100">
       <Text fx:id="springboardDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Springboard">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text fx:id="spinnerDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Spinner">
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="100">
+        <Text fx:id="spinnerDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Spinner">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text fx:id="seasawDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Seasaw">
+        </VBox>
+        <VBox alignment="CENTER" prefHeight="100">
+        <Text fx:id="seasawDummy" strokeType="OUTSIDE" strokeWidth="0.0" text="Seasaw">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
+        </VBox>
 
 
     </children>

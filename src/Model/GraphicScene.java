@@ -61,7 +61,7 @@ public class GraphicScene {
         lines[2] = line3;
         lines[3] = line4;
         //Unterer Rand
-        lines[4] = new Line(0,820,1115,820);
+        lines[4] = new Line(0,820,1145,820);
 
 
     }
@@ -80,6 +80,9 @@ public class GraphicScene {
                     if (!graphicsObject.equals(secondObject)){
                         //falls das zweite ein Ball ist
                         if (secondObject instanceof Ball) ((Ball) graphicsObject).calculateCollisionWithBall((Ball)secondObject);
+                    }
+                    if(secondObject instanceof Block){
+                        ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
                     }
                 }
 

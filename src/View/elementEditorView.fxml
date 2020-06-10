@@ -41,7 +41,7 @@
          <RowConstraints />
    </rowConstraints>
    <children>
-      <Label text="Editor"></Label>
+      <Label fx:id="elementEditorTitle" text="Editor"></Label>
       <Label text="Position" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
@@ -54,8 +54,8 @@
       <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
       <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
       <Label text="Acceleration [cm/s^2]" GridPane.rowIndex="4" />
-      <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-      <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
       <Label text="Rotate [Degree]" GridPane.rowIndex="7" />
       <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="85.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
       <Label text="Weight [g]" GridPane.rowIndex="6" />
