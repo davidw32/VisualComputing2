@@ -7,10 +7,6 @@
     -fx-cursor: hand;
 }
 
-.startScreenBtn{
-    -fx-border-color: black;
-    -fx-background-color: rgba(0,0,0,0);
-}
 
 #sceneSubmitBtn{
     -fx-background-radius: 20;
