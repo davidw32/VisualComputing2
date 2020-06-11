@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Line;
 
+import javax.swing.*;
 import java.util.LinkedList;
 
 /**
@@ -83,6 +84,11 @@ public class GraphicScene {
                     }
                     if(secondObject instanceof Block){ // falls das Objekt ein Block ist wird mit den Kollisionskanten des Blocks geprüft
                         ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
+                    }
+                    if(secondObject instanceof Springboard)
+                    {
+                        System.out.println();
+                        ((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
                     }
                 }
 

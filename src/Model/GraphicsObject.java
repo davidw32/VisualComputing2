@@ -15,15 +15,15 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
 
     // Werte für das Reset
-    private double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight;
+    protected double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight;
 
-    private final DoubleProperty xPosition, yPosition,
+    protected final DoubleProperty xPosition, yPosition,
                                  xAcceleration, yAcceleration,
                                  xVelocity, yVelocity,
                                  xScale, yScale,
                                  friction, weight, angle;
 
-    private final BooleanProperty isSelected;
+    protected final BooleanProperty isSelected;
 
 
 
