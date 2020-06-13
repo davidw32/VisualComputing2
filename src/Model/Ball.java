@@ -9,6 +9,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 
+import java.util.Locale;
+
 import static Helpers.Config.GRAVITY;
 
 public class Ball extends GraphicsObject {
@@ -73,12 +75,23 @@ public class Ball extends GraphicsObject {
             setVelocity();
             updateDirectionLine();
         }));
+        xPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
+        yPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
 
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
 
+
         calculator = new VectorMath();
         velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition() - radius() - 10);
+
     }
 
     public DoubleProperty radiusProperty() {
@@ -91,6 +104,10 @@ public class Ball extends GraphicsObject {
 
     public final double radius() {
         return this.radius.get();
+    }
+
+    public Text getVelocityText() {
+        return velocityText;
     }
 
     //Die Länge des Geschwindigkeitsvektors
@@ -110,14 +127,20 @@ public class Ball extends GraphicsObject {
     public void resetDirectionLine() {
         directionLine.setEndX(getXPosition());
         directionLine.setEndY(getYPosition());
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition() - radius() - 10);
     }
 
     //wenn sich die Geschwindigkeit ändert
     public void updateDirectionLine() {
-
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition() - radius() - 10);
         if (getVelocity() == 0) {
             directionLine.setEndX(getXPosition());
             directionLine.setEndY(getYPosition());
+
         } else {
             directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
             directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
@@ -139,8 +162,12 @@ public class Ball extends GraphicsObject {
 
             elementView.setStroke(Color.ORANGE);
             elementView.setStrokeWidth(3);
+            velocityText.setVisible(true);
 
-        } else elementView.setStroke(null);
+        } else {
+            elementView.setStroke(null);
+            velocityText.setVisible(false);
+        }
     }
 
     /**
@@ -454,7 +481,7 @@ public class Ball extends GraphicsObject {
         setXPosition(getXPosition() + getXVelocity() * time + 0.5f * accelerationSum * Math.pow(time, 2));
         // [m/s] v = v0 + a * t
         setXVelocity(getXVelocity() + accelerationSum * time);
-        velocityText.setX((x - radius()) / 2);
+        //velocityText.setX((x - radius()) / 2);
 
 
     }
@@ -488,8 +515,8 @@ public class Ball extends GraphicsObject {
         //[m/s] Geschwindigkeit v = v0 + a * t
         setYVelocity(getYVelocity() + accelerationSum * time);
 
-        velocityText.setY(y - ((Circle) elementView).getRadius() - 10);
-        velocityText.setText(String.format("%.2f", Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2))));
+        //velocityText.setY(y - ((Circle) elementView).getRadius() - 10);
+        //velocityText.setText(String.format("%.2f", Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2))));
     }
 
     /**
@@ -730,12 +757,12 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
                     }
-
                 }
+
             } else {
                 // ansonsten berechne den schiefen elastischen Stoß
-
-                if (this.getXPosition() <= ball2.getXPosition()) {
+                //Ball1 links von Ball2 und Ball1 rollt nach rechts und Ball2 nach links
+                if (this.getXPosition() <= ball2.getXPosition() && (this.getXVelocity() > 0 && ball2.getXVelocity() < 0)) {
                     //Differenzvektor der Mittelpunkte
                     double deltaX = ball2.getXPosition() - this.getXPosition();
                     double deltaY = ball2.getYPosition() - this.getYPosition();
@@ -753,7 +780,7 @@ public class Ball extends GraphicsObject {
                     }
 
 
-                } else if (this.getXPosition() >= ball2.getXPosition()) {
+                } else if (this.getXPosition() >= ball2.getXPosition() && (this.getXVelocity() < 0 && ball2.getXVelocity() > 0)) {
                     //Differenzvektor der Mittelpunkte
                     double deltaX = this.getXPosition() - ball2.getXPosition();
                     double deltaY = this.getYPosition() - ball2.getYPosition();
@@ -769,15 +796,8 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
                         ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
                     }
-
-
                 }
-
-
             }
-
-
-
         }
     }
 
@@ -828,9 +848,79 @@ public class Ball extends GraphicsObject {
         return vnew;
     }
 
+    public void checkCollisionWithSpinner(Spinner spinner) {
+
+        //Äußerer Radius um den Spinner wird berührt
+      //  if(this.getXPosition()>= spinner.getXPosition()-this.radius() && this.getXPosition()<= spinner.getXPosition()+spinner.getHeight()+this.radius()
+      //      && this.getYPosition()>= spinner.getYPosition()-this.radius() && this.getYPosition()<= spinner.getYPosition()+spinner.getHeight()+this.radius())
+      //  {
+            Line[] outlines = spinner.getOutlines();
+
+            for (Line line : outlines) {
+                double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, normLength, lotX, lotY;
+                boolean hit = false;
+                //Anfangs und Endpunkt der zu prüfenden Kante
+                ax = line.getStartX();
+                ay = line.getStartY();
+                bx = line.getEndX();
+                by = line.getEndY();
+                deltaX = bx - ax;
+                deltaY = by - ay;
+                // Normalenvektor auf Kante
+                normalX = deltaY;
+                normalY = -deltaX;
+                normLength = calculator.vectorLength(normalX, normalY);
+
+                //Abstand Mittelpunkt der Kugel zur Kante
+                double d = Math.abs(calculator.dotProduct(this.getXPosition() - ax, this.getYPosition() - ay, normalX, normalY))
+                        / normLength;
+                //System.out.println("Abstand: "+ (d - radius() * getXScale()));
+                //Abstand Kugel / Kante klein genug
+                if (Math.abs(d - radius() ) < 10) {
+                    // Lotfußpunkt bestimmen
+                    double tmp;
+                    tmp = calculator.dotProduct(this.getXPosition() - ax, this.getYPosition() - ay, normalX, normalY);
+                    lotX = this.getXPosition() - tmp * normalX / Math.pow(normLength, 2);
+                    lotY = this.getYPosition() - tmp * normalY / Math.pow(normLength, 2);
+                    System.out.println("LotX: " + lotX + " LotY: " + lotY);
+                    //Lotfusspunkt liegt zwischen A und B
+                    if ((ax <= bx & ax <= lotX & lotX <= bx) || (bx <= ax & bx <= lotX & lotX <= ax) && (ay <= by & ay <= lotY & lotY <= by) || (by <= ay & by <= lotY & lotY <= ay)) {
+                        //Prüfe ob Winkel zwischen Richtungsvektor der Kugel und dem Normalenvekor der Kante ein stumpfer ist
+                        if (calculator.dotProduct(normalX, normalY, this.getVelocity(), this.getYVelocity()) < 0) {
+                            hit = true;
+                        }
+                    }
+
+                    if (hit) {
+                        System.out.println("Hit = " + hit);
+                        // berechne die Tangentialgeschwindigkeit des Lotpunktes
+                        double spinnerRadius = calculator.computeDistance(lotX, lotY, spinner.getCenterX(), spinner.getCenterY());
+                        double angle = 360 * spinner.getRotationalSpeed() * time; //Winkelgeschwindigkeit
+
+                        double tangentialX = spinnerRadius * (-Math.sin(Math.toRadians(angle)));
+                        double tangentialY = spinnerRadius * Math.cos(Math.toRadians(angle));
+                        System.out.println("Angle = " + angle + " tanX: " + tangentialX + " tanY: " + tangentialY);
+                        // berechne den neuen Geschwindigkeitsvektor
+                        double newVel[] = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), tangentialX, tangentialY, spinner.getWeight());
+                        System.out.println("Velx = " + newVel[0] + "Vely = " + newVel[1]);
+                        this.setXVelocity(newVel[0]);
+                        this.setYVelocity(newVel[1]);
+
+                        hit = false;
+
+                    }
+
+                }
+
+            }
+     //   }
+
+    }
+
+
     // das Element wird auf die Startwerte zurückgesetzt
     @Override
-    public void resetElement(){
+    public void resetElement() {
         super.resetElement();
         this.bounced = false;
         this.collision = false;

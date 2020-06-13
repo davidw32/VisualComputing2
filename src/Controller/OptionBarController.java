@@ -37,10 +37,6 @@ public class OptionBarController {
         graphicScene.getStartController().showStartScreen();
     }
 
-    @FXML
-    public void saveScene(ActionEvent actionEvent) {
-        System.out.println("Szene speichern");
-    }
 
     @FXML
     public void clearScene(ActionEvent actionEvent) {

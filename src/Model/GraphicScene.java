@@ -35,15 +35,16 @@ public class GraphicScene {
     private StartScreenController startScreenController;
     private StartController startController;
     private Ball placeholder;
+    private final Wind wind;
 
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
     //für die erste Szene
-    Line line1 = new Line(0,220,400,220);
-    Line line2 = new Line(400,220,500,200);
-    Line line3 = new Line(500,200,700,300);
-    Line line4 = new Line(700,300,900,300);
+    Line line1 = new Line(0,0,0,0);
+    Line line2 = new Line(0,0,0,0);
+    Line line3 = new Line(0,0,0,0);
+    Line line4 = new Line(0,0,0,0);
     Line[] lines = new Line[5];
 
     public GraphicScene(){
@@ -61,10 +62,12 @@ public class GraphicScene {
         lines[1] = line2;
         lines[2] = line3;
         lines[3] = line4;
+
+
         //Unterer Rand
         lines[4] = new Line(0,820,1145,820);
 
-
+        wind = new Wind();
     }
 
     // die eigentliche Animationsloop
@@ -84,6 +87,9 @@ public class GraphicScene {
                     }
                     if(secondObject instanceof Block){ // falls das Objekt ein Block ist wird mit den Kollisionskanten des Blocks geprüft
                         ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
+                    }
+                    if(secondObject instanceof Spinner){
+                        ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
                     }
                     if(secondObject instanceof Springboard)
                     {
@@ -145,10 +151,15 @@ public class GraphicScene {
 
     public void deleteActiveElement(){
 
-        getActiveElement().getElementView().setVisible(false);
-
+        //getActiveElement().getElementView().setVisible(false);
+        graphicSceneController.getGraphicPane().getChildren().remove(getActiveElement().getElementView());
+        if (getActiveElement() instanceof Ball) {
+            graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getDirectionLine());
+            graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getVelocityText());
+        }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
+
     }
 
     /**
@@ -177,7 +188,11 @@ public class GraphicScene {
      */
     public void clearScene(){
         for (GraphicsObject graphicsObject: elementsInScene){
-            graphicsObject.getElementView().setVisible(false);
+            graphicSceneController.getGraphicPane().getChildren().remove(graphicsObject.getElementView());
+            if (graphicsObject instanceof Ball) {
+                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getDirectionLine());
+                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getVelocityText());
+            }
         }
         elementsInScene.clear();
         setActiveElement(placeholder);
@@ -268,4 +283,9 @@ public class GraphicScene {
     public Ball getPlaceholder() {
         return placeholder;
     }
+
+    public Wind getWind(){
+        return  this.wind;
+    }
+
 }

@@ -1,25 +1,42 @@
 package Controller;
 
-import Model.GraphicScene;
-import Model.GraphicsObject;
+import Model.*;
+import Model.Spinner;
 import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
+
+import static javafx.scene.paint.Color.rgb;
 
 public class ElementEditorController {
 
 
+    @FXML
+    private HBox spinnerEditor;
+    @FXML
+    private Slider spinnerSlider;
+    @FXML
+    private VBox windEditor;
+    @FXML
+    private CheckBox checkBoxWind;
+    @FXML
+    private Slider windDirectionSlider;
+    @FXML
+    private Slider windForceSlider;
     @FXML
     private TextField textFieldXPosition;
     @FXML
@@ -41,7 +58,7 @@ public class ElementEditorController {
     @FXML
     private TextField textFieldWeight;
     @FXML
-    private TextField textFieldFriction;
+    private TextField textFieldElasticity;
     @FXML
     private ColorPicker colorPicker;
     @FXML
@@ -50,7 +67,7 @@ public class ElementEditorController {
     private GridPane editor;
     @FXML
     private GridPane helpText;
-
+@FXML private Label infoLabel;
     private LinkedList<TextField> allTextFields;
     private GraphicScene graphicScene;
 
@@ -60,8 +77,57 @@ public class ElementEditorController {
     }
 
     public void initialize() {
-        System.out.println("Init ElementController");
+        setUpValidation(textFieldXPosition);
+        setUpValidation(textFieldYPosition);
+        setUpValidation(textFieldVelocityX);
+        setUpValidation(textFieldVelocityY);
+        setUpValidation(textFieldAccelerationX);
+        setUpValidation(textFieldAccelerationY);
+        setUpValidation(textFieldScaleX);
+        setUpValidation(textFieldScaleY);
+        setUpValidation(textFieldElasticity);
+        setUpValidation(textFieldRotate);
+        setUpValidation(textFieldWeight);
 
+        spinnerSlider.setDisable(true);
+        windDirectionSlider.setDisable(true);
+        windForceSlider.setDisable(true);
+
+        windDirectionSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindDirection((Double) newValue)));
+        windForceSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindForce((Double) newValue)));
+
+
+    }
+
+    //überprüft, ob die Eingabe eine Zahl ist
+    private void setUpValidation(final TextField tf) {
+        tf.textProperty().addListener(new ChangeListener<String>() {
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable,
+                                String oldValue, String newValue) {
+                validate(tf);
+            }
+
+        });
+
+        validate(tf);
+        tf.setDisable(true);
+    }
+
+    private void validate(TextField tf) {
+        ObservableList<String> styleClass = tf.getStyleClass();
+        if (tf.getText().trim().length() == 0 && tf.getText().matches("[-+]?[0-9]*\\.?[0-9]*")) {
+            if (!styleClass.contains("error")) {
+                styleClass.add("error");
+                infoLabel.setText("Bitte eine Zahl eingeben!");
+                infoLabel.setStyle("-fx-text-fill: red;");
+            }
+        } else {
+            // remove all occurrences:
+            infoLabel.setText("");
+            styleClass.removeAll(Collections.singleton("error"));
+        }
     }
 
     /**
@@ -70,21 +136,66 @@ public class ElementEditorController {
      */
     public void initValues() {
 
+
         // für die Textfelder
         graphicScene.getActiveElementProperty().addListener(this::changed);
 
         // für den Colorpicker
+
         colorPicker.setValue((Color) graphicScene.getActiveElement().getElementView().getFill());
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             colorPicker.setValue(newValue);
             graphicScene.getActiveElement().getElementView().setFill(newValue);
 
         });
+
     }
 
     // die Changelistener für die Textfelder
     private void changed(ObservableValue<? extends GraphicsObject> observableValue, GraphicsObject oldValue, GraphicsObject newValue) {
 
+        if (newValue instanceof Spinner) {
+            spinnerSlider.setDisable(false);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldScaleX.setDisable(false);
+            textFieldScaleY.setDisable(false);
+            textFieldAccelerationX.setDisable(true);
+            textFieldAccelerationY.setDisable(true);
+            textFieldVelocityX.setDisable(true);
+            textFieldVelocityY.setDisable(true);
+            textFieldRotate.setDisable(true);
+            textFieldElasticity.setDisable(true);
+            textFieldWeight.setDisable(true);
+
+        } else if (newValue instanceof Ball) {
+            spinnerSlider.setDisable(true);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldScaleX.setDisable(false);
+            textFieldScaleY.setDisable(false);
+            textFieldAccelerationX.setDisable(false);
+            textFieldAccelerationY.setDisable(false);
+            textFieldVelocityX.setDisable(false);
+            textFieldVelocityY.setDisable(false);
+            textFieldRotate.setDisable(true);
+            textFieldElasticity.setDisable(false);
+            textFieldWeight.setDisable(false);
+
+        } else if (newValue instanceof Block){
+            spinnerSlider.setDisable(true);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldScaleX.setDisable(false);
+            textFieldScaleY.setDisable(false);
+            textFieldAccelerationX.setDisable(true);
+            textFieldAccelerationY.setDisable(true);
+            textFieldVelocityX.setDisable(true);
+            textFieldVelocityY.setDisable(true);
+            textFieldRotate.setDisable(false);
+            textFieldElasticity.setDisable(true);
+            textFieldWeight.setDisable(true);
+        }
 
         colorPicker.setValue((Color) newValue.getElementView().getFill());
 
@@ -99,10 +210,28 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldAccelerationY.textProperty(), oldValue.yAccelerationProperty());
         Bindings.unbindBidirectional(textFieldRotate.textProperty(), oldValue.angleProperty());
         Bindings.unbindBidirectional(textFieldWeight.textProperty(), oldValue.weightProperty());
-        Bindings.unbindBidirectional(textFieldFriction.textProperty(), oldValue.frictionProperty());
+        Bindings.unbindBidirectional(textFieldElasticity.textProperty(), oldValue.frictionProperty());
+
+        if (oldValue instanceof Spinner) {
+            Bindings.unbindBidirectional(spinnerSlider.valueProperty(), ((Spinner) oldValue).rotationalSpeedProperty());
+        }
 
         //die Textfelder mit dem neuen Element verbinden
-        StringConverter<Number> converter = new NumberStringConverter(Locale.US,"#####.###");
+        StringConverter<Number> converter = new NumberStringConverter(Locale.US, "#####.###") {
+            @Override
+            public String toString(Number object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Number fromString(String string) throws NumberFormatException {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        };
 
         Bindings.bindBidirectional(textFieldXPosition.textProperty(), newValue.xPositionProperty(), converter);
         Bindings.bindBidirectional(textFieldYPosition.textProperty(), newValue.yPositionProperty(), converter);
@@ -114,7 +243,11 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldAccelerationY.textProperty(), newValue.yAccelerationProperty(), converter);
         Bindings.bindBidirectional(textFieldRotate.textProperty(), newValue.angleProperty(), converter);
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
-        Bindings.bindBidirectional(textFieldFriction.textProperty(), newValue.frictionProperty(), converter);
+        Bindings.bindBidirectional(textFieldElasticity.textProperty(), newValue.frictionProperty(), converter);
+
+        if (newValue instanceof Spinner) {
+            Bindings.bindBidirectional(spinnerSlider.valueProperty(), ((Spinner) newValue).rotationalSpeedProperty());
+        }
 
 
     }
@@ -131,5 +264,17 @@ public class ElementEditorController {
     public void onClose(ActionEvent actionEvent) {
         helpText.setVisible(false);
         editor.setVisible(true);
+    }
+
+    //schaltet den Wind an
+    public void setOnWind(ActionEvent actionEvent) {
+        if (checkBoxWind.isSelected()) {
+            windDirectionSlider.setDisable(false);
+            windForceSlider.setDisable(false);
+
+        } else {
+            windForceSlider.setDisable(true);
+            windDirectionSlider.setDisable(true);
+        }
     }
 }
