@@ -271,10 +271,12 @@ public class ElementEditorController {
         if (checkBoxWind.isSelected()) {
             windDirectionSlider.setDisable(false);
             windForceSlider.setDisable(false);
+            graphicScene.getWind().setIsActivated(true);
 
         } else {
             windForceSlider.setDisable(true);
             windDirectionSlider.setDisable(true);
+            graphicScene.getWind().setIsActivated(false);
         }
     }
 }

@@ -101,7 +101,7 @@
                     <HBox prefHeight="52.0" prefWidth="331.0">
                         <children>
                             <Label prefHeight="17.0" prefWidth="50.0" text="Stärke" />
-                            <Slider fx:id="windForceSlider" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="38.0" prefWidth="278.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                            <Slider fx:id="windForceSlider" majorTickUnit="1.0" max="12.0" minorTickCount="0" prefHeight="38.0" prefWidth="278.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                         </children>
                     </HBox>
                 </children>

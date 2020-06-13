@@ -64,7 +64,7 @@ public class GraphicScene {
         lines[2] = line3;
         lines[3] = line4;
         //Unterer Rand
-        lines[4] = new Line(0,820,1145,820);
+        lines[4] = new Line(0,820,1250,820);
 
         wind = new Wind();
     }
@@ -77,6 +77,7 @@ public class GraphicScene {
 
             if ( graphicsObject instanceof Ball){
                 //Prüfe ob der Ball mit weiteren Elementen kollidiert
+                ((Ball) graphicsObject).calcWind(getWind());
                 for(GraphicsObject secondObject: elementsInScene){
                     // alle anderen Elemente
                     if (!graphicsObject.equals(secondObject)){

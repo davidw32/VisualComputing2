@@ -31,10 +31,10 @@ public class Ball extends GraphicsObject {
     private double bounceVelocity = 0;
     Text velocityText = new Text();
 
-    boolean windCollision = false;
-    double windX = 0;
-    double windY = 0;
-    double windAngle = 5;
+    private boolean windCollision = false;
+    private double windX = 0;
+    private double windY = 0;
+    private double windAngle = 0;
 
     public Ball(double _initXPosition, double _initYPosition) {
 
@@ -321,13 +321,11 @@ public class Ball extends GraphicsObject {
      * Berechnungen der Bewegungen
      */
     public void move(){
-        if(!windCollision) {
-            calcWind();
-        }
-        else{
+        if(windCollision) {
             windX = 0;
             windY = 0;
         }
+
         if(bounce) { // wenn der Ball vom Aufprall springen soll
             if (contactAngle != 0) {
                 setXVelocity(bounceDirectionX * bounceVelocity);
@@ -337,11 +335,13 @@ public class Ball extends GraphicsObject {
         if(bounced){ // wenn der Ball an einer Ebene entlang rollt ohne zu springen
             calcAcceleration(contactAngle);
         }
-        if (getXPosition() + radius() * getXScale() >= 1150 && getXVelocity() > 0) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
+        if (getXPosition() + radius() * getXScale() >= 1150 && (getXVelocity() > 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time > 0 && !bounced)) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
             setXVelocity(-1 * getXVelocity()*0.6);
+            windX = 0;
 
-        } else if (getXPosition() - radius() * getXScale() <= 0 && getXVelocity() < 0) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
+        } else if (getXPosition() - radius() * getXScale() <= 0 && (getXVelocity() < 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time < 0 && !bounced)) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
             setXVelocity(-1 * getXVelocity()*0.6);
+            windX = 0;
         }
         // x
         if(!bounced) {
@@ -492,22 +492,26 @@ public class Ball extends GraphicsObject {
     /**
      * Berechnet die Beschleunigung, welche der Wind auf den Ball bei einer Temperatur von ca. 20 Grad Celsius ausuebt
      */
-    public void calcWind(){
-        double airDensity = 1.2041 * Math.pow(10,-6); // kg/cm^3 bei 20 Grad Celsius
-        double dragCoefficient = 0.47; // für eine Kugel
-        double windVelocity = 800;
-        double windAngle = this.windAngle;
-        double windVelocityX = windVelocity * Math.cos(Math.toRadians(windAngle));
-        double windVelocityY = windVelocity * Math.sin(Math.toRadians(windAngle));
+    public void calcWind(Wind sceneWind){
+        if(sceneWind.getIsActivated()) {
+            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius
+            double dragCoefficient = 0.47; // für eine Kugel
+            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(),3f/2) * 100; // Umrechnung Bft(Beaufort) in cm/s
+            this.windAngle = sceneWind.getWindDirection();
 
-        double affectedArea = Math.PI * Math.pow(radius()*getXScale(),2);
+            double affectedArea = Math.PI * Math.pow(radius() * getXScale(), 2);
 
-        double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity,2);
+            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2);
 
-        double windAcceleration = dragForce / getWeight();
+            double windAcceleration = dragForce / getWeight();
 
-        windX = windAcceleration * Math.cos(Math.toRadians(windAngle));
-        windY = windAcceleration * Math.sin(Math.toRadians(windAngle));
+            windX = windAcceleration * Math.cos(Math.toRadians(windAngle));
+            windY = windAcceleration * Math.sin(Math.toRadians(windAngle));
+        }
+        else{
+            windX = 0;
+            windY = 0;
+        }
 
     }
 
