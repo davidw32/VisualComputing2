@@ -68,6 +68,9 @@ public class ElementEditorController {
     @FXML
     private GridPane helpText;
 @FXML private Label infoLabel;
+
+@FXML private Label scaleFactor;
+
     private LinkedList<TextField> allTextFields;
     private GraphicScene graphicScene;
 
@@ -167,13 +170,14 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(true);
             textFieldWeight.setDisable(true);
+            scaleFactor.setText("Scalefactor");
 
         } else if (newValue instanceof Ball) {
             spinnerSlider.setDisable(true);
             textFieldXPosition.setDisable(false);
             textFieldYPosition.setDisable(false);
             textFieldScaleX.setDisable(false);
-            textFieldScaleY.setDisable(false);
+            textFieldScaleY.setDisable(true);
             textFieldAccelerationX.setDisable(false);
             textFieldAccelerationY.setDisable(false);
             textFieldVelocityX.setDisable(false);
@@ -181,6 +185,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(false);
             textFieldWeight.setDisable(false);
+            scaleFactor.setText("Radius");
 
         } else if (newValue instanceof Block){
             spinnerSlider.setDisable(true);
@@ -195,6 +200,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(false);
             textFieldElasticity.setDisable(true);
             textFieldWeight.setDisable(true);
+            scaleFactor.setText("Width/Height");
         }
 
         colorPicker.setValue((Color) newValue.getElementView().getFill());
@@ -252,13 +258,6 @@ public class ElementEditorController {
 
     }
 
-    public GridPane getEditor() {
-        return editor;
-    }
-
-    public GridPane getHelpText() {
-        return helpText;
-    }
 
     //Schließt das Hilfefenster
     public void onClose(ActionEvent actionEvent) {
@@ -276,5 +275,21 @@ public class ElementEditorController {
             windForceSlider.setDisable(true);
             windDirectionSlider.setDisable(true);
         }
+    }
+
+
+    public TextField getTextFieldScaleX() {
+        return textFieldScaleX;
+    }
+
+    public TextField getTextFieldScaleY() {
+        return textFieldScaleY;
+    }
+
+    public GridPane getEditor() {
+        return editor;
+    }
+    public GridPane getHelpText() {
+        return helpText;
     }
 }

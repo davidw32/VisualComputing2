@@ -55,7 +55,7 @@
             <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label alignment="CENTER" text="X" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <Label alignment="CENTER" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Label text="Scalefactor" GridPane.rowIndex="2" />
+            <Label fx:id="scaleFactor" text="Scalefactor" GridPane.rowIndex="2" />
             <Label text="Velocity [m/s]" GridPane.rowIndex="3" />
             <TextField fx:id="textFieldScaleX" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="textFieldScaleY" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
