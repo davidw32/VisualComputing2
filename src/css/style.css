@@ -1,28 +1,41 @@
-#clock{
-    -fx-font-size: 25px;
+#clock
+{
+    -fx-font-size: 30px;
 }
 
-.startScreenBtn:hover{
-    -fx-border-color: #ff9910;
+.startScreenBtn:hover
+{
+    -fx-border-color: #ffd700;
     -fx-cursor: hand;
+
 }
 
+.startScreenBtn
+{
+    -fx-border-color: black;
+    -fx-background-color: rgba(0,0,0,0);
+}
 
-
-#sceneSubmitBtn{
+#sceneSubmitBtn
+{
     -fx-background-radius: 20;
     -fx-border-width: 5;
     -fx-border-radius: 20;
     -fx-background-color: #31C85D;
 }
 
-#sceneSubmitBtn:hover{
+#sceneSubmitBtn:hover
+{
+
     -fx-cursor: hand;
 }
 
 #elementBar{
     -fx-padding: 20;
+
 }
+
+
 
 @font-face {
     font-family: Poppins;
@@ -30,10 +43,11 @@
 }
 
 .label{
-    -fx-font-size: 15;
+    -fx-font-size: 18;
     -fx-font-family: Poppins;
     -fx-text-fill: #3e3e3e;
 }
+
 
 #player,
 #start,
@@ -49,7 +63,7 @@
     -fx-border-width: 0;
 }
 
-#startScreenViewTitle{
+#startScreenGrid .label{
     -fx-font-size: 50;
 }
 
@@ -63,22 +77,12 @@
     -fx-effect: dropshadow(three-pass-box, rgba(50,50,93,0.9), 5, 0, 0, 0);
 }
 
-#ballDummy:hover,
-#blockDummy:hover,
-#spinnerDummy:hover,
-#springboardDummy:hover,
-#seasawDummy:hover{
-    -fx-effect: dropshadow(three-pass-box, rgba(255, 153, 16, 0.9), 5, 0, 0, 0);
-    -fx-cursor: hand;
-    -fx-stroke-width: 3;
-    -fx-stroke: #ff9910;
+#elementEditor .label{
+    -fx-font-size: 15;
 }
 
-
-#elementBarTitle,
-#elementEditorTitle{
-    -fx-font-size: 18;
-    -fx-font-weight: bold;
+.menu{
+    -fx-font-size: 15;
 }
 
 .text-field,
@@ -100,7 +104,8 @@
     -fx-border-radius: 18;
 }
 
-
-#optionBar :hover{
-    -fx-text-fill: #ffffff;
+.text-field.error {
+  -fx-text-box-border: red ;
+  -fx-focus-color: red ;
 }
+
