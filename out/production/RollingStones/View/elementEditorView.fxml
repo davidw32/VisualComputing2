@@ -115,7 +115,7 @@
     </GridPane>
 
     <GridPane fx:id="helpText" maxHeight="820.0" maxWidth="350.0" prefHeight="820.0" prefWidth="350.0"
-              xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+              >
         <columnConstraints>
             <ColumnConstraints/>
             <ColumnConstraints/>

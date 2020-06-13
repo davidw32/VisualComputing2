@@ -65,9 +65,10 @@ public class GraphicSceneController {
 
                     //Platzhalter für Drag-and-Drop bis die Elemente implementiert wurden
                     if(db.getString().equals("springboardDummy")){
-                        Text placeholder = createPlaceholder(event.getX(),event.getY());
-                        placeholder.setText("Springboard");
-                        graphicPane.getChildren().add(placeholder);
+                        Springboard springboard = new Springboard(event.getX(),event.getY());
+                        addListenersToObject(springboard);
+                        graphicScene.addElement(springboard);
+                        graphicPane.getChildren().addAll(springboard.getElementView());
                         success = true;
                     }
 

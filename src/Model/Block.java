@@ -11,8 +11,8 @@ public class Block extends GraphicsObject{
 
     private DoubleProperty width, height;
     private Line[] outlines = new Line[4]; // Kanten des Rechtecks
-    double xMiddle;
-    double yMiddle;
+    double xMiddle; // X-Wert des Mittelpunkts
+    double yMiddle; // Y-Wert des Mittelpunkts
 
 public Block(double _initX, double _initY){
     super(_initX, _initY);
@@ -43,6 +43,7 @@ public Block(double _initX, double _initY){
         setIsSelectedColor();
     });
 
+    //Objekt aktualisiert die Kollisionskanten nach Translation, Rotation oder Skalierung
     xPositionProperty().addListener((observable, oldValue, newValue) -> {
         xMiddle = getXPosition() + getWidth()/2;
         updateOutlines();
@@ -70,6 +71,9 @@ public Block(double _initX, double _initY){
 
 }
 
+    /**
+     * initalisiert die Kollisionslinien des Rechtecks an den Kanten des Rechtecks
+     */
     private void initOutlines(){
         outlines[0] = new Line(getXPosition(),getYPosition(),getXPosition()+getWidth(),getYPosition());
         outlines[1] = new Line(getXPosition()+getWidth(),getYPosition(),getXPosition()+getWidth(),getYPosition()+getHeight());
@@ -77,6 +81,9 @@ public Block(double _initX, double _initY){
         outlines[3] = new Line(getXPosition(),getYPosition()+getHeight(),getXPosition(),getYPosition());
     }
 
+    /**
+     *  Aktualisiert die Kollisionslinien des Rechtecks nach einer Skalierung/Translation
+     */
     private void updatePositionOutlines(){
         double minX = getXPosition() -getWidth()*((elementView.getScaleX()-1)/2); // x-Wert links
         double minY = getYPosition() -getHeight()*((elementView.getScaleY()-1)/2); // y-Wert oben
@@ -101,6 +108,9 @@ public Block(double _initX, double _initY){
         outlines[3].setEndY(minY);
     }
 
+    /**
+     * Aktualisiert die Kollisionslinien nach der Rotation
+     */
     public void updateOutlines(){
         updatePositionOutlines();
 

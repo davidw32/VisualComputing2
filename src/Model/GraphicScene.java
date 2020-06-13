@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.shape.Line;
 
+import javax.swing.*;
 import java.util.LinkedList;
 
 /**
@@ -62,7 +63,7 @@ public class GraphicScene {
         lines[2] = line3;
         lines[3] = line4;
 
- 
+
         //Unterer Rand
         lines[4] = new Line(0,820,1145,820);
 
@@ -84,11 +85,16 @@ public class GraphicScene {
                         //falls das zweite ein Ball ist
                         if (secondObject instanceof Ball) ((Ball) graphicsObject).calculateCollisionWithBall((Ball)secondObject);
                     }
-                    if(secondObject instanceof Block){
+                    if(secondObject instanceof Block){ // falls das Objekt ein Block ist wird mit den Kollisionskanten des Blocks geprüft
                         ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
                     }
                     if(secondObject instanceof Spinner){
                         ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
+                    }
+                    if(secondObject instanceof Springboard)
+                    {
+                        System.out.println();
+                        ((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
                     }
                 }
 
@@ -190,6 +196,7 @@ public class GraphicScene {
         }
         elementsInScene.clear();
         setActiveElement(placeholder);
+
     }
 
     /**
