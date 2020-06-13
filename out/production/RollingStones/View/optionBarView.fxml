@@ -10,7 +10,6 @@
         <Menu  fx:id="sceneMenu" text="Szene">
             <items >
                 <MenuItem onAction="#openScene"  fx:id="sceneMenuOpen" text="Open Scene"/>
-                <MenuItem onAction="#saveScene" fx:id="sceneMenuSave" text="Save Scene"/>
                 <MenuItem onAction="#clearScene" fx:id="sceneMenuClear" text="Clear Scene"/>
                 <SeparatorMenuItem  />
                 <MenuItem   onAction="#closeApplication" text="Exit"/>
