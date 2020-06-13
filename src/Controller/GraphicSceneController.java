@@ -143,6 +143,7 @@ public class GraphicSceneController {
             initTranslateX=_graphicsObject.getXPosition();
             initTranslateY=_graphicsObject.getYPosition();
 
+
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {

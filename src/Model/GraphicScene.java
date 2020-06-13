@@ -34,15 +34,16 @@ public class GraphicScene {
     private StartScreenController startScreenController;
     private StartController startController;
     private Ball placeholder;
+    private final Wind wind;
 
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
     //für die erste Szene
-    Line line1 = new Line(0,220,400,220);
-    Line line2 = new Line(400,220,500,200);
-    Line line3 = new Line(500,200,700,300);
-    Line line4 = new Line(700,300,900,300);
+    Line line1 = new Line(0,0,0,0);
+    Line line2 = new Line(0,0,0,0);
+    Line line3 = new Line(0,0,0,0);
+    Line line4 = new Line(0,0,0,0);
     Line[] lines = new Line[5];
 
     public GraphicScene(){
@@ -60,10 +61,12 @@ public class GraphicScene {
         lines[1] = line2;
         lines[2] = line3;
         lines[3] = line4;
+
+ 
         //Unterer Rand
         lines[4] = new Line(0,820,1145,820);
 
-
+        wind = new Wind();
     }
 
     // die eigentliche Animationsloop
@@ -83,6 +86,9 @@ public class GraphicScene {
                     }
                     if(secondObject instanceof Block){
                         ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
+                    }
+                    if(secondObject instanceof Spinner){
+                        ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
                     }
                 }
 
@@ -270,4 +276,9 @@ public class GraphicScene {
     public Ball getPlaceholder() {
         return placeholder;
     }
+
+    public Wind getWind(){
+        return  this.wind;
+    }
+
 }

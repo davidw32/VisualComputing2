@@ -75,15 +75,22 @@ public class Ball extends GraphicsObject {
             setVelocity();
             updateDirectionLine();
         }));
+        xPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
+        yPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
 
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
 
+
         calculator = new VectorMath();
         velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
-        velocityText.setText(String.format(Locale.US, "%.2f",velocity));
-        velocityText.setX(getXPosition() );
-        velocityText.setY(getYPosition()-radius() - 10);
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
+        velocityText.setX(getXPosition());
+        velocityText.setY(getYPosition() - radius() - 10);
 
     }
 
@@ -99,7 +106,7 @@ public class Ball extends GraphicsObject {
         return this.radius.get();
     }
 
-    public Text getVelocityText(){
+    public Text getVelocityText() {
         return velocityText;
     }
 
@@ -120,16 +127,16 @@ public class Ball extends GraphicsObject {
     public void resetDirectionLine() {
         directionLine.setEndX(getXPosition());
         directionLine.setEndY(getYPosition());
-        velocityText.setText(String.format(Locale.US,"%.2f",velocity));
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
         velocityText.setX(getXPosition());
-        velocityText.setY(getYPosition()-radius() - 10);
+        velocityText.setY(getYPosition() - radius() - 10);
     }
 
     //wenn sich die Geschwindigkeit ändert
     public void updateDirectionLine() {
-        velocityText.setText(String.format(Locale.US, "%.2f",velocity));
+        velocityText.setText(String.format(Locale.US, "%.2f", velocity));
         velocityText.setX(getXPosition());
-        velocityText.setY(getYPosition()-radius() - 10);
+        velocityText.setY(getYPosition() - radius() - 10);
         if (getVelocity() == 0) {
             directionLine.setEndX(getXPosition());
             directionLine.setEndY(getYPosition());
@@ -164,7 +171,7 @@ public class Ball extends GraphicsObject {
     }
 
 
-    public void collisionDetection(Line[] lines){
+    public void collisionDetection(Line[] lines) {
         //collision = false;
         //bounce = false;
 
@@ -172,7 +179,7 @@ public class Ball extends GraphicsObject {
         double y = getYPosition();
 
 
-        for(Line line : lines){
+        for (Line line : lines) {
             // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b
             double linePx = line.getStartX();
             double linePy = line.getStartY();
@@ -180,7 +187,7 @@ public class Ball extends GraphicsObject {
             double lineRy = line.getEndY() - line.getStartY();
 
             double lineM = lineRy / lineRx;
-            double lineB = linePy + (- linePx / lineRx)*lineRy;
+            double lineB = linePy + (-linePx / lineRx) * lineRy;
             double abstand;
             double schnittpunktX;
             double schnittpunktY;
@@ -188,36 +195,34 @@ public class Ball extends GraphicsObject {
             double nX = lineRy;
             double nY = -lineRx;
 
-            if(lineRy == 0){
-                abstand = Math.abs(linePy - y) - radius()*getXScale();
+            if (lineRy == 0) {
+                abstand = Math.abs(linePy - y) - radius() * getXScale();
                 schnittpunktX = x;
                 schnittpunktY = linePy;
-            }
-            else if(lineRx == 0){
-                abstand = Math.abs(linePx - x) - radius()*getXScale();
+            } else if (lineRx == 0) {
+                abstand = Math.abs(linePx - x) - radius() * getXScale();
                 schnittpunktX = linePx;
                 schnittpunktY = y;
-            }
-            else {
+            } else {
                 double ballLineM = nY / nX;
                 double ballLineB = y + (-x / nX) * nY;
 
                 schnittpunktX = (ballLineB - lineB) / (lineM - ballLineM);
                 schnittpunktY = ballLineM * schnittpunktX + ballLineB;
 
-                abstand = Math.sqrt(Math.pow(x - schnittpunktX, 2) + Math.pow(y - schnittpunktY, 2)) - radius()*getXScale();
+                abstand = Math.sqrt(Math.pow(x - schnittpunktX, 2) + Math.pow(y - schnittpunktY, 2)) - radius() * getXScale();
 
             }
 
             double leftX = linePx;
             double rightX = linePx + lineRx;
-            if(lineRx < 0){
+            if (lineRx < 0) {
                 leftX = line.getEndX();
                 rightX = leftX - lineRx;
             }
             double topY = linePy;
             double bottomY = linePy + lineRy;
-            if(lineRy < 0){
+            if (lineRy < 0) {
                 topY = line.getEndY();
                 bottomY = topY - lineRy;
             }
@@ -225,39 +230,37 @@ public class Ball extends GraphicsObject {
 
             boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
 
-            if(abstand < 0.5 && onLine){
+            if (abstand < 0.5 && onLine) {
                 collision = true;
 
                 boolean contact = (nX * getXVelocity() * time + nY * getYVelocity() * time) < 0;
 
-                double directionAngle = Math.acos(((-getXVelocity())*nX+(-getYVelocity())*nY)/(Math.sqrt(Math.pow(getXVelocity(),2)+Math.pow(getYVelocity(),2))*Math.sqrt(Math.pow(nX,2)+Math.pow(nY,2))))*(180/Math.PI);
+                double directionAngle = Math.acos(((-getXVelocity()) * nX + (-getYVelocity()) * nY) / (Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2)) * Math.sqrt(Math.pow(nX, 2) + Math.pow(nY, 2)))) * (180 / Math.PI);
 
-                double angleNew = detectAngle(line.getStartX(),line.getStartY(),line.getEndX(),line.getEndY());
+                double angleNew = detectAngle(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY());
                 System.out.println(angleNew);
 
-                if(contactAngle!= angleNew){
+                if (contactAngle != angleNew) {
                     bounced = false;
                 }
 
-                if(angleNew == 0){
-                    if(Math.abs(getYVelocity()*time) > 2 && contact) {
+                if (angleNew == 0) {
+                    if (Math.abs(getYVelocity() * time) > 2 && contact) {
                         bounce = true;
-                    }
-                    else {
-                        if(contact) {
+                    } else {
+                        if (contact) {
                             bounced = true;
                             bounce = false;
                         }
                     }
-                }
-                else{
-                    if(Math.sqrt(Math.pow(getYVelocity()*time,2)+Math.pow(getXVelocity()*time,2)) > 8 && contact) {
-                        System.out.println(Math.sqrt(Math.pow(getYVelocity()*time,2)+Math.pow(getXVelocity()*time,2)));
+                } else {
+                    if (Math.sqrt(Math.pow(getYVelocity() * time, 2) + Math.pow(getXVelocity() * time, 2)) > 8 && contact) {
+                        System.out.println(Math.sqrt(Math.pow(getYVelocity() * time, 2) + Math.pow(getXVelocity() * time, 2)));
                         if (!bounced) {
                             bounce = true;
                             //System.out.println(getXVelocity()+" "+getYVelocity()+" "+getXAcceleration()+" "+getYAcceleration()+" "+directionAngle);
-                            double normY = 1/Math.sqrt(Math.pow(getYVelocity()*time,2)+Math.pow(getXVelocity()*time,2)) * (getYVelocity()*time);
-                            double normNY = 1/ Math.sqrt(Math.pow(nX,2)+Math.pow(nY,2)) * nY;
+                            double normY = 1 / Math.sqrt(Math.pow(getYVelocity() * time, 2) + Math.pow(getXVelocity() * time, 2)) * (getYVelocity() * time);
+                            double normNY = 1 / Math.sqrt(Math.pow(nX, 2) + Math.pow(nY, 2)) * nY;
                             double cos = Math.cos(Math.toRadians(-directionAngle * 2));
                             double sin = Math.sin(Math.toRadians(-directionAngle * 2));
                             /*if(normY < normNY*-1 && angleNew > 180 && normNY < 0 || normY > normNY*-1 && angleNew < 180 && normNY < 0 ||  normY > normNY*-1 && angleNew > 180 && normNY > 0 || normY < normNY*-1 && angleNew < 180 && normNY > 0){
@@ -265,28 +268,27 @@ public class Ball extends GraphicsObject {
                                 sin = Math.sin(Math.toRadians(-directionAngle * 2));
                             }*/
 
-                            if(getXVelocity() > 0 && nY < 0 || getXVelocity() < 0 && nY > 0){
+                            if (getXVelocity() > 0 && nY < 0 || getXVelocity() < 0 && nY > 0) {
                                 cos = Math.cos(Math.toRadians(directionAngle * 2));
                                 sin = Math.sin(Math.toRadians(directionAngle * 2));
                             }
-                            if(getXVelocity() == 0){
-                                if(angleNew < 180){
+                            if (getXVelocity() == 0) {
+                                if (angleNew < 180) {
                                     cos = Math.cos(Math.toRadians(directionAngle * 2));
                                     sin = Math.sin(Math.toRadians(directionAngle * 2));
                                 }
                             }
 
-                            bounceDirectionX = (getXVelocity() * cos - getYVelocity() * sin)*(-1);
+                            bounceDirectionX = (getXVelocity() * cos - getYVelocity() * sin) * (-1);
                             bounceDirectionY = (getXVelocity() * sin + (getYVelocity()) * cos);
 
-                            double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX,2)+Math.pow(bounceDirectionY,2));
-                            bounceDirectionX = 1/bounceDirection * bounceDirectionX;
-                            bounceDirectionY = 1/ bounceDirection * bounceDirectionY;
-                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity()*0.6, 2) + Math.pow(getYVelocity()*0.6, 2));
+                            double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX, 2) + Math.pow(bounceDirectionY, 2));
+                            bounceDirectionX = 1 / bounceDirection * bounceDirectionX;
+                            bounceDirectionY = 1 / bounceDirection * bounceDirectionY;
+                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity() * 0.6, 2) + Math.pow(getYVelocity() * 0.6, 2));
                         }
-                    }
-                    else if (contact){
-                        if(!bounced) {
+                    } else if (contact) {
+                        if (!bounced) {
                             bounced = true;
                         }
                     }
@@ -298,16 +300,16 @@ public class Ball extends GraphicsObject {
         }
     }
 
-    public void move(){
+    public void move() {
         // x
-        if(bounce) {
+        if (bounce) {
             if (contactAngle != 0) {
                 setXVelocity(bounceDirectionX * bounceVelocity);
                 //System.out.println("Bounce:" +bounceDirectionX+" "+velocity);
             }
         }
 
-        if(bounced){
+        if (bounced) {
             calcAcceleration(contactAngle);
         }
         if (getXPosition() + radius() * getXScale() >= 1150 && getXVelocity() > 0) {
@@ -318,54 +320,53 @@ public class Ball extends GraphicsObject {
             setXVelocity(-1 * getXVelocity());
         }
         // [m] s = s0 + v * t + 1/2 * a * t^2
-        setXPosition(getXPosition() + getXVelocity() * time + 0.5f * getXAcceleration() * Math.pow(time,2));
+        setXPosition(getXPosition() + getXVelocity() * time + 0.5f * getXAcceleration() * Math.pow(time, 2));
         // [m/s] v = v0 + a * t
-        setXVelocity(getXVelocity()+getXAcceleration()*time);
-        velocityText.setX((getXPosition() -radius())/2);
+        setXVelocity(getXVelocity() + getXAcceleration() * time);
+        //velocityText.setX((getXPosition() -radius())/2);
 
 
-        if(!collision){
+        if (!collision) {
             setYAcceleration(GRAVITY);
             setXAcceleration(0);
             bounced = false;
         }
-        if(bounce) {
-            if(contactAngle != 0) {
-                setYVelocity(-1*bounceDirectionY * bounceVelocity);
+        if (bounce) {
+            if (contactAngle != 0) {
+                setYVelocity(-1 * bounceDirectionY * bounceVelocity);
                 //System.out.println("BounceY: "+bounceDirectionY);
-            }
-            else {
-                setYVelocity(-1*getYVelocity() * 0.6);
+            } else {
+                setYVelocity(-1 * getYVelocity() * 0.6);
             }
             //accelerationSum = 0;
             bounce = false;
         }
         // y
         //[m] s = s0 + v * t + 1/2 * a * t^2
-        setYPosition( getYPosition() + getYVelocity() * time + 0.5 * getYAcceleration() * Math.pow(time,2));
+        setYPosition(getYPosition() + getYVelocity() * time + 0.5 * getYAcceleration() * Math.pow(time, 2));
         //[m/s] Geschwindigkeit v = v0 + a * t
-        setYVelocity(getYVelocity() +getYAcceleration()*time);
+        setYVelocity(getYVelocity() + getYAcceleration() * time);
 
-        velocityText.setY(getYPosition() - ((Circle) elementView).getRadius()-10);
-        velocityText.setText(String.format("%.2f",Math.sqrt(Math.pow(getXVelocity(),2)+Math.pow(getYVelocity(),2))));
+        //velocityText.setY(getYPosition() - ((Circle) elementView).getRadius()-10);
+        //velocityText.setText(String.format("%.2f",Math.sqrt(Math.pow(getXVelocity(),2)+Math.pow(getYVelocity(),2))));
 
         collision = false;
 
     }
 
-    public void calcAcceleration(double angle){
+    public void calcAcceleration(double angle) {
         //[m/s^2]
         double FG = getWeight() * GRAVITY;
         // [N]
-        double FH =  ( FG * Math.sin( Math.toRadians(angle) ) );
+        double FH = (FG * Math.sin(Math.toRadians(angle)));
         // FR = frictionCoff  * FN
         // [N]
-        double FN =  ( frictionCoefficient *( FG * Math.cos(Math.toRadians(angle)  )  )  );
+        double FN = (frictionCoefficient * (FG * Math.cos(Math.toRadians(angle))));
 
         // [N]
         //System.out.println(FHx+" "+FNx);
         double friction = FH + FN;
-        if(FH < 0){
+        if (FH < 0) {
             friction = FH - FN;
         }
         // [m/s^2]  F = m * a umgeformt zu:  a = F / m
@@ -374,56 +375,51 @@ public class Ball extends GraphicsObject {
         setYAcceleration(acceleration * Math.sin(Math.toRadians(angle)));
 
 
-
-        if(angle == 0) {
+        if (angle == 0) {
             setYVelocity(0);
             setYAcceleration(0);
-            if(getXVelocity() > 0) {
+            if (getXVelocity() > 0) {
                 setXAcceleration(-1 * getXAcceleration());
             }
             //Es kommt zum Stillstand,sobald Geschwindigkeit < 0.25 und Beschleunigung < 0.25f
-            if(Math.abs(getXVelocity()) < 2.5)
-            {
+            if (Math.abs(getXVelocity()) < 2.5) {
                 setXVelocity(0);
                 setXAcceleration(0);
             }
         }
 
         double[] direction;
-        if(angle > 180){
-            direction = calculator.rotateCCW(-1,0, angle);
-            if(getXVelocity() > 0){
+        if (angle > 180) {
+            direction = calculator.rotateCCW(-1, 0, angle);
+            if (getXVelocity() > 0) {
                 direction[0] = -1 * direction[0];
                 direction[1] = -1 * direction[1];
-                if(!slowed){
-                    setXVelocity(getXVelocity()/2);
-                    setYVelocity(getYVelocity()/2);
+                if (!slowed) {
+                    setXVelocity(getXVelocity() / 2);
+                    setYVelocity(getYVelocity() / 2);
                     slowed = true;
                 }
-            }
-            else{
+            } else {
                 slowed = false;
             }
-        }
-        else {
+        } else {
             direction = calculator.rotateCCW(1, 0, angle);
-            if(getXVelocity() < 0 && angle != 0) {
+            if (getXVelocity() < 0 && angle != 0) {
                 direction[0] = -1 * direction[0];
                 direction[1] = -1 * direction[1];
-                if(!slowed){
-                    setXVelocity(getXVelocity()/2);
-                    setYVelocity(getYVelocity()/2);
+                if (!slowed) {
+                    setXVelocity(getXVelocity() / 2);
+                    setYVelocity(getYVelocity() / 2);
                     slowed = true;
                 }
-            }
-            else{
+            } else {
                 slowed = false;
             }
         }
         if (getXVelocity() < 0 && angle == 0) {
             direction = calculator.rotateCCW(1, 0, 180);
         }
-        double directionAngle = detectAngle(0,0,direction[0],direction[1]);
+        double directionAngle = detectAngle(0, 0, direction[0], direction[1]);
 
         double velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
         setXVelocity(direction[0] * velocity);
@@ -708,7 +704,7 @@ public class Ball extends GraphicsObject {
 
         //der Abstand ist klein genug um sich zu treffen
         if (intersecting(ball2)) {
-           // System.out.println("Kugeln treffen sich");
+            // System.out.println("Kugeln treffen sich");
 
             //diese Kugel rollt nach rechts oder links
             if (this.getXVelocity() != 0 && Math.abs(this.getYVelocity()) <= 100) {
@@ -733,7 +729,6 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
                     }
-
                 }
                 //andersherum
                 else if (this.getXPosition() >= ball2.getXPosition()) {
@@ -750,12 +745,12 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
                     }
-
                 }
+
             } else {
                 // ansonsten berechne den schiefen elastischen Stoß
-
-                if (this.getXPosition() <= ball2.getXPosition()) {
+                //Ball1 links von Ball2 und Ball1 rollt nach rechts und Ball2 nach links
+                if (this.getXPosition() <= ball2.getXPosition() && (this.getXVelocity() > 0 && ball2.getXVelocity() < 0)) {
                     //Differenzvektor der Mittelpunkte
                     double deltaX = ball2.getXPosition() - this.getXPosition();
                     double deltaY = ball2.getYPosition() - this.getYPosition();
@@ -773,7 +768,7 @@ public class Ball extends GraphicsObject {
                     }
 
 
-                } else if (this.getXPosition() >= ball2.getXPosition()) {
+                } else if (this.getXPosition() >= ball2.getXPosition() && (this.getXVelocity() < 0 && ball2.getXVelocity() > 0)) {
                     //Differenzvektor der Mittelpunkte
                     double deltaX = this.getXPosition() - ball2.getXPosition();
                     double deltaY = this.getYPosition() - ball2.getYPosition();
@@ -789,15 +784,8 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
                         ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
                     }
-
-
                 }
-
-
             }
-
-
-
         }
     }
 
@@ -848,9 +836,79 @@ public class Ball extends GraphicsObject {
         return vnew;
     }
 
+    public void checkCollisionWithSpinner(Spinner spinner) {
+
+        //Äußerer Radius um den Spinner wird berührt
+      //  if(this.getXPosition()>= spinner.getXPosition()-this.radius() && this.getXPosition()<= spinner.getXPosition()+spinner.getHeight()+this.radius()
+      //      && this.getYPosition()>= spinner.getYPosition()-this.radius() && this.getYPosition()<= spinner.getYPosition()+spinner.getHeight()+this.radius())
+      //  {
+            Line[] outlines = spinner.getOutlines();
+
+            for (Line line : outlines) {
+                double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, normLength, lotX, lotY;
+                boolean hit = false;
+                //Anfangs und Endpunkt der zu prüfenden Kante
+                ax = line.getStartX();
+                ay = line.getStartY();
+                bx = line.getEndX();
+                by = line.getEndY();
+                deltaX = bx - ax;
+                deltaY = by - ay;
+                // Normalenvektor auf Kante
+                normalX = deltaY;
+                normalY = -deltaX;
+                normLength = calculator.vectorLength(normalX, normalY);
+
+                //Abstand Mittelpunkt der Kugel zur Kante
+                double d = Math.abs(calculator.dotProduct(this.getXPosition() - ax, this.getYPosition() - ay, normalX, normalY))
+                        / normLength;
+                //System.out.println("Abstand: "+ (d - radius() * getXScale()));
+                //Abstand Kugel / Kante klein genug
+                if (Math.abs(d - radius() ) < 10) {
+                    // Lotfußpunkt bestimmen
+                    double tmp;
+                    tmp = calculator.dotProduct(this.getXPosition() - ax, this.getYPosition() - ay, normalX, normalY);
+                    lotX = this.getXPosition() - tmp * normalX / Math.pow(normLength, 2);
+                    lotY = this.getYPosition() - tmp * normalY / Math.pow(normLength, 2);
+                    System.out.println("LotX: " + lotX + " LotY: " + lotY);
+                    //Lotfusspunkt liegt zwischen A und B
+                    if ((ax <= bx & ax <= lotX & lotX <= bx) || (bx <= ax & bx <= lotX & lotX <= ax) && (ay <= by & ay <= lotY & lotY <= by) || (by <= ay & by <= lotY & lotY <= ay)) {
+                        //Prüfe ob Winkel zwischen Richtungsvektor der Kugel und dem Normalenvekor der Kante ein stumpfer ist
+                        if (calculator.dotProduct(normalX, normalY, this.getVelocity(), this.getYVelocity()) < 0) {
+                            hit = true;
+                        }
+                    }
+
+                    if (hit) {
+                        System.out.println("Hit = " + hit);
+                        // berechne die Tangentialgeschwindigkeit des Lotpunktes
+                        double spinnerRadius = calculator.computeDistance(lotX, lotY, spinner.getCenterX(), spinner.getCenterY());
+                        double angle = 360 * spinner.getRotationalSpeed() * time; //Winkelgeschwindigkeit
+
+                        double tangentialX = spinnerRadius * (-Math.sin(Math.toRadians(angle)));
+                        double tangentialY = spinnerRadius * Math.cos(Math.toRadians(angle));
+                        System.out.println("Angle = " + angle + " tanX: " + tangentialX + " tanY: " + tangentialY);
+                        // berechne den neuen Geschwindigkeitsvektor
+                        double newVel[] = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), tangentialX, tangentialY, spinner.getWeight());
+                        System.out.println("Velx = " + newVel[0] + "Vely = " + newVel[1]);
+                        this.setXVelocity(newVel[0]);
+                        this.setYVelocity(newVel[1]);
+
+                        hit = false;
+
+                    }
+
+                }
+
+            }
+     //   }
+
+    }
+
+
     // das Element wird auf die Startwerte zurückgesetzt
     @Override
-    public void resetElement(){
+    public void resetElement() {
         super.resetElement();
         this.bounced = false;
         this.collision = false;
