@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.shape.Line;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -62,10 +63,8 @@ public class GraphicScene {
         lines[1] = line2;
         lines[2] = line3;
         lines[3] = line4;
-
-
         //Unterer Rand
-        lines[4] = new Line(0,820,1145,820);
+        lines[4] = new Line(0,820,1250,820);
 
         wind = new Wind();
     }
@@ -73,20 +72,17 @@ public class GraphicScene {
     // die eigentliche Animationsloop
     public void updateScene(){
         //
+        Line[] collisionLines = findCollisionLines();
         for (GraphicsObject graphicsObject: elementsInScene){
 
             if ( graphicsObject instanceof Ball){
-                //für den Anfang
-                ((Ball)graphicsObject).collisionDetection(lines);
                 //Prüfe ob der Ball mit weiteren Elementen kollidiert
+                ((Ball) graphicsObject).calcWind(getWind());
                 for(GraphicsObject secondObject: elementsInScene){
                     // alle anderen Elemente
                     if (!graphicsObject.equals(secondObject)){
                         //falls das zweite ein Ball ist
                         if (secondObject instanceof Ball) ((Ball) graphicsObject).calculateCollisionWithBall((Ball)secondObject);
-                    }
-                    if(secondObject instanceof Block){ // falls das Objekt ein Block ist wird mit den Kollisionskanten des Blocks geprüft
-                        ((Ball)graphicsObject).collisionDetection(((Block) secondObject).getOutlines());
                     }
                     if(secondObject instanceof Spinner){
                         ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
@@ -97,11 +93,35 @@ public class GraphicScene {
                         ((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
                     }
                 }
+                ((Ball)graphicsObject).collisionDetection(collisionLines);
 
             }
             graphicsObject.moveElement();
         }
 
+    }
+
+    /**
+     * Findet alle Linien in der Szene mit denen kollidiert werden kann und gibt diese zurueck
+     * @return Kollisionslinien der Szene
+     */
+    public Line[] findCollisionLines(){
+        ArrayList<Line> collisionLines = new ArrayList<>();
+        for(Line line : lines){
+            collisionLines.add(line);
+        }
+        for (GraphicsObject graphicsObject: elementsInScene){
+            if(graphicsObject instanceof Block){
+                for (Line line: ((Block) graphicsObject).getOutlines()) {
+                    collisionLines.add(line);
+                }
+            }
+        }
+        Line[] lineArray = new Line[collisionLines.size()];
+        for(int i = 0; i < collisionLines.size(); i++){
+            lineArray[i] = collisionLines.get(i);
+        }
+        return lineArray;
     }
 
     /**
@@ -159,7 +179,6 @@ public class GraphicScene {
         }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
-
     }
 
     /**

@@ -32,7 +32,7 @@ public class Main extends Application {
 
 
         mainPane = (BorderPane)initFXML(mainPaneLoader,"./View/mainView.fxml", mainPane);
-        mainScene = new Scene(mainPane,1600,900);
+        mainScene = new Scene(mainPane,1700,980);
         initCSS(mainScene,"./css/style.css");
 
 

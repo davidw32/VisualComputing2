@@ -31,11 +31,16 @@ public class Ball extends GraphicsObject {
     private double bounceVelocity = 0;
     Text velocityText = new Text();
 
+    private boolean windCollision = false;
+    private double windX = 0;
+    private double windY = 0;
+    private double windAngle = 0;
+
     public Ball(double _initXPosition, double _initYPosition) {
 
         super(_initXPosition, _initYPosition);
         radius = new SimpleDoubleProperty(this, "radius", 30.0);
-        setWeight(10.0);
+        setWeight(0.5);
         setIsMoving(true);
 
         elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
@@ -78,6 +83,14 @@ public class Ball extends GraphicsObject {
         xPositionProperty().addListener((observable -> {
             updateDirectionLine();
         }));
+        yPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
+
+        xPositionProperty().addListener((observable -> {
+            updateDirectionLine();
+        }));
+
         yPositionProperty().addListener((observable -> {
             updateDirectionLine();
         }));
@@ -301,12 +314,17 @@ public class Ball extends GraphicsObject {
 
             }
         }
+        windCollision = calcWindCollision(lines);
     }
 
     /**
      * Berechnungen der Bewegungen
      */
     public void move(){
+        if(windCollision) {
+            windX = 0;
+            windY = 0;
+        }
 
         if(bounce) { // wenn der Ball vom Aufprall springen soll
             if (contactAngle != 0) {
@@ -317,23 +335,32 @@ public class Ball extends GraphicsObject {
         if(bounced){ // wenn der Ball an einer Ebene entlang rollt ohne zu springen
             calcAcceleration(contactAngle);
         }
-        if (getXPosition() + radius() * getXScale() >= 1150 && getXVelocity() > 0) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity());
+        if (getXPosition() + radius() * getXScale() >= 1150 && (getXVelocity() > 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time > 0 && !bounced)) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
+            setXVelocity(-1 * getXVelocity()*0.6);
+            windX = 0;
 
-        } else if (getXPosition() - radius() * getXScale() <= 0 && getXVelocity() < 0) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity());
+        } else if (getXPosition() - radius() * getXScale() <= 0 && (getXVelocity() < 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time < 0 && !bounced)) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
+            setXVelocity(-1 * getXVelocity()*0.6);
+            windX = 0;
         }
         // x
-        // [m] s = s0 + v * t + 1/2 * a * t^2
-        setXPosition(getXPosition() + getXVelocity() * time + 0.5f * getXAcceleration() * Math.pow(time,2));
-        // [m/s] v = v0 + a * t
-        setXVelocity(getXVelocity()+getXAcceleration()*time);
+        if(!bounced) {
+            setXAcceleration(getXAcceleration()+windX);
+            // [m] s = s0 + v * t + 1/2 * a * t^2
+            setXPosition(getXPosition() + getXVelocity() * time + 0.5f * getXAcceleration() * Math.pow(time, 2));
+            // [m/s] v = v0 + a * t
+            setXVelocity(getXVelocity() + getXAcceleration() * time);
+        }
+        else{
+            setXPosition(getXPosition() + getXVelocity() * time);
+        }
+
         velocityText.setX((getXPosition() -radius())/2);
 
 
         if(!collision){ // wenn der Ball im freien Fall ist
-            setYAcceleration(GRAVITY);
-            setXAcceleration(0);
+            setYAcceleration(GRAVITY + windY);
+            setXAcceleration(0 + windX);
             bounced = false;
         }
         if(bounce) { // wenn der Ball vom Aufprall springen soll
@@ -346,10 +373,15 @@ public class Ball extends GraphicsObject {
             bounce = false;
         }
         // y
-        //[m] s = s0 + v * t + 1/2 * a * t^2
-        setYPosition( getYPosition() + getYVelocity() * time + 0.5 * getYAcceleration() * Math.pow(time,2));
-        //[m/s] Geschwindigkeit v = v0 + a * t
-        setYVelocity(getYVelocity() +getYAcceleration()*time);
+        if(!bounced) {
+            //[m] s = s0 + v * t + 1/2 * a * t^2
+            setYPosition(getYPosition() + getYVelocity() * time + 0.5 * getYAcceleration() * Math.pow(time, 2));
+            //[m/s] Geschwindigkeit v = v0 + a * t
+            setYVelocity(getYVelocity() + getYAcceleration() * time);
+        }
+        else{
+            setYPosition(getYPosition() + getYVelocity() * time);
+        }
 
 
 
@@ -363,7 +395,7 @@ public class Ball extends GraphicsObject {
      */
     public void calcAcceleration(double angle){
         //[m/s^2]
-        double FG = getWeight() * GRAVITY;
+        double FG = getWeight() * (GRAVITY + windY);
         // [N]
         double FH =  ( FG * Math.sin( Math.toRadians(angle) ) );
         // FR = frictionCoff  * FN
@@ -380,7 +412,10 @@ public class Ball extends GraphicsObject {
         setXAcceleration(acceleration * Math.cos(Math.toRadians(angle)));
         setYAcceleration(acceleration * Math.sin(Math.toRadians(angle)));
 
+        setYAcceleration(getYAcceleration() + windY);
 
+
+        boolean turn = false;
 
         if(angle == 0) { // beim Rollen auf einer horizontalen Ebene
             setYVelocity(0);
@@ -388,18 +423,27 @@ public class Ball extends GraphicsObject {
             if(getXVelocity() > 0) {
                 setXAcceleration(-1 * getXAcceleration());
             }
-            //Es kommt zum Stillstand,sobald Geschwindigkeit < 0.25 und Beschleunigung < 0.25f
-            if(Math.abs(getXVelocity()) < 2.5)
-            {
-                setXVelocity(0);
-                setXAcceleration(0);
+            if((windX + getXAcceleration() > 0 && windX > 0 || windX + getXAcceleration() < 0 && windX < 0) && getXVelocity() != 0){
+                if(getXVelocity() + (getXAcceleration() + windX) * time > 0 && getXVelocity() < 0 || getXVelocity() + (getXAcceleration() + windX) * time < 0 && getXVelocity() > 0) {
+                    turn = true;
+                }
+            }
+            else {
+                //Es kommt zum Stillstand,sobald Geschwindigkeit < 0.25
+                if (Math.abs(getXVelocity()) < 2.5) {
+                    setXVelocity(0);
+                    setXAcceleration(0);
+                    windX = 0;
+                }
             }
         }
+
+        setXAcceleration(getXAcceleration() + windX);
 
         double[] direction;
         if(angle > 180){
             direction = calculator.rotateCCW(-1,0, angle); // berechnet die Richtung in die der Ball rollen muss
-            if(getXVelocity() > 0){
+            if(getXVelocity()+getXAcceleration()*time > 0){
                 direction[0] = -1 * direction[0];
                 direction[1] = -1 * direction[1];
                 if(!slowed){
@@ -414,7 +458,7 @@ public class Ball extends GraphicsObject {
         }
         else {
             direction = calculator.rotateCCW(1, 0, angle); // berechnet die Richtung in die der Ball rollen muss
-            if(getXVelocity() < 0 && angle != 0) {
+            if(getXVelocity()+getXAcceleration()*time < 0 && angle != 0) {
                 direction[0] = -1 * direction[0];
                 direction[1] = -1 * direction[1];
                 if(!slowed){
@@ -431,11 +475,108 @@ public class Ball extends GraphicsObject {
             direction = calculator.rotateCCW(1, 0, 180); // berechnet die Richtung in die der Ball rollen muss
         }
 
-        double velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
+
+        if(turn){
+            direction[0] = -1 * direction[0];
+            direction[1] = -1 * direction[1];
+        }
+
+        double velocity = calculator.vectorLength(getXVelocity()+getXAcceleration()*time, getYVelocity()+getYAcceleration()*time);
         setXVelocity(direction[0] * velocity); // die Geschwindigkeiten werden entsprechend des Richtungsvektors gesetzt
         setYVelocity(direction[1] * velocity);
 
 
+    }
+
+    /**
+     * Berechnet die Beschleunigung, welche der Wind auf den Ball bei einer Temperatur von ca. 20 Grad Celsius ausuebt
+     */
+    public void calcWind(Wind sceneWind){
+        if(sceneWind.getIsActivated()) {
+            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius
+            double dragCoefficient = 0.47; // für eine Kugel
+            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(),3f/2) * 100; // Umrechnung Bft(Beaufort) in cm/s
+            this.windAngle = sceneWind.getWindDirection();
+
+            double affectedArea = Math.PI * Math.pow(radius() * getXScale(), 2);
+
+            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2);
+
+            double windAcceleration = dragForce / getWeight();
+
+            windX = windAcceleration * Math.cos(Math.toRadians(windAngle));
+            windY = windAcceleration * Math.sin(Math.toRadians(windAngle));
+        }
+        else{
+            windX = 0;
+            windY = 0;
+        }
+
+    }
+
+    /**
+     * Berechnet ob der Wind den Ball beeinflusst oder ob er bereits vorher mit einer Linie kollidiert.
+     * @param lines Kollisionslinien der Szene
+     * @return Wahrheitswert ob der Wind vor dem Ball mit einer Linie kollidiert
+     */
+    public boolean calcWindCollision(Line[] lines){
+        for(Line line : lines) {
+            // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b (lineare Funktion)
+            // Umformung der Parameterform der Geraden in eine lineare Funktion
+            double linePx = line.getStartX();
+            double linePy = line.getStartY();
+            double lineRx = line.getEndX() - line.getStartX();
+            double lineRy = line.getEndY() - line.getStartY();
+
+            double lineM = lineRy / lineRx;
+            double lineB = linePy + (-linePx / lineRx) * lineRy;
+            double schnittpunktX;
+            double schnittpunktY;
+
+            // Wind-Gerade von dem Ball aus in lineare Funktion umgeformt
+            double windLinePx = getXPosition();
+            double windLinePy = getYPosition();
+            double windLineRx = calculator.rotateCCW(1,0,windAngle)[0];
+            double windLineRy = calculator.rotateCCW(1,0,windAngle)[1];
+
+            double windLineM = windLineRy / windLineRx;
+            double windLineB = windLinePy + (-windLinePx / windLineRx) * windLineRy;
+
+            if(Math.abs(windLineM)!=Math.abs(lineM)) { // wenn der Wind nicht parallel zu der Linie verlaeuft
+                if (lineRx == 0) { // Fallunterscheidung wenn es eine vertikale Linie ist
+                    schnittpunktX = linePx;
+                    schnittpunktY = windLineM * linePx + windLineB;
+                } else if (windLineRx == 0) { // Fallunterscheidung wenn der Wind vertikal verlaeuft
+                    schnittpunktX = (linePy - windLineB) / windLineM;
+                    schnittpunktY = linePy;
+                } else {
+                    schnittpunktX = (windLineB - lineB) / (lineM - windLineM);
+                    schnittpunktY = windLineM * schnittpunktX + windLineB;
+                }
+
+                //Bestimmung des linken und rechten Punktes der Linie im Koordinatensystem
+                double leftX = linePx;
+                double rightX = linePx + lineRx;
+                if (lineRx < 0) {
+                    leftX = line.getEndX();
+                    rightX = leftX - lineRx;
+                }
+                double topY = linePy;
+                double bottomY = linePy + lineRy;
+                if (lineRy < 0) {
+                    topY = line.getEndY();
+                    bottomY = topY - lineRy;
+                }
+                // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
+                boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
+                if(onLine && (windAngle <= 180 && schnittpunktY <= getYPosition() || windAngle > 180 && schnittpunktY >= getYPosition())){ // wenn der Schnittpunkt vor dem Aufprall auf den Ball liegt
+                    return true;
+                }
+
+            }
+
+        }
+        return false;
     }
 
 

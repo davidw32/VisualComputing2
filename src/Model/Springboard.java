@@ -76,6 +76,7 @@ public class Springboard extends GraphicsObject
         elementView.setTranslateY(200);
         updateOutliners();
 
+
     }
 
 
@@ -111,7 +112,7 @@ public class Springboard extends GraphicsObject
         private double calcForce(double impulse)
         {
             // [N] F = m * g
-            double FG = GRAVITY * weight.get();
+            double FG = GRAVITY * getWeight();
             // [N]    [N] = [N/m] * [m]
             double FS = featherConstant() * s;
             // [N] Impulse welcher Bei Kollision zwischen Ball und Objekt eintrifft
@@ -138,7 +139,7 @@ public class Springboard extends GraphicsObject
             }
 
 
-            return F / weight.get();
+            return F / getWeight();
         }
 
         public void moveElement()
