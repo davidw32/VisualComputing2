@@ -351,8 +351,7 @@ public class Ball extends GraphicsObject {
         //[m/s] Geschwindigkeit v = v0 + a * t
         setYVelocity(getYVelocity() +getYAcceleration()*time);
 
-        velocityText.setY(getYPosition() - ((Circle) elementView).getRadius()-10);
-        velocityText.setText(String.format("%.2f",Math.sqrt(Math.pow(getXVelocity(),2)+Math.pow(getYVelocity(),2))));
+
 
         collision = false;
 
@@ -481,7 +480,7 @@ public class Ball extends GraphicsObject {
         setXPosition(getXPosition() + getXVelocity() * time + 0.5f * accelerationSum * Math.pow(time, 2));
         // [m/s] v = v0 + a * t
         setXVelocity(getXVelocity() + accelerationSum * time);
-        //velocityText.setX((x - radius()) / 2);
+
 
 
     }
@@ -515,8 +514,7 @@ public class Ball extends GraphicsObject {
         //[m/s] Geschwindigkeit v = v0 + a * t
         setYVelocity(getYVelocity() + accelerationSum * time);
 
-        //velocityText.setY(y - ((Circle) elementView).getRadius() - 10);
-        //velocityText.setText(String.format("%.2f", Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity(), 2))));
+
     }
 
     /**
@@ -717,13 +715,13 @@ public class Ball extends GraphicsObject {
         if (intersecting(ball2)) {
            // System.out.println("Kugeln treffen sich");
 
-            //diese Kugel rollt nach rechts oder links
-            if (this.getXVelocity() != 0 && Math.abs(this.getYVelocity()) <= 100) {
+            //diese Kugel bewegt sich horizontal
+            if (this.getXVelocity() != 0 && Math.abs(this.getYVelocity()) <= 10) {
 
                 //diese Kugel befindet sich links von der anderen Kugel
                 if (this.getXPosition() <= ball2.getXPosition()) {
                     //Ball2 ruht und dieser Ball rollt daruf zu
-                    if (ball2.getXVelocity() == 0 && ball2.getYVelocity() == 0 && this.getXVelocity() > 0) {
+                    if (this.getXVelocity()>=0 && ball2.getXVelocity() <= this.getXVelocity() && Math.abs(ball2.getYVelocity()) <= 10 ) {
                         //berechne die neuen Geschwindigkeiten
                         vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
                         //setze die berechneten neuen Geschwindigkeiten ein
@@ -732,25 +730,10 @@ public class Ball extends GraphicsObject {
                         ball2.setXVelocity(vneu[2]);
                         ball2.setYVelocity(vneu[3]);
                     }
-                    //Ball2 rollt nach rechts und dieser Ball auch, dieser ist schneller
-                    else if (ball2.getXVelocity() > 0 && ball2.getXVelocity() < this.getXVelocity()) {
-                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
-                        this.setXVelocity(vneu[0]);
-                        this.setYVelocity(vneu[1]);
-                        ball2.setXVelocity(vneu[2]);
-                        ball2.setYVelocity(vneu[3]);
-                    }
-
                 }
-                //andersherum
+                //diese Kugel ist rechts von der zweiten und bewegt sich nach links
                 else if (this.getXPosition() >= ball2.getXPosition()) {
-                    if (ball2.getXVelocity() == 0 && ball2.getYVelocity() == 0 && this.getXVelocity() < 0) {
-                        vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
-                        this.setXVelocity(vneu[0]);
-                        this.setYVelocity(vneu[1]);
-                        ball2.setXVelocity(vneu[2]);
-                        ball2.setYVelocity(vneu[3]);
-                    } else if (ball2.getXVelocity() > 0 && ball2.getXVelocity() > this.getXVelocity()) {
+                    if (this.getXVelocity() < 0 && ball2.getXVelocity() >= this.getXVelocity() && ball2.getXVelocity()<=0) {
                         vneu = zentralerStoss(this.getXVelocity(), this.getYVelocity(), this.getWeight(), ball2.getXVelocity(), ball2.getYVelocity(), ball2.getWeight());
                         this.setXVelocity(vneu[0]);
                         this.setYVelocity(vneu[1]);
@@ -758,44 +741,100 @@ public class Ball extends GraphicsObject {
                         ball2.setYVelocity(vneu[3]);
                     }
                 }
+            }
 
-            } else {
-                // ansonsten berechne den schiefen elastischen Stoß
-                //Ball1 links von Ball2 und Ball1 rollt nach rechts und Ball2 nach links
-                if (this.getXPosition() <= ball2.getXPosition() && (this.getXVelocity() > 0 && ball2.getXVelocity() < 0)) {
-                    //Differenzvektor der Mittelpunkte
-                    double deltaX = ball2.getXPosition() - this.getXPosition();
-                    double deltaY = ball2.getYPosition() - this.getYPosition();
-                    System.out.println("Schiefer Stoß");
-                    double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
-                    double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+            //diese Kugel bewegt sich
+            else if(this.getXVelocity()!=0 || this.getYVelocity()!= 0){
 
-                    if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
-                        vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+                //Ball1 links oben von Ball2, und Ball1 bewegt sich nach schräg rechts unten
+                if ((this.getXPosition() <= ball2.getXPosition() && this.getYPosition()<= ball2.getYPosition())&&
+                        (this.getXVelocity() >= 0 || this.getYVelocity() >= 0)) {
 
-                        this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
-                        this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
-                        ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
-                        ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                   if ( (ball2.getVelocity()<this.getVelocity()) || (ball2.getYVelocity()<=0 && ball2.getXVelocity()<=0 )) {
+                       //Differenzvektor der Mittelpunkte
+                       double deltaX = ball2.getXPosition() - this.getXPosition();
+                       double deltaY = ball2.getYPosition() - this.getYPosition();
+                       System.out.println("Schiefer Stoß");
+                       double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                       double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+
+                       if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                           vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+
+                           this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                           this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                           ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                           ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                       }
+                   }
+                }
+                //Ball1 rechts oben von Ball2 und Ball1 bewegt sich nach links unten
+                else if ((this.getXPosition() >= ball2.getXPosition() && this.getYPosition()<= ball2.getYPosition())&&
+                        (this.getXVelocity() <= 0 || this.getYVelocity() >= 0)) {
+
+                    if ( (ball2.getVelocity()<this.getVelocity()) || (ball2.getYVelocity()<=0 && ball2.getXVelocity()>=0 )) {
+                        //Differenzvektor der Mittelpunkte
+                        double deltaX = this.getXPosition() - ball2.getXPosition();
+                        double deltaY = ball2.getYPosition() - this.getYPosition();
+                        System.out.println("Schiefer Stoß");
+                        double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                        double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+
+                        if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                            vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+
+                            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                            ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                            ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                        }
+                    }
+                }
+                //Ball1 links unten von Ball2, und Ball1 bewegt sich nach schräg rechts oben
+                else if ((this.getXPosition() <= ball2.getXPosition() && this.getYPosition()>= ball2.getYPosition())&&
+                        (this.getXVelocity() >= 0 || this.getYVelocity() <= 0)) {
+
+                    if ( (ball2.getVelocity()<this.getVelocity()) || (ball2.getYVelocity()>=0 && ball2.getXVelocity()<=0 )) {
+                        //Differenzvektor der Mittelpunkte
+                        double deltaX = ball2.getXPosition() - this.getXPosition();
+                        double deltaY = this.getYPosition() - ball2.getYPosition();
+                        System.out.println("Schiefer Stoß");
+                        double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                        double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+
+                        if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                            vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+
+                            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                            ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                            ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                        }
                     }
 
+                }
+                //Ball1 rechts unten von Ball2, und Ball1 bewegt sich nach schräg links oben
+                else if ((this.getXPosition() >= ball2.getXPosition() && this.getYPosition()>= ball2.getYPosition())&&
+                        (this.getXVelocity() <= 0 || this.getYVelocity() <= 0)) {
 
-                } else if (this.getXPosition() >= ball2.getXPosition() && (this.getXVelocity() < 0 && ball2.getXVelocity() > 0)) {
-                    //Differenzvektor der Mittelpunkte
-                    double deltaX = this.getXPosition() - ball2.getXPosition();
-                    double deltaY = this.getYPosition() - ball2.getYPosition();
-                    System.out.println("Schiefer Stoß");
-                    double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
-                    double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
+                    if ( (ball2.getVelocity()<this.getVelocity()) || (ball2.getYVelocity()>=0 && ball2.getXVelocity()>=0 )) {
+                        //Differenzvektor der Mittelpunkte
+                        double deltaX = this.getXPosition() - ball2.getXPosition();
+                        double deltaY = this.getYPosition() - ball2.getYPosition();
+                        System.out.println("Schiefer Stoß");
+                        double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), deltaX, deltaY);
+                        double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), deltaX, deltaY);
 
-                    if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
-                        vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
+                        if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                            vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
 
-                        this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
-                        this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
-                        ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
-                        ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                            ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
+                            ball2.setYVelocity(vneu[3] + ball2.getYVelocity() - v2_z[1]);
+                        }
                     }
+
                 }
             }
         }
