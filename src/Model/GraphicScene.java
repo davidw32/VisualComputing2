@@ -90,7 +90,7 @@ public class GraphicScene {
                     if(secondObject instanceof Springboard)
                     {
                         System.out.println();
-                        ((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
+                        //((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
                     }
                 }
                 ((Ball)graphicsObject).collisionDetection(collisionLines);

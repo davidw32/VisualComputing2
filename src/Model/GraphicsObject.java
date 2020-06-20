@@ -15,7 +15,8 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
 
     // Werte für das Reset
-    protected double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
+    protected double  startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
+
 
     protected final DoubleProperty xPosition, yPosition,
                                  xAcceleration, yAcceleration,

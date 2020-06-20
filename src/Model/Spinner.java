@@ -3,7 +3,6 @@ package Model;
 import Helpers.VectorMath;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 

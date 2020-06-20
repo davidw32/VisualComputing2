@@ -106,11 +106,11 @@ public class GraphicSceneController {
         placeholder.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
 
             // Position Mauszeiger
-            initX = event.getSceneX();
-            initY = event.getSceneY();
+            initX = (int)event.getSceneX();
+            initY = (int)event.getSceneY();
             //Position des Elements
-            initTranslateX = ((Text) (event.getSource())).getX();
-            initTranslateY = ((Text) (event.getSource())).getY();
+            initTranslateX = ((Text)event.getSource()).getX();
+            initTranslateY = ((Text)event.getSource()).getY();
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
        placeholder.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
@@ -138,8 +138,8 @@ public class GraphicSceneController {
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
 
             // Position Mauszeiger
-            initX = event.getSceneX();
-            initY = event.getSceneY();
+            initX =(int) event.getSceneX();
+            initY =(int) event.getSceneY();
             //Position des Elements
             initTranslateX=_graphicsObject.getXPosition();
             initTranslateY=_graphicsObject.getYPosition();
@@ -152,8 +152,8 @@ public class GraphicSceneController {
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
             //Element verschieben
-            _graphicsObject.setXPosition(newTranslateX);
-            _graphicsObject.setYPosition(newTranslateY);
+            _graphicsObject.setXPosition((int)newTranslateX);
+            _graphicsObject.setYPosition((int)newTranslateY);
             if(_graphicsObject instanceof Ball){
                 ((Ball) _graphicsObject).updateDirectionLine();
             }
