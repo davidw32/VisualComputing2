@@ -79,7 +79,7 @@ public class GraphicSceneController {
                         //placeholder.setText("Spinner");
                         graphicScene.addElement(newSpinner);
 
-                        graphicPane.getChildren().add(newSpinner.getElementView());
+                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter());
                         success = true;
                     }
                     if(db.getString().equals("seasawDummy")){
@@ -157,119 +157,14 @@ public class GraphicSceneController {
             if(_graphicsObject instanceof Ball){
                 ((Ball) _graphicsObject).updateDirectionLine();
             }
+            if(_graphicsObject instanceof Spinner){
+                ((Spinner)_graphicsObject).updateOutlines();
+            }
         });
 
     }
 
 
-
-
-    //neues Ball-Objekt anlegen und die entsprechenden Listener hinzufügen.
-    private Ball createBall(double xPosition, double yPosition){
-
-        Ball returnBall = new Ball(xPosition, yPosition);
-
-        //hier wird der Drag-and-drop innerhalb der Szene initialisiert
-        returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            //Element als Actives Element definieren
-            graphicScene.getActiveElement().setIsSelected(false);
-            returnBall.setIsSelected(true);
-            graphicScene.setActiveElement(returnBall);
-
-            // Position Mauszeiger
-            initX = event.getSceneX();
-            initY = event.getSceneY();
-            //Position des Elements
-            initTranslateX = ((Circle) (event.getSource())).getCenterX();
-            initTranslateY = ((Circle) (event.getSource())).getCenterY();
-        });
-        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
-        returnBall.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            //Verschiebung berechnen
-            double offsetX = event.getSceneX() - initX;
-            double offsetY = event.getSceneY() - initY;
-            double newTranslateX = initTranslateX + offsetX;
-            double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            ((Circle) (event.getSource())).setCenterX(newTranslateX);
-            ((Circle) (event.getSource())).setCenterY(newTranslateY);
-
-        });
-
-        return returnBall;
-    }
-
-    //neues Block-Objekt erzeugen und Listener setzen
-    private Block createBlock(double _xPosition, double _yPosition){
-
-        Block returnBlock = new Block(_xPosition,_yPosition);
-
-        returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            // Durch Mausklick als Aktives Element setzen
-            graphicScene.getActiveElement().setIsSelected(false);
-            returnBlock.setIsSelected(true);
-            graphicScene.setActiveElement(returnBlock);
-            // Werte für das Drag-and-Drop speichern
-            initX = event.getSceneX();
-            initY = event.getSceneY();
-            initTranslateX = ((Rectangle) (event.getSource())).getX();
-            initTranslateY = ((Rectangle) (event.getSource())).getY();
-        });
-        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
-        returnBlock.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            //Verschiebung berechnen
-            double offsetX = event.getSceneX() - initX;
-            double offsetY = event.getSceneY() - initY;
-
-            double newTranslateX = initTranslateX + offsetX;
-            double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            ((Rectangle) (event.getSource())).setX(newTranslateX);
-            ((Rectangle) (event.getSource())).setY(newTranslateY);
-
-        });
-
-        return returnBlock;
-    }
-
-    private Spinner createSpinner(double _xPosition, double _yPosition){
-        Spinner returnSpinner = new Spinner(_xPosition, _yPosition);
-        returnSpinner.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-            // Durch Mausklick als Aktives Element setzen
-            graphicScene.getActiveElement().setIsSelected(false);
-            returnSpinner.setIsSelected(true);
-            graphicScene.setActiveElement(returnSpinner);
-            // Werte für das Drag-and-Drop speichern
-            initX = event.getSceneX();
-            initY = event.getSceneY();
-            initTranslateX = ((Shape)event.getSource()).getTranslateX();
-            initTranslateY = ((Shape)event.getSource()).getTranslateY();
-        });
-        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
-        returnSpinner.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            //Verschiebung berechnen
-            double offsetX = event.getSceneX() - initX;
-            double offsetY = event.getSceneY() - initY;
-
-            double newTranslateX = initTranslateX + offsetX;
-            double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            ((Shape) (event.getSource())).setTranslateX(newTranslateX);
-            ((Shape) (event.getSource())).setTranslateY(newTranslateY);
-
-        });
-
-        return returnSpinner;
-
-    }
-
-
-    private Seasaw createSeasaw(double _xPosition, double _yPosition){
-        return new Seasaw(_xPosition,_yPosition);
-    }
-    private Springboard createSpringboard(double _xPosition, double _yPosition){
-        return new Springboard(_xPosition,_yPosition);
-    }
 
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;

@@ -106,7 +106,7 @@ public class OptionBarController {
     public void takeSnapshot(ActionEvent actionEvent) {
         //System.out.println("Mache einen Snapshot von der Szene");
         try {
-            System.out.println("Snapshot in out/Snapsshots gespeichert");
+            System.out.println("Snapshot in img/Snapsshots gespeichert");
             String name = ZonedDateTime.now(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("uuuu_MM_dd_HH_mm_SS"));
             Image snapshot = graphicScene.getGraphicSceneController().getGraphicPane().snapshot(null, null);
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("src/img/Snapshots/" + name + "_Snapshot.png"));

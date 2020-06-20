@@ -49,7 +49,7 @@ public Block(double _initX, double _initY){
         updateOutlines();
     });
 
-    xPositionProperty().addListener((observable, oldValue, newValue) -> {
+    yPositionProperty().addListener((observable, oldValue, newValue) -> {
         yMiddle = getYPosition() + getHeight()/2;
         updateOutlines();
     });

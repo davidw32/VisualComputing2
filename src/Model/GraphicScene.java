@@ -177,6 +177,9 @@ public class GraphicScene {
             graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getDirectionLine());
             graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getVelocityText());
         }
+        if (getActiveElement() instanceof Spinner){
+            graphicSceneController.getGraphicPane().getChildren().remove(((Spinner)getActiveElement()).getCenter());
+        }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
     }

@@ -15,12 +15,13 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
 
     // Werte für das Reset
-    protected double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight;
+    protected double startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
 
     protected final DoubleProperty xPosition, yPosition,
                                  xAcceleration, yAcceleration,
                                  xVelocity, yVelocity,
                                  xScale, yScale,
+                                 width, height, radius,
                                  friction, weight, angle;
 
     protected final BooleanProperty isSelected;
@@ -42,6 +43,10 @@ public abstract class GraphicsObject {
         this.friction = new SimpleDoubleProperty(this, "friction", 1.0);
         this.angle = new SimpleDoubleProperty(this,"angle", 0.0);
         this.isSelected = new SimpleBooleanProperty(this, "isSelected", true);
+        this.width = new SimpleDoubleProperty(this, "width", 0.0);
+        this.height = new SimpleDoubleProperty(this, "height", 0.0);
+        this.radius = new SimpleDoubleProperty(this, "radius", 0.0);
+
     }
     // statt der Werte diese als Property setzen, dann lassen sie sich mit der Gui verknüpfen
     public DoubleProperty xPositionProperty(){return xPosition;}
@@ -82,11 +87,27 @@ public abstract class GraphicsObject {
     public DoubleProperty xScaleProperty() { return xScale; }
     public DoubleProperty yScaleProperty() { return yScale; }
 
-    public final void setXScale(double _xScale){ this.xScale.set(_xScale);}
-    public final void setYScale(double _yScale){ this.xScale.set(_yScale);}
+    public final void setXScale(double _xScale){ this.xScale.set(1);}
+    public final void setYScale(double _yScale){ this.xScale.set(1);}
 
-    public final double getXScale(){return this.xScale.get();}
-    public final double getYScale(){return this.yScale.get();}
+    public final double getXScale(){return 1;}
+    public final double getYScale(){return 1;}
+
+    public DoubleProperty widthProperty(){
+        return this.width;
+    }
+    public double getWidth(){ return width.get(); }
+    public void setWidth(double _width){ this.width.set(_width);}
+
+    public DoubleProperty heightProperty() {
+        return this.height;
+    }
+    public double getHeight(){return height.get();}
+    public void setHeight(double _height){ this.height.set(_height);}
+
+    public DoubleProperty radiusProperty(){ return radius;}
+    public double getRadius(){ return this.radius.get();}
+    public  void setRadius(double _radius){ this.radius.set(_radius);}
 
     public DoubleProperty frictionProperty() { return friction; }
     public final void setFriction(double _friction){ this.friction.set(_friction); }
@@ -127,6 +148,9 @@ public abstract class GraphicsObject {
         startScaleX = this.getXScale();
         startScaleY = this.getYScale();
         startWeight = this.getWeight();
+        startHeight = this.getHeight();
+        startWidth = this.getWidth();
+
 
 
     }
@@ -143,6 +167,8 @@ public abstract class GraphicsObject {
         //setXScale(startScaleX);
         //setYScale(startScaleY);
         setWeight(startWeight);
+        setWidth(startWidth);
+        setHeight(startHeight);
     }
 
     public void moveElement(){//diese Methode muss von den Objekten jeweils selbst implementiert werden
