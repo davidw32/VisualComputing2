@@ -1,6 +1,7 @@
 package Model;
 
 import javafx.beans.property.*;
+import javafx.scene.Group;
 import javafx.scene.shape.Shape;
 
 /**
@@ -126,9 +127,7 @@ public abstract class GraphicsObject {
     public final void setIsSelected(Boolean _isSelected){ this.isSelected.set(_isSelected); }
     public final boolean getIsSelected(){ return isSelected.get(); }
 
-    public Shape getElementView() {
-        return elementView;
-    }
+    public Shape getElementView(){ return this.elementView; }
     public void setElementView(Shape elementView) {
         this. elementView = elementView;
     }

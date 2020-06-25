@@ -5,12 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-
-import javax.swing.*;
 
 public class GraphicSceneController {
     @FXML
@@ -48,8 +43,6 @@ public class GraphicSceneController {
                         addListenersToObject(newBall);
                         // in der Liste einfügen
                         graphicScene.addElement(newBall);
-
-
                         // in der Szene anzeigen
                         graphicPane.getChildren().addAll(newBall.getElementView(), newBall.getDirectionLine(), newBall.getVelocityText());
 
@@ -73,19 +66,22 @@ public class GraphicSceneController {
                     }
 
                     if(db.getString().equals("spinnerDummy")){
-                        //Text placeholder = createPlaceholder(event.getX(), event.getY());
+
                         Spinner newSpinner = new Spinner(event.getX(), event.getY());
                         addListenersToObject(newSpinner);
-                        //placeholder.setText("Spinner");
+
                         graphicScene.addElement(newSpinner);
 
                         graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter());
                         success = true;
                     }
-                    if(db.getString().equals("seasawDummy")){
-                        Text placeholder = createPlaceholder(event.getX(), event.getY());
-                        placeholder.setText("Seasaw");
-                        graphicPane.getChildren().add(placeholder);
+                    if(db.getString().equals("seesawDummy")){
+
+                        Seesaw newSeesaw = new Seesaw(event.getX(), event.getY());
+                        addListenersToObject(newSeesaw);
+
+                        graphicScene.addElement(newSeesaw);
+                        graphicPane.getChildren().addAll(newSeesaw.getElementView(), newSeesaw.getTriangle());
                         success = true;
                     }
 
@@ -95,38 +91,8 @@ public class GraphicSceneController {
             }
         });
 
-
-
     }
 
-    private Text createPlaceholder(double x, double y){
-        Text placeholder = new Text();
-        placeholder.setX(x);
-        placeholder.setY(y);
-        placeholder.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-
-            // Position Mauszeiger
-            initX = (int)event.getSceneX();
-            initY = (int)event.getSceneY();
-            //Position des Elements
-            initTranslateX = ((Text)event.getSource()).getX();
-            initTranslateY = ((Text)event.getSource()).getY();
-        });
-        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
-       placeholder.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            //Verschiebung berechnen
-            double offsetX = event.getSceneX() - initX;
-            double offsetY = event.getSceneY() - initY;
-            double newTranslateX = initTranslateX + offsetX;
-            double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            ((Text) (event.getSource())).setX(newTranslateX);
-            ((Text) (event.getSource())).setY(newTranslateY);
-
-        });
-        return placeholder;
-
-    }
 
     public void addListenersToObject(GraphicsObject _graphicsObject){
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
@@ -160,10 +126,40 @@ public class GraphicSceneController {
             if(_graphicsObject instanceof Spinner){
                 ((Spinner)_graphicsObject).updateOutlines();
             }
+            if(_graphicsObject instanceof Seesaw){
+                ((Seesaw)_graphicsObject).updateOutlines();
+            }
         });
 
     }
+    private Text createPlaceholder(double x, double y){
+        Text placeholder = new Text();
+        placeholder.setX(x);
+        placeholder.setY(y);
+        placeholder.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
 
+            // Position Mauszeiger
+            initX = (int)event.getSceneX();
+            initY = (int)event.getSceneY();
+            //Position des Elements
+            initTranslateX = ((Text)event.getSource()).getX();
+            initTranslateY = ((Text)event.getSource()).getY();
+        });
+        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
+        placeholder.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            //Verschiebung berechnen
+            double offsetX = event.getSceneX() - initX;
+            double offsetY = event.getSceneY() - initY;
+            double newTranslateX = initTranslateX + offsetX;
+            double newTranslateY = initTranslateY + offsetY;
+            //Element verschieben
+            ((Text) (event.getSource())).setX(newTranslateX);
+            ((Text) (event.getSource())).setY(newTranslateY);
+
+        });
+        return placeholder;
+
+    }
 
 
     public void setGraphicScene(GraphicScene graphicScene) {

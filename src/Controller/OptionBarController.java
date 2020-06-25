@@ -9,7 +9,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
 
 import javax.imageio.ImageIO;
 import java.io.File;

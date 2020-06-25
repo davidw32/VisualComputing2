@@ -3,11 +3,8 @@ package Model;
 import Controller.*;
 import Helpers.SceneTime;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXML;
 import javafx.scene.shape.Line;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
