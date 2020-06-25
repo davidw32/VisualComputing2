@@ -1,5 +1,6 @@
 package Model;
 
+import Helpers.VectorMath;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -7,13 +8,13 @@ import javafx.scene.shape.*;
 
 public class Seesaw extends GraphicsObject
 {
-    private double heightOfRectangle,lengthOfRectangle, heightOfTriangle, alpha, pivotX, pivotY, weight;
-    private Group seesaw;
+    private double heightOfRectangle,lengthOfRectangle, heightOfTriangle, alpha, pivotX, pivotY, omega;
+
     Rectangle elementView;
     Polygon triangle;
-
+    private boolean left, right;
     private Line[] outlines = new Line[4]; // Kanten des Rechtecks
-
+    private VectorMath vectorMath;
 
     public Seesaw(double initialX, double initialY){
         super(initialX, initialY);
@@ -21,9 +22,11 @@ public class Seesaw extends GraphicsObject
 
         setWidth(120);
         setHeight(20);
+        setWeight(100);
         pivotX=initialX + getWidth()/2; //Mittelpunkt des Rechtecks
         pivotY=initialY + getHeight()/2;
 
+        vectorMath = new VectorMath();
         elementView = new Rectangle(initialX,initialY,120.0,20.0);
         elementView.setFill(Color.DODGERBLUE);
         elementView.setStroke(Color.ORANGE);
@@ -36,10 +39,10 @@ public class Seesaw extends GraphicsObject
 
 
         // Bindings zwischen View und Objekt
-        ((Rectangle) elementView).xProperty().bindBidirectional(xPositionProperty());
-        ((Rectangle) elementView).yProperty().bindBidirectional(yPositionProperty());
-        ((Rectangle) elementView).widthProperty().bindBidirectional(widthProperty());
-        ((Rectangle) elementView).heightProperty().bindBidirectional(heightProperty());
+        elementView.xProperty().bindBidirectional(xPositionProperty());
+        elementView.yProperty().bindBidirectional(yPositionProperty());
+        elementView.widthProperty().bindBidirectional(widthProperty());
+        elementView.heightProperty().bindBidirectional(heightProperty());
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
         elementView.rotateProperty().bindBidirectional(angleProperty());
@@ -54,11 +57,13 @@ public class Seesaw extends GraphicsObject
         //Objekt aktualisiert die Kollisionskanten nach Translation, Rotation oder Skalierung
         xPositionProperty().addListener((observable, oldValue, newValue) -> {
             pivotX = getXPosition() + getWidth() / 2;
+
             updateOutlines();
         });
 
         yPositionProperty().addListener((observable, oldValue, newValue) -> {
             pivotY = getYPosition() + getHeight() / 2;
+
             updateOutlines();
         });
         widthProperty().addListener(((observable, oldValue, newValue) -> {
@@ -81,18 +86,21 @@ public class Seesaw extends GraphicsObject
         angleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
+        elementView.fillProperty().addListener(observable -> {triangle.setFill(elementView.getFill());});
 
         initOutlines();
 
 
-
-
         heightOfRectangle = 20.0;
         lengthOfRectangle = 120.0;
-        heightOfTriangle = 0;
+        heightOfTriangle = 20;
 
-        weight = 120.0 * 20.0 * 1; //Volumen * Dichte
-
+        left = false;
+        right = false;
+        //maximaler Kippwinkel des Balkens
+        alpha = Math.toDegrees(Math.atan( 2* heightOfTriangle / lengthOfRectangle));
+        //Kippgeschwindigkeit
+        omega = 60;
     }
 
     public Shape getElementView(){ return elementView;}
@@ -107,8 +115,13 @@ public class Seesaw extends GraphicsObject
 
             elementView.setStroke(Color.ORANGE);
             elementView.setStrokeWidth(3);
+            triangle.setStroke((Color.ORANGE));
+            triangle.setStrokeWidth(3);
 
-        } else elementView.setStroke(null);
+        } else {
+            elementView.setStroke(null);
+            triangle.setStroke(null);
+        }
     }
 
     /**
@@ -153,8 +166,9 @@ public class Seesaw extends GraphicsObject
      */
     public void updateOutlines() {
         updatePositionOutlines();
-        triangle.setTranslateX(pivotX);
-        triangle.setTranslateY(pivotY);
+
+        triangle.getPoints().clear();
+        triangle.getPoints().addAll(pivotX - 15, pivotY + 30.0, pivotX+15, pivotY + 30.0, pivotX, pivotY + 10.0);
         double c = Math.cos(Math.toRadians(getAngle()));
         double s = Math.sin(Math.toRadians(getAngle()));
         for (int i = 0; i < 4; i++) {
@@ -171,26 +185,63 @@ public class Seesaw extends GraphicsObject
 
     }
 
+    public void moveElement(){
+        //System.out.println("Alpha: "+alpha+" left "+left+" right "+right);
+        if(left){
+            if (this.getAngle()> -alpha){
+                this.setAngle(this.getAngle() - omega * time);
+                updateOutlines();
+            } else if (this.getAngle() <= -alpha ){
+                left = false;
+                //right = true;
+            }
+        }
+        else if (right){
+            if (this.getAngle() < alpha){
+                this.setAngle(this.getAngle() + omega * time);
+                updateOutlines();
+            } else if (this.getAngle() >= alpha ){
+                //left = true;
+                right = false;
+            }
+        }
+
+    }
 
 
+    public Line[] getOutlines(){
+        return this.outlines;
+    }
+    public void setOmega(double velocity, double x, double y){
 
+        double radius = vectorMath.vectorLength(x-pivotX, y-pivotY);
+        this.omega= Math.toDegrees(velocity/radius);
+        System.out.println("Radius: "+radius+" Omega: "+omega+" Velocity: "+velocity);
+    }
+    public void setLeft(boolean _left){
+        this.left = _left;
+    }
+    public void setRight(boolean _right){
+        this.right = _right;
+    }
 
     private void kippWinkel(){
-
+        //maximaler Kippwinkel
         alpha = Math.atan( 2* heightOfTriangle / lengthOfRectangle);
     }
 
 
-    private void kippGeschwindigkeit(){
-        double v_0 = 0;
-        double time = 1/60;
-        double F_Kugel = 1; // F = m * a    Masse * Beschleunigung
-        double m_Balken;
-        double a = F_Kugel / weight;
+    private void setKippGeschwindigkeit(double ballWeight, double ballAccX, double ballAccY){
 
-        a = F_Kugel / (lengthOfRectangle/2 * heightOfRectangle * 1);
+        double forceX = ballWeight * ballAccX;
+        double forceY = ballWeight * ballAccY;
 
-        double v_kipp = v_0 + a * time * alpha;
+        this.setXAcceleration( forceX / this.getWeight() );
+        this.setYAcceleration( forceY / this.getWeight() );
+
+        this.setXVelocity(this.getXVelocity() + this.getXAcceleration() * time * Math.toRadians(alpha));
+        this.setYVelocity(this.getYVelocity() + this.getYAcceleration() * time * Math.toRadians(alpha));
+
     }
 
 

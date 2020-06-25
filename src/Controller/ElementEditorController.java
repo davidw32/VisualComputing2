@@ -154,6 +154,7 @@ public class ElementEditorController {
             colorPicker.setValue(newValue);
             graphicScene.getActiveElement().getElementView().setFill(newValue);
 
+
         });
 
     }
@@ -216,6 +217,26 @@ public class ElementEditorController {
             textFieldVelocityX.setDisable(true);
             textFieldVelocityY.setDisable(true);
             textFieldRotate.setDisable(false);
+            textFieldElasticity.setDisable(true);
+            textFieldWeight.setDisable(true);
+            scaleFactor.setText("Width/Height");
+
+        }else if (newValue instanceof Seesaw){
+
+            spinnerSlider.setDisable(true);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldWidth.setDisable(true);
+            textFieldWidth.setVisible(true);
+            textFieldHeight.setDisable(true);
+            textFieldHeight.setVisible(true);
+            textFieldRadius.setDisable(true);
+            textFieldRadius.setVisible(false);
+            textFieldAccelerationX.setDisable(true);
+            textFieldAccelerationY.setDisable(true);
+            textFieldVelocityX.setDisable(true);
+            textFieldVelocityY.setDisable(true);
+            textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(true);
             textFieldWeight.setDisable(true);
             scaleFactor.setText("Width/Height");

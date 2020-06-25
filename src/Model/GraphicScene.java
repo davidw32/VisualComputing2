@@ -89,6 +89,9 @@ public class GraphicScene {
                         System.out.println();
                         //((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
                     }
+                    if(secondObject instanceof Seesaw){
+                        ((Ball)graphicsObject).checkCollisionWithSeesaw((Seesaw) (secondObject));
+                    }
                 }
                 ((Ball)graphicsObject).collisionDetection(collisionLines);
 

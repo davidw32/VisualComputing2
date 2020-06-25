@@ -13,7 +13,7 @@ public class Spinner extends GraphicsObject {
     private double xMiddle; // X-Wert des Mittelpunkts
     private double yMiddle; // Y-Wert des Mittelpunkts
     private VectorMath calculator;
-    private Line vector1,vector2;
+    private Line vector1;
     private Circle center, pointA, pointB;
 
     public Spinner(double _initX, double _initY) {
@@ -185,7 +185,6 @@ public class Spinner extends GraphicsObject {
         returnVector[0]= -(y-yMiddle) * v/r;
         returnVector[1]= (x-xMiddle) * v/r ;
 
-        //System.out.println ( "Velvector: "+returnVector[0]+"  "+returnVector[1]+" Velradius: "+ r +" v: " +v);
         return returnVector;
     }
 

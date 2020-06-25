@@ -29,7 +29,7 @@ public class Ball extends GraphicsObject {
     private double bounceDirectionY = 0;
     private boolean slowed = false;
     private double bounceVelocity = 0;
-    Text velocityText = new Text();
+    private Text velocityText = new Text();
 
     private boolean windCollision = false;
     private double windX = 0;
@@ -759,7 +759,87 @@ public class Ball extends GraphicsObject {
         return vnew;
     }
 
+    public void checkCollisionWithSeesaw(Seesaw seesaw) {
+        Line[] outlines = seesaw.getOutlines();
+        double linePx = outlines[0].getStartX();
+        double linePy = outlines[0].getStartY();
+        double lineRx = outlines[0].getEndX() - outlines[0].getStartX();
+        double lineRy = outlines[0].getEndY() - outlines[0].getStartY();
 
+        double lineM = lineRy / lineRx;
+        double lineB = linePy + (-linePx / lineRx) * lineRy;
+        double abstand;
+        double schnittpunktX;
+        double schnittpunktY;
+        // Normalenvektor der Linie
+        double nX = lineRy;
+        double nY = -lineRx;
+
+        if (lineRy == 0) { // Fallunterscheidung wenn es eine horizontale Linie ist
+            abstand = Math.abs(linePy - getYPosition()) - radius() * getXScale();
+            schnittpunktX = getXPosition();
+            schnittpunktY = linePy;
+        } else if (lineRx == 0) { // Fallunterscheidung wenn es eine vertikale Linie ist
+            abstand = Math.abs(linePx - getXPosition()) - radius() * getXScale();
+            schnittpunktX = linePx;
+            schnittpunktY = getYPosition();
+        } else {
+            double ballLineM = nY / nX;
+            double ballLineB = getYPosition() + (-getXPosition() / nX) * nY;
+
+            schnittpunktX = (ballLineB - lineB) / (lineM - ballLineM);
+            schnittpunktY = ballLineM * schnittpunktX + ballLineB;
+
+            // Abstand zwischen dem Mittelpunkt des Ball und dem Schnittpunkt - den Radius des Balls
+            abstand = Math.sqrt(Math.pow(getXPosition() - schnittpunktX, 2) + Math.pow(getYPosition() - schnittpunktY, 2)) - radius() * getXScale();
+
+        }
+
+        //Bestimmung des linken und rechten Punktes der Linie im Koordinatensystem
+        double leftX = linePx;
+        double rightX = linePx + lineRx;
+        if (lineRx < 0) {
+            leftX = outlines[0].getEndX();
+            rightX = leftX - lineRx;
+        }
+        double topY = linePy;
+        double bottomY = linePy + lineRy;
+        if (lineRy < 0) {
+            topY = outlines[0].getEndY();
+            bottomY = topY - lineRy;
+        }
+
+
+        // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
+        boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
+        //v_rel * n_Seesawkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
+        boolean hit = (nX * (-this.getXVelocity() + seesaw.getXVelocity()) + nY * (-this.getYVelocity() + seesaw.getYVelocity())) < 0;
+
+        if (onLine && abstand < 5 ) {
+            //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
+            seesaw.setLeft(leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX);
+            seesaw.setRight((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX);
+
+            double delX = schnittpunktX - this.getXPosition();
+            double delY = schnittpunktY - this.getYPosition();
+            //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
+            double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), delX, delY); //Projektion der Kugelvelocity
+            double[] v2_z = calculator.parallelProjection(seesaw.getXVelocity(), seesaw.getYVelocity(), delX, delY); // Projektion der spinnerVelocity
+
+
+            // nur die parallelen Anteile werden verändert
+            double[] vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], seesaw.getWeight());
+            // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
+            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+
+            //seesaw.setOmega(calculator.vectorLength(vneu[2], vneu[3]), schnittpunktX, schnittpunktY);
+
+
+
+        }
+
+    }
 
     public void checkCollisionWithSpinner(Spinner spinner) {
 
@@ -767,12 +847,11 @@ public class Ball extends GraphicsObject {
         if (isInRangeOfSpinner(spinner)) {
             Line[] outlines = spinner.getOutlines();
             //System.out.println("Spinner in Range");
-            double[] spinnerVelocity = new double[]{0, 0};
+            double[] spinnerVelocity;
 
             if (spinner.getRotationalSpeed() == 0) {
                 collisionDetection(outlines);//wenn der Spinner sich nicht dreht, behandle ihn wie Block
-            }
-            else {//ansonsten
+            } else {//ansonsten
 
                 for (Line line : outlines) {
 
@@ -850,6 +929,7 @@ public class Ball extends GraphicsObject {
             }
         }
     }
+
     //berechnet ob sich die Kugel in einem groben Radius des Spinners befindet, wenn ja, wird die eigentliche Kollisionsprüfung durchgeführt
     private boolean isInRangeOfSpinner(Spinner spinner) {
 
@@ -866,6 +946,7 @@ public class Ball extends GraphicsObject {
         }
         return isInRange;
     }
+
     // das Element wird auf die Startwerte zurückgesetzt
     @Override
     public void resetElement() {
