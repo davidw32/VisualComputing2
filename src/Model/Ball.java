@@ -36,6 +36,8 @@ public class Ball extends GraphicsObject {
     private double windY = 0;
     private double windAngle = 0;
 
+    public boolean springboardCollision = false;
+
     public Ball(double _initXPosition, double _initYPosition) {
 
         super(_initXPosition, _initYPosition);
@@ -930,6 +932,73 @@ public class Ball extends GraphicsObject {
         }
     }
 
+    public void collisionDetectionBoardSpring(Line line, Springboard.Board board){
+
+
+        // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b (lineare Funktion)
+        // Umformung der Parameterform der Geraden in eine lineare Funktion
+        double linePx = line.getStartX();
+        double linePy = line.getStartY();
+        double lineRx = line.getEndX() - line.getStartX();
+        double lineRy = line.getEndY() - line.getStartY();
+
+        double lineM = lineRy / lineRx;
+        double lineB = linePy + (-linePx / lineRx) * lineRy;
+        double abstand;
+        double schnittpunktX;
+        double schnittpunktY;
+        // Normalenvektor der Linie
+        double nX = lineRy;
+        double nY = -lineRx;
+
+        if (lineRy == 0) { // Fallunterscheidung wenn es eine horizontale Linie ist
+            abstand = Math.abs(linePy - getYPosition()) - radius() * getXScale();
+            schnittpunktX = getXPosition();
+            schnittpunktY = linePy;
+        } else if (lineRx == 0) { // Fallunterscheidung wenn es eine vertikale Linie ist
+            abstand = Math.abs(linePx - getXPosition()) - radius() * getXScale();
+            schnittpunktX = linePx;
+            schnittpunktY = getYPosition();
+        } else {
+            double ballLineM = nY / nX;
+            double ballLineB = getYPosition() + (-getXPosition() / nX) * nY;
+
+            schnittpunktX = (ballLineB - lineB) / (lineM - ballLineM);
+            schnittpunktY = ballLineM * schnittpunktX + ballLineB;
+
+            // Abstand zwischen dem Mittelpunkt des Ball und dem Schnittpunkt - den Radius des Balls
+            abstand = Math.sqrt(Math.pow(getXPosition() - schnittpunktX, 2) + Math.pow(getYPosition() - schnittpunktY, 2)) - radius() * getXScale();
+
+        }
+
+        //Bestimmung des linken und rechten Punktes der Linie im Koordinatensystem
+        double leftX = linePx;
+        double rightX = linePx + lineRx;
+        if (lineRx < 0) {
+            leftX = line.getEndX();
+            rightX = leftX - lineRx;
+        }
+        double topY = linePy;
+        double bottomY = linePy + lineRy;
+        if (lineRy < 0) {
+            topY = line.getEndY();
+            bottomY = topY - lineRy;
+        }
+
+
+        // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
+        boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
+
+        if (abstand < 0.5 && onLine) { // wenn es kollidiert
+            springboardCollision = true;
+            board.getParentSpringboard().move(this);
+
+        }
+        else{
+            springboardCollision = false;
+        }
+    }
+
     //berechnet ob sich die Kugel in einem groben Radius des Spinners befindet, wenn ja, wird die eigentliche Kollisionsprüfung durchgeführt
     private boolean isInRangeOfSpinner(Spinner spinner) {
 
@@ -955,6 +1024,10 @@ public class Ball extends GraphicsObject {
         this.collision = false;
         this.bounce = false;
         this.slowed = false;
+    }
+
+    public void setSpringboardCollision(boolean springboardCollision) {
+        this.springboardCollision = springboardCollision;
     }
 
 }

@@ -28,19 +28,19 @@
          </font>
       </Text>
         </VBox>
-        <VBox alignment="CENTER" prefHeight="100">
-         <Group fx:id="spinnerDummy">
+        <VBox alignment="CENTER" prefHeight="100" fx:id="spinnerDummy">
+         <Group >
             <children>
                <Rectangle fill="ORANGERED" height="10.0"  width="90.0" />
                <Circle centerX="45.0" centerY="5.0" radius="3.0" />
             </children>
          </Group>
         </VBox>
-        <VBox alignment="CENTER" prefHeight="100">
-         <Group fx:id="seesawDummy">
+        <VBox alignment="CENTER" prefHeight="100" fx:id="seesawDummy">
+         <Group >
             <children>
                <Rectangle fill="DODGERBLUE" height="10.0" rotate="14.0"  width="90.0" />
-               <Polygon fill="DODGERBLUE" layoutX="45.0" layoutY="9.0" points="-10.0, 13.0, 9.0, 12.5, -1.0, 1.5"  />
+               <Polygon fill="DODGERBLUE" layoutX="45.0" layoutY="9.0" points="-10.0, 13.0, 10.0, 13, 0, 0"  />
             </children>
          </Group>
         </VBox>

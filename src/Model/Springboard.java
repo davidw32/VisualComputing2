@@ -1,253 +1,183 @@
-        package Model;
+package Model;
 
-        import javafx.scene.paint.Color;
-        import javafx.scene.shape.Line;
-        import javafx.scene.shape.Polyline;
-        import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.Rectangle;
 
-        import static Helpers.Config.GRAVITY;
+import static Helpers.Config.GRAVITY;
 
 /**
  * @author: Patrick Pavlenko
  * individuelles Objekt: Sprungbrett
  */
 
-        public class Springboard extends GraphicsObject
-        {
+public class Springboard extends Block
+{
 
-        // Body
-        Rectangle board = new Rectangle(500,20);
-        Polyline poly = new Polyline();
-        Polyline collisionLine = new Polyline();
+    private double acceleration = 0;
+    private double startHeight;
+    private boolean down = false;
+    private boolean activated = false;
+    private double s = 0;
 
-        //Kollisionslinien als Line element
-        Line[] outlines = {new Line(),new Line(),new Line(),new Line()};
+    private Board board;
 
-
-        double[] linesEndPoints = new double[10];
-        double[] lineStretchPoints = new double[10];
-
-
-        double stretchDistance;
-        double flexDistance;
-        double currentDistance;
-
-        double acceleration = 0;
-
-        // [N] Federweg
-        double s = 50;
-
-        // [N] Kraft,die auf das Objekt ausgesetzt . ( Weil bzw. Ball darauf fällt)
-        double collisionImpulse = 2000;
-
-
-        public Springboard(double initialX, double initialY)
-        {
+    public Springboard(double initialX, double initialY)
+    {
         super(initialX, initialY);
-        poly.getPoints().addAll(new Double[]{
-        200.0, 250.0,  //Viereck
-        200.0, 220.0,  // 2,3
-        400.0, 220.0,  // 4,5
-        400.0, 250.0,
-        200.0, 250.0,
 
-        400.0, 250.0,  //ab hier Feder
-        200.0, 290.0,
-        400.0, 330.0,
-        200.0, 370.0,
-        400.0, 410.0,
-        200.0, 450.0,
-        400.0, 490.0,
-        200.0, 530.0,
-        400.0, 570.0,
-        200.0, 570.0,
-        });
-
-        poly.setStrokeWidth(1);
-        updateCollisionLine();
-        elementView = poly;
-        elementView.setFill(Color.TRANSPARENT);
         elementView.setStroke(Color.BLUE);
-
-        stretchDistance = getDistance();
-        flexDistance = getDistance() - s;
-
-        elementView.setTranslateX(300);
-        elementView.setTranslateY(200);
-        updateOutliners();
-
-
-        }
+        ((Rectangle)elementView).setHeight(100);
+        ((Rectangle)elementView).setWidth(100);
+        board = new Board(0,0,this);
+        initOutlines();
+        updateOutlines();
+        board.initOutlines();
+        board.updateOutlines();
 
 
-        private double getDistance()
+
+
+        startHeight = getHeight();
+        Image img = new Image(getClass().getClassLoader().getResourceAsStream("img/Model_IMG/springboard.png"));
+        elementView.setFill(new ImagePattern(img));
+    }
+
+    /**
+     * Hier werden die Bewegungne + Kollisione aussgeführt
+     * @param ball Der Ball,mit dem die Kollsionen + Bewegungen verglichen werden
+     */
+    public void move(Ball ball)
         {
-        double x1 = poly.getPoints().set(8,poly.getPoints().get(8));
-        double y1 = poly.getPoints().set(9,poly.getPoints().get(9));
-        double x2 = poly.getPoints().set(28,poly.getPoints().get(28));
-        double y2 = poly.getPoints().set(29,poly.getPoints().get(29));
 
-        return Math.sqrt(  Math.pow( x2-x1 , 2 ) + Math.pow( y2-y1 , 2 )  );
-        }
-
-        private double featherConstant()
-        {
-        // [N] F = m * g      m = Gewicht Ball,welches drauf gelangt auf Feder
-        double Fg = (getWeight()+1) * GRAVITY;
-        //[N/m] Federkonstante  D = F(Federkraft) / S delta(Eine Einheit des Weges)    Einheiten:  [N/m] = N / s(meter)
-        return  (Fg / 0.1);
-        }
+            if(!activated)
+            {
+                s = energy(ball.getYVelocity(), ball.getWeight());
+                setYVelocity(ball.getYVelocity());
+                activated = true;
+            }
+            flex(ball);
 
 
-        /*
-         *
-         * @param m [Kg] Gewicht des Objektes
-         * @param k [N / m] Federkonstante
-         * @param s [N] Federweg
-         * @param impulse [N] Kraft die bei Kollision zwischen Springbaord und Kugel entsteh
-         *  FG = Gewichtskraft des Springboard
-         *  FS = Spannkraft des Springboard
-         *  FC = Kraft die bei Impuls zwischen Springboard und Ball entsteht
-         */
-        private double calcForce(double impulse)
-        {
-        // [N] F = m * g
-        double FG = GRAVITY * getWeight();
-        // [N]    [N] = [N/m] * [m]
-        double FS = featherConstant() * s;
-        // [N] Impulse welcher Bei Kollision zwischen Ball und Objekt eintrifft
-        double FC = impulse;
-
-        double F = 0;
-
-        System.out.println("FG   "+FG);
-        System.out.println("FC:  "+FC);
-        System.out.println("FS   "+FS);
-
-        // Wenn Ball nicht auf Objekt faellt ... ( Spannkraft = Gewichtskraft , Spannkraft wirkt gegen Gewichtskraft und neutralisieren sich damit)
-        if((FG + FC) == FS)
-        {
-        // dann Gibt es nicht genuegend Kraft,die das Springboard zum verformen bringt
-        return 0;
-        }
-        else
-        {
-        //andersfall verformt es sich
-        // Gewichtskraft + Kollsionskraft - Spannkraft
-        F = (FG + FC) - FS;
-        System.out.println("defautl");
-        }
-
-
-        return F / getWeight();
-        }
-
-        public void moveElement()
-        {
-        double f = 0;
-        double amplitude = s;
-        double angularFrequency = (Math.PI *2) * f;
-        double phaseAngle = 0;
-
-
-        double oscillation = amplitude * Math.sin(angularFrequency * time + phaseAngle);
-
-        updateCollisionLine();
         }
 
         /**
-         * Updaten der Kollisionslinien,da Objekt sich verformt
+         * @param velocityY Geschwindigkeit der Y-Achse
+         * @param weight gewicht
+         *
+         * @return
          */
-        private void updateCollisionLine()
+        public double energy(double velocityY,double weight)
         {
-        // Oben [0,1,2,3]
-        collisionLine.getPoints().add(poly.getPoints().get(2));
-        collisionLine.getPoints().add(poly.getPoints().get(3));
-        collisionLine.getPoints().add(poly.getPoints().get(4));
-        collisionLine.getPoints().add(poly.getPoints().get(5));
+            // [N/m] Federkonstante
+            double k = 2.7;
+            // [m] Federweg
+            s = (-1*(-weight*GRAVITY)+ Math.sqrt(Math.pow(weight*GRAVITY,2)-4*((0.5)*k*(-0.5)*weight*Math.pow(velocityY,2)))/(k));
 
-        // Rechts [4,5,6,7]
-        collisionLine.getPoints().add(poly.getPoints().get(4));
-        collisionLine.getPoints().add(poly.getPoints().get(5));
-        collisionLine.getPoints().add(poly.getPoints().get(26));
-        collisionLine.getPoints().add(poly.getPoints().get(27));
+            System.out.println(s);
+            //[N] Federkraft F = m * a  als: F = k * s
+            double Fk = k * s;
 
-        // Unten [8,9,10,11]
-        collisionLine.getPoints().add(poly.getPoints().get(26));
-        collisionLine.getPoints().add(poly.getPoints().get(27));
-        collisionLine.getPoints().add(poly.getPoints().get(28));
-        collisionLine.getPoints().add(poly.getPoints().get(29));
+            // [m/s^2] Beschleunigung a = F / m
+            double acceleration = Fk/weight;
 
-        //Links [12,13,14,15]
-        collisionLine.getPoints().add(poly.getPoints().get(28));
-        collisionLine.getPoints().add(poly.getPoints().get(29));
-        collisionLine.getPoints().add(poly.getPoints().get(2));
-        collisionLine.getPoints().add(poly.getPoints().get(3));
-
-
+            setYAcceleration(-acceleration);
+            return s;
         }
 
-        private void updateOutliners()
+        /**
+         * Deformation Feder und Translation des Springbrett
+         */
+        private void flex(Ball ball)
         {
-        outlines[0].setStartX(poly.getPoints().get(2)+elementView.getTranslateX());
-        outlines[0].setStartY(poly.getPoints().get(3)+elementView.getTranslateY());
-        outlines[0].setEndX(poly.getPoints().get(4)+elementView.getTranslateX());
-        outlines[0].setEndY(poly.getPoints().get(5)+elementView.getTranslateY());
+            double difference = ball.getYPosition()+ball.radius() - board.getYPosition();
+            if(!down)
+            {
+                if (getHeight() > startHeight - s && getYVelocity() > 1)
+                {
+                    setYVelocity(getYVelocity() + getYAcceleration() * time);
+                    ((Rectangle) elementView).setHeight(getHeight() - difference);
+                    setYPosition(getYPosition() + difference);
+                    board.setYPosition(getYPosition() - board.getHeight() );
+                }
+                else
+                {
+                    down = true;
+                    setYVelocity(0);
+                }
+                ball.setYVelocity(this.getYVelocity());
+            }
+            else
+            {
+                // Kugel geht wieder hoch
+                if (getHeight() < startHeight)
+                {
+                    setYVelocity(getYVelocity() - getYAcceleration() * time);
+                    ((Rectangle) elementView).setHeight(getHeight() + getYVelocity() * time);
+                    setYPosition(getYPosition() - getYVelocity() * time);
+                    board.setYPosition(getYPosition() - board.getHeight() );
+                    ball.setYVelocity(-getYVelocity());
+                }
+                // Kugel springt ab von Feder ,nachdem sie wieder hochgedrueckt wird
+                else
+                {
+                    activated = false;
+                    down = false;
+                    ball.setYVelocity(-getYVelocity());
+                    ball.setYPosition(board.getYPosition()-ball.radius()-3);
+                    ball.setSpringboardCollision(false);
+                }
 
-        outlines[1].setStartX(poly.getPoints().get(4)+elementView.getTranslateX());
-        outlines[1].setStartY(poly.getPoints().get(5)+elementView.getTranslateY());
-        outlines[1].setEndX(poly.getPoints().get(26)+elementView.getTranslateX());
-        outlines[1].setEndY(poly.getPoints().get(27)+elementView.getTranslateY());
-
-        outlines[2].setStartX(poly.getPoints().get(26)+elementView.getTranslateX());
-        outlines[2].setStartY(poly.getPoints().get(27)+elementView.getTranslateY());
-        outlines[2].setEndX(poly.getPoints().get(28)+elementView.getTranslateX());
-        outlines[2].setEndY(poly.getPoints().get(29)+elementView.getTranslateY());
-
-        outlines[3].setStartX(poly.getPoints().get(28)+elementView.getTranslateX());
-        outlines[3].setStartY(poly.getPoints().get(29)+elementView.getTranslateY());
-        outlines[3].setEndX(poly.getPoints().get(2)+elementView.getTranslateX());
-        outlines[3].setEndY(poly.getPoints().get(3)+elementView.getTranslateY());
-
-        System.out.println(elementView.getTranslateX());
-        System.out.println(outlines[0].getStartX());
-        System.out.println(outlines[0].getStartY());
-        System.out.println(outlines[0].getEndX());
-        System.out.println(outlines[0].getEndY());
+            }
+            this.initOutlines();
+            this.updateOutlines();
+            board.initOutlines();
+            board.updateOutlines();
         }
 
+    @Override
+    public void resetElement() {
+        super.resetElement();
+        this.activated = false;
+        this.down = false;
+        setHeight(startHeight);
+        this.setYVelocity(0);
+    }
 
-        public void save()
+
+
+
+
+
+    /**
+     * Klasse des Brettes des Springboards
+     * Dadurch kann gezielter beide Teile des Springboards bei Kollisionen verglichen werden
+     */
+    public class Board extends Block
+    {
+
+        private Springboard parentSpringboard;
+
+        public Board(double x,double y,Springboard springboard)
         {
-        /*
-        for(int x = 0; x <= line.length-1;x++)
-        {
-            savelineEndX[x] = line[x].getEndX();
-            savelineEndY[x] = line[x].getEndY();
-            savelineStartX[x] = line[x].getStartX();
-            savelineStartY[x] = line[x].getStartY();
-        }
-        saveBoardX = board.getTranslateX();
-        saveBoardY = board.getTranslateY(); */
-        }
-
-        public void reset()
-        {
-        /*
-        for(int x = 0; x <= line.length-1;x++)
-        {
-            line[x].setEndX(savelineEndX[x]);
-            line[x].setEndY(savelineEndY[x]);
-            line[x].setStartX(savelineStartX[x]);
-            line[x].setStartY(savelineStartY[x]);
-        }
-        board.setTranslateX(saveBoardX);
-        board.setTranslateY(saveBoardY);  */
+            super(x,y);
+            setWidth(((Rectangle) springboard.getElementView()).getWidth());
+            setHeight(20);
+            elementView.setFill(Color.GREY);
+            elementView.setStrokeWidth(3);
+            elementView.setStroke(Color.BLACK);
+            setXPosition(springboard.getXPosition());
+            setYPosition(springboard.getYPosition() - getHeight() );
+            parentSpringboard = springboard;
         }
 
+        public Springboard getParentSpringboard() { return parentSpringboard; }
+    }
 
-        public Line[] getOutlines() {
-        return outlines;
-        }
-        }
 
+
+    public Block getBoard() { return board; }
+}
