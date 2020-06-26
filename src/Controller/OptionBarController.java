@@ -4,8 +4,18 @@ import Model.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -16,13 +26,23 @@ import java.time.format.DateTimeFormatter;
 public class OptionBarController {
 
 
-    @FXML
-    MenuBar optionBar;
+    @FXML MenuBar optionBar;
+
+    Button continue_btn = new Button("Continue");
+    Button cancel_btn = new Button("Cancel");
+    Label text = new Label("Do you really want to exit?");
+    VBox Vbox_Modal = new VBox();
+    HBox HBox_Modal = new HBox();
+    Scene modalScene;
+    Stage warningWindow;
+    String eventType = "";
 
     private GraphicScene graphicScene;
 
-    public void initialize() {
+    public void initialize()
+    {
         System.out.println("Init OptionBarController");
+        text.setStyle("-fx-font-size: 20");
     }
 
 
@@ -30,21 +50,23 @@ public class OptionBarController {
     @FXML
     public void openScene(ActionEvent actionEvent) {
         //System.out.println("StartScreen öffnen und Szene auswählen");
-        graphicScene.getStartController().showStartScreen();
+        eventType = "open";
+        showWarning();
     }
 
 
     @FXML
     public void clearScene(ActionEvent actionEvent) {
         //System.out.println("Alle Elemente der Szene löschen");
-        graphicScene.clearScene();
-
+        eventType = "clear";
+        showWarning();
     }
 
     @FXML
     public void closeApplication(ActionEvent actionEvent) {
         System.out.println("Auf Wiedersehen!");
-        System.exit(0);
+        eventType = "close";
+        showWarning();
     }
 
     //Die Menu-Items von Object
@@ -114,7 +136,8 @@ public class OptionBarController {
     }
 
     @FXML
-    public void deleteObject(ActionEvent actionEvent) {
+    public void deleteObject(ActionEvent actionEvent)
+    {
         //System.out.println("lösche das aktive Element, setze den Platzhaler als neues Aktives Element");
         graphicScene.deleteActiveElement();
         System.out.println("Aktives Element gelöscht!");
@@ -122,7 +145,8 @@ public class OptionBarController {
 
     //Die Menu_Items von Options
     @FXML
-    public void takeSnapshot(ActionEvent actionEvent) {
+    public void takeSnapshot(ActionEvent actionEvent)
+    {
         //System.out.println("Mache einen Snapshot von der Szene");
         try {
             System.out.println("Snapshot in img/Snapsshots gespeichert");
@@ -135,10 +159,67 @@ public class OptionBarController {
     }
 
     @FXML
-    public void openHelp(ActionEvent actionEvent) {
+    public void openHelp(ActionEvent actionEvent)
+    {
         System.out.println("Zeige Hilfetext an");
         graphicScene.getElementEditorController().getEditor().setVisible(false);
         graphicScene.getElementEditorController().getHelpText().setVisible(true);
+
+    }
+
+
+    private void showWarning()
+    {
+
+        VBox Vbox_Modal = new VBox();
+        Vbox_Modal.setAlignment(Pos.CENTER);
+        Vbox_Modal.setSpacing(20);
+
+        HBox HBox_Modal = new HBox();
+        HBox_Modal.getChildren().addAll(continue_btn,cancel_btn);
+        HBox_Modal.setSpacing(20);
+        HBox_Modal.setAlignment(Pos.BASELINE_CENTER);
+
+        Vbox_Modal.getChildren().addAll(text,HBox_Modal);
+
+        Scene modalScene = new Scene(Vbox_Modal, 300, 150);
+        Stage warningWindow = new Stage();
+
+        warningWindow.setResizable(false);
+        warningWindow.setTitle("Hinweis");
+        warningWindow.setScene(modalScene);
+        warningWindow.initModality(Modality.WINDOW_MODAL);
+        //Sucht die momentane Stage ( im dessen Sinne die Parent Stage)
+        warningWindow.initOwner(Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null));
+        warningWindow.setX(750);
+        warningWindow.setY(450);
+
+        warningWindow.show();
+
+        cancel_btn.setOnMouseClicked(e ->
+        {
+            warningWindow.hide();
+        });
+
+        continue_btn.setOnMouseClicked(e ->
+        {
+            if(eventType.equals("clear"))
+            {
+                graphicScene.clearScene();
+                warningWindow.hide();
+            }
+            else if(eventType.equals("close"))
+            {
+                System.exit(0);
+                warningWindow.hide();
+            }
+            else if(eventType.equals("open"))
+            {
+                graphicScene.getStartController().showStartScreen();
+                warningWindow.hide();
+
+            }
+        });
 
     }
 
@@ -150,3 +231,4 @@ public class OptionBarController {
         this.graphicScene = graphicScene;
     }
 }
+

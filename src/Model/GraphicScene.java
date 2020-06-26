@@ -4,6 +4,7 @@ import Controller.*;
 import Helpers.SceneTime;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -302,6 +303,7 @@ public class GraphicScene {
     public void setStartController(StartController startController) {
         this.startController = startController;
     }
+
 
     public StartController getStartController() {
         return startController;
