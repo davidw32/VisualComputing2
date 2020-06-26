@@ -833,7 +833,7 @@ public class Ball extends GraphicsObject {
             this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
             this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
 
-            //seesaw.setOmega(calculator.vectorLength(vneu[2], vneu[3]), schnittpunktX, schnittpunktY);
+           //seesaw.setOmega(calculator.vectorLength(vneu[2], vneu[3]), schnittpunktX, schnittpunktY);
 
 
 
@@ -907,7 +907,7 @@ public class Ball extends GraphicsObject {
                         spinnerVelocity = spinner.velocityVector(lotX, lotY);
 
                         //v_rel * n_Spinnerkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-                        hit = (normalX * (-this.getXVelocity() + spinnerVelocity[0]) + normalY * (-this.getYVelocity() + spinnerVelocity[1])) < 0;
+                        hit = (normalX * (-this.getXVelocity() + spinnerVelocity[0]) + normalY * (-this.getYVelocity() + spinnerVelocity[1])) > 0;
 
                         if (online && hit) {
                             double delX = lotX - this.getXPosition();

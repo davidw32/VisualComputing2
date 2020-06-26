@@ -19,7 +19,7 @@ public class Spinner extends GraphicsObject {
     public Spinner(double _initX, double _initY) {
 
         super(_initX, _initY);
-        setHeight(10);
+        setHeight(20);
         setWidth(100);
         setWeight(100);
         calculator = new VectorMath();
@@ -31,7 +31,7 @@ public class Spinner extends GraphicsObject {
         setIsMoving(true);
 
         // Initialisierung der View
-        elementView = new Rectangle(_initX, _initY, 100, 10);
+        elementView = new Rectangle(_initX, _initY, 100, 20);
         elementView.setFill(Color.ORANGERED);
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeWidth(3);
