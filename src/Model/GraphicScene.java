@@ -46,7 +46,7 @@ public class GraphicScene {
     Line[] lines = new Line[5];
 
     public GraphicScene(){
-        System.out.println("klasse graphicScene");
+
         elementsInScene= new LinkedList<>();
         // placeholder um die Textfelder im ElementEditor miteinander zu verknüpfen
         placeholder = new Ball(0,0);
@@ -180,6 +180,9 @@ public class GraphicScene {
         if (getActiveElement() instanceof Spinner){
             graphicSceneController.getGraphicPane().getChildren().remove(((Spinner)getActiveElement()).getCenter());
         }
+        if(getActiveElement() instanceof Seesaw){
+            getGraphicSceneController().getGraphicPane().getChildren().remove(((Seesaw)getActiveElement()).getTriangle());
+        }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
     }
@@ -209,14 +212,11 @@ public class GraphicScene {
      * hier wird die gesammte Szene gelöscht
      */
     public void clearScene(){
-        for (GraphicsObject graphicsObject: elementsInScene){
-            graphicSceneController.getGraphicPane().getChildren().remove(graphicsObject.getElementView());
-            if (graphicsObject instanceof Ball) {
-                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getDirectionLine());
-                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getVelocityText());
-            }
-        }
+
+        graphicSceneController.getGraphicPane().getChildren().clear();
+
         elementsInScene.clear();
+
         setActiveElement(placeholder);
 
     }

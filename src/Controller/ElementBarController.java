@@ -18,9 +18,9 @@ public class ElementBarController {
 
     public Text springboardDummy;
     @FXML
-    private Group spinnerDummy;
+    private VBox spinnerDummy;
     @FXML
-    private Group seesawDummy;
+    private VBox seesawDummy;
     @FXML
     private Circle ballDummy;
     @FXML
@@ -31,7 +31,7 @@ public class ElementBarController {
 
 
     public void initialize() {
-        System.out.println(" init ElementBarController");
+        System.out.println("Init ElementBarController");
 
         ballDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override

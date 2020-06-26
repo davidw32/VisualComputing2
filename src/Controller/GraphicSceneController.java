@@ -17,7 +17,7 @@ public class GraphicSceneController {
 
     public void initialize(){
 
-        System.out.println("init Graphicscene");
+        System.out.println("Init GraphicSceneController");
     // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override

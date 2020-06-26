@@ -83,6 +83,7 @@ public class ElementEditorController {
     }
 
     public void initialize() {
+        System.out.println("Init ElementEditorController");
         setUpValidation(textFieldXPosition);
         setUpValidation(textFieldYPosition);
         setUpValidation(textFieldVelocityX);

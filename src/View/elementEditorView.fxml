@@ -55,18 +55,18 @@
             <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label alignment="CENTER" text="X" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <Label alignment="CENTER" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Label fx:id="scaleFactor" text="Scalefactor" GridPane.rowIndex="2" />
-            <Label text="Velocity [m/s]" GridPane.rowIndex="3" />
+            <Label fx:id="scaleFactor" text="Width/Height" GridPane.rowIndex="2" />
+            <Label text="Velocity" GridPane.rowIndex="3" />
             <TextField fx:id="textFieldWidth" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="textFieldHeight" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="Acceleration [cm/s^2]" GridPane.rowIndex="4" />
+            <Label text="Acceleration" GridPane.rowIndex="4" />
             <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label text="Rotate [Degree]" GridPane.rowIndex="7" />
+            <Label text="Rotate" GridPane.rowIndex="7" />
             <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="85.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label text="Weight [g]" GridPane.rowIndex="6" />
+            <Label text="Weight" GridPane.rowIndex="6" />
             <TextField fx:id="textFieldWeight" prefHeight="27.0" prefWidth="83.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
             <Label text="Color" GridPane.rowIndex="10" />
             <ColorPicker fx:id="colorPicker" prefHeight="27.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" />
@@ -86,8 +86,7 @@
             <VBox prefHeight="52.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="13">
                 <children>
                     <Label prefHeight="17.0" prefWidth="112.0" text="Rotational Speed" />
-                    <Slider fx:id="spinnerSlider" majorTickUnit="0.5" max="3.0" maxWidth="326.0" min="-3.0" minorTickCount="0" prefHeight="38.0" prefWidth="326.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                    <Label prefHeight="17.0" prefWidth="228.0" text="Umdrehungen pro Sec" />
+                    <Slider fx:id="spinnerSlider" majorTickUnit="1" max="3.0" maxWidth="326.0" min="-3.0" minorTickCount="0" prefHeight="38.0" prefWidth="326.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                 </children>
             </VBox>
             <VBox fx:id="windEditor" prefHeight="148.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="15">
