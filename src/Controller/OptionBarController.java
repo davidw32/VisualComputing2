@@ -1,15 +1,11 @@
 package Controller;
 
-import Model.Ball;
-import Model.Block;
-import Model.GraphicScene;
-import Model.GraphicsObject;
+import Model.*;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuBar;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -77,6 +73,18 @@ public class OptionBarController {
             ((Block) copy).setWidth(((Block) active).getWidth());
             copy.setIsMoving(false);
         }
+        if(active instanceof Spinner){
+            copy = new Spinner(40,40);
+            ((Spinner) copy).setHeight(((Spinner) active).getHeight());
+            ((Spinner) copy).setWidth(((Spinner) active).getWidth());
+            ((Spinner) copy).setRotationalSpeed(((Spinner) active).getRotationalSpeed());
+        }
+        if(active instanceof Seesaw){
+            copy = new Seesaw(40,40);
+            ((Seesaw) copy).setHeight(((Seesaw) active).getHeight());
+            ((Seesaw) copy).setWidth(((Seesaw) active).getWidth());
+        }
+
         //kopiere die Werte
         copy.setWeight(active.getWeight());
         copy.setAngle(active.getAngle());
@@ -89,6 +97,17 @@ public class OptionBarController {
 
         //füge die Kopie in der Szene und in er Liste ein
         graphicScene.getGraphicSceneController().getGraphicPane().getChildren().add(copy.getElementView());
+        if ( copy instanceof Ball){
+            graphicScene.getGraphicSceneController().getGraphicPane().getChildren().addAll(((Ball) copy).getDirectionLine(), ((Ball) copy).getVelocityText());
+        }
+
+        if (copy instanceof Spinner){
+            graphicScene.getGraphicSceneController().getGraphicPane().getChildren().addAll(((Spinner)copy).getCenter());
+        }
+        if (copy instanceof Seesaw){
+            graphicScene.getGraphicSceneController().getGraphicPane().getChildren().addAll(((Seesaw)copy).getTriangle());
+        }
+
         graphicScene.getGraphicSceneController().addListenersToObject(copy);
         graphicScene.addElement(copy);
 
@@ -106,7 +125,7 @@ public class OptionBarController {
     public void takeSnapshot(ActionEvent actionEvent) {
         //System.out.println("Mache einen Snapshot von der Szene");
         try {
-            System.out.println("Snapshot in out/Snapsshots gespeichert");
+            System.out.println("Snapshot in img/Snapsshots gespeichert");
             String name = ZonedDateTime.now(ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern("uuuu_MM_dd_HH_mm_SS"));
             Image snapshot = graphicScene.getGraphicSceneController().getGraphicPane().snapshot(null, null);
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", new File("src/img/Snapshots/" + name + "_Snapshot.png"));

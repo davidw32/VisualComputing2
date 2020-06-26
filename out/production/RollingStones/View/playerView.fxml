@@ -13,8 +13,24 @@
         <HBox fx:id="playerPanel" prefWidth="1150">
             <children>
 <HBox fx:id="timeManager" alignment="CENTER_LEFT" prefWidth="383" spacing="10">
-    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnTimeLapse" text="Fast" />
-    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnSlowMotion" text="Slow" />
+    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnTimeLapse"  >
+        <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../img/Icons/Fast.png" />
+                </image>
+            </ImageView>
+        </graphic>
+    </Button>
+    <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#setOnSlowMotion" >
+        <graphic>
+        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../img/Icons/Slow.png" />
+            </image>
+        </ImageView>
+    </graphic>
+    </Button>
 </HBox>
         <HBox fx:id="playerControl" alignment="CENTER" prefWidth="383" spacing="10">
             <Button minHeight="40.0" minWidth="40.0" mnemonicParsing="false" onAction="#stopSimulation">

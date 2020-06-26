@@ -42,9 +42,9 @@ public class ElementEditorController {
     @FXML
     private TextField textFieldYPosition;
     @FXML
-    private TextField textFieldScaleX;
+    private TextField textFieldWidth;
     @FXML
-    private TextField textFieldScaleY;
+    private TextField textFieldHeight;
     @FXML
     private TextField textFieldVelocityX;
     @FXML
@@ -60,6 +60,9 @@ public class ElementEditorController {
     @FXML
     private TextField textFieldElasticity;
     @FXML
+    private TextField textFieldRadius;
+
+    @FXML
     private ColorPicker colorPicker;
     @FXML
     private ChoiceBox choiceBoxPattern;
@@ -67,9 +70,9 @@ public class ElementEditorController {
     private GridPane editor;
     @FXML
     private GridPane helpText;
-@FXML private Label infoLabel;
+    @FXML private Label infoLabel;
 
-@FXML private Label scaleFactor;
+    @FXML private Label scaleFactor;
 
     private LinkedList<TextField> allTextFields;
     private GraphicScene graphicScene;
@@ -80,17 +83,19 @@ public class ElementEditorController {
     }
 
     public void initialize() {
+        System.out.println("Init ElementEditorController");
         setUpValidation(textFieldXPosition);
         setUpValidation(textFieldYPosition);
         setUpValidation(textFieldVelocityX);
         setUpValidation(textFieldVelocityY);
         setUpValidation(textFieldAccelerationX);
         setUpValidation(textFieldAccelerationY);
-        setUpValidation(textFieldScaleX);
-        setUpValidation(textFieldScaleY);
+        setUpValidation(textFieldWidth);
+        setUpValidation(textFieldHeight);
         setUpValidation(textFieldElasticity);
         setUpValidation(textFieldRotate);
         setUpValidation(textFieldWeight);
+        setUpValidation(textFieldRadius);
 
         spinnerSlider.setDisable(true);
         windDirectionSlider.setDisable(true);
@@ -150,6 +155,7 @@ public class ElementEditorController {
             colorPicker.setValue(newValue);
             graphicScene.getActiveElement().getElementView().setFill(newValue);
 
+
         });
 
     }
@@ -161,8 +167,10 @@ public class ElementEditorController {
             spinnerSlider.setDisable(false);
             textFieldXPosition.setDisable(false);
             textFieldYPosition.setDisable(false);
-            textFieldScaleX.setDisable(false);
-            textFieldScaleY.setDisable(false);
+            textFieldWidth.setDisable(false);
+            textFieldWidth.setVisible(true);
+            textFieldHeight.setDisable(false);
+            textFieldHeight.setVisible(true);
             textFieldAccelerationX.setDisable(true);
             textFieldAccelerationY.setDisable(true);
             textFieldVelocityX.setDisable(true);
@@ -170,14 +178,22 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(true);
             textFieldWeight.setDisable(true);
-            scaleFactor.setText("Scalefactor");
+            textFieldRadius.setDisable(true);
+            textFieldRadius.setVisible(false);
+
+            scaleFactor.setText("Width/Height");
+
 
         } else if (newValue instanceof Ball) {
             spinnerSlider.setDisable(true);
             textFieldXPosition.setDisable(false);
             textFieldYPosition.setDisable(false);
-            textFieldScaleX.setDisable(false);
-            textFieldScaleY.setDisable(true);
+            textFieldWidth.setDisable(true);
+            textFieldWidth.setVisible(false);
+            textFieldHeight.setDisable(true);
+            textFieldHeight.setVisible(false);
+            textFieldRadius.setVisible(true);
+            textFieldRadius.setDisable(false);
             textFieldAccelerationX.setDisable(false);
             textFieldAccelerationY.setDisable(false);
             textFieldVelocityX.setDisable(false);
@@ -191,13 +207,37 @@ public class ElementEditorController {
             spinnerSlider.setDisable(true);
             textFieldXPosition.setDisable(false);
             textFieldYPosition.setDisable(false);
-            textFieldScaleX.setDisable(false);
-            textFieldScaleY.setDisable(false);
+            textFieldWidth.setDisable(false);
+            textFieldWidth.setVisible(true);
+            textFieldHeight.setDisable(false);
+            textFieldHeight.setVisible(true);
+            textFieldRadius.setDisable(true);
+            textFieldRadius.setVisible(false);
             textFieldAccelerationX.setDisable(true);
             textFieldAccelerationY.setDisable(true);
             textFieldVelocityX.setDisable(true);
             textFieldVelocityY.setDisable(true);
             textFieldRotate.setDisable(false);
+            textFieldElasticity.setDisable(true);
+            textFieldWeight.setDisable(true);
+            scaleFactor.setText("Width/Height");
+
+        }else if (newValue instanceof Seesaw){
+
+            spinnerSlider.setDisable(true);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldWidth.setDisable(true);
+            textFieldWidth.setVisible(true);
+            textFieldHeight.setDisable(true);
+            textFieldHeight.setVisible(true);
+            textFieldRadius.setDisable(true);
+            textFieldRadius.setVisible(false);
+            textFieldAccelerationX.setDisable(true);
+            textFieldAccelerationY.setDisable(true);
+            textFieldVelocityX.setDisable(true);
+            textFieldVelocityY.setDisable(true);
+            textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(true);
             textFieldWeight.setDisable(true);
             scaleFactor.setText("Width/Height");
@@ -208,8 +248,9 @@ public class ElementEditorController {
         // die alten Bindungen löschen
         Bindings.unbindBidirectional(textFieldXPosition.textProperty(), oldValue.xPositionProperty());
         Bindings.unbindBidirectional(textFieldYPosition.textProperty(), oldValue.yPositionProperty());
-        Bindings.unbindBidirectional(textFieldScaleX.textProperty(), oldValue.xScaleProperty());
-        Bindings.unbindBidirectional(textFieldScaleY.textProperty(), oldValue.yScaleProperty());
+        Bindings.unbindBidirectional(textFieldWidth.textProperty(), oldValue.widthProperty());
+        Bindings.unbindBidirectional(textFieldHeight.textProperty(), oldValue.heightProperty());
+        Bindings.unbindBidirectional(textFieldRadius.textProperty(), oldValue.radiusProperty());
         Bindings.unbindBidirectional(textFieldVelocityX.textProperty(), oldValue.xVelocityProperty());
         Bindings.unbindBidirectional(textFieldVelocityY.textProperty(), oldValue.yVelocityProperty());
         Bindings.unbindBidirectional(textFieldAccelerationX.textProperty(), oldValue.xAccelerationProperty());
@@ -217,6 +258,7 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldRotate.textProperty(), oldValue.angleProperty());
         Bindings.unbindBidirectional(textFieldWeight.textProperty(), oldValue.weightProperty());
         Bindings.unbindBidirectional(textFieldElasticity.textProperty(), oldValue.frictionProperty());
+
 
         if (oldValue instanceof Spinner) {
             Bindings.unbindBidirectional(spinnerSlider.valueProperty(), ((Spinner) oldValue).rotationalSpeedProperty());
@@ -241,8 +283,9 @@ public class ElementEditorController {
 
         Bindings.bindBidirectional(textFieldXPosition.textProperty(), newValue.xPositionProperty(), converter);
         Bindings.bindBidirectional(textFieldYPosition.textProperty(), newValue.yPositionProperty(), converter);
-        Bindings.bindBidirectional(textFieldScaleX.textProperty(), newValue.xScaleProperty(), converter);
-        Bindings.bindBidirectional(textFieldScaleY.textProperty(), newValue.yScaleProperty(), converter);
+        Bindings.bindBidirectional(textFieldWidth.textProperty(), newValue.widthProperty(), converter);
+        Bindings.bindBidirectional(textFieldHeight.textProperty(), newValue.heightProperty(), converter);
+        Bindings.bindBidirectional(textFieldRadius.textProperty(), newValue.radiusProperty(), converter);
         Bindings.bindBidirectional(textFieldVelocityX.textProperty(), newValue.xVelocityProperty(), converter);
         Bindings.bindBidirectional(textFieldVelocityY.textProperty(), newValue.yVelocityProperty(), converter);
         Bindings.bindBidirectional(textFieldAccelerationX.textProperty(), newValue.xAccelerationProperty(), converter);
@@ -280,12 +323,12 @@ public class ElementEditorController {
     }
 
 
-    public TextField getTextFieldScaleX() {
-        return textFieldScaleX;
+    public TextField getTextFieldWidth() {
+        return textFieldWidth;
     }
 
-    public TextField getTextFieldScaleY() {
-        return textFieldScaleY;
+    public TextField getTextFieldHeight() {
+        return textFieldHeight;
     }
 
     public GridPane getEditor() {

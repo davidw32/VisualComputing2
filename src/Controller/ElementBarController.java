@@ -3,6 +3,7 @@ package Controller;
 import Model.GraphicScene;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -16,8 +17,10 @@ public class ElementBarController {
 
 
     public Text springboardDummy;
-    public Text spinnerDummy;
-    public Text seasawDummy;
+    @FXML
+    private VBox spinnerDummy;
+    @FXML
+    private VBox seesawDummy;
     @FXML
     private Circle ballDummy;
     @FXML
@@ -28,7 +31,7 @@ public class ElementBarController {
 
 
     public void initialize() {
-        System.out.println(" init ElementBarController");
+        System.out.println("Init ElementBarController");
 
         ballDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
@@ -70,14 +73,14 @@ public class ElementBarController {
                 event.consume();
             }
         });
-        seasawDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
+        seesawDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
 
-                Dragboard db = seasawDummy.startDragAndDrop(TransferMode.COPY);
+                Dragboard db = seesawDummy.startDragAndDrop(TransferMode.COPY);
 
                 ClipboardContent content = new ClipboardContent();
-                content.putString(seasawDummy.getId());
+                content.putString(seesawDummy.getId());
                 db.setContent(content);
 
                 event.consume();
