@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import javax.script.Bindings;
@@ -105,6 +106,7 @@ public class GraphicSceneController {
         });
         //die Listener für das Drag-and-Drop
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            graphicScene.setActiveElement(_graphicsObject);
             // Position Mauszeiger
             initX =(int) event.getSceneX();
             initY =(int) event.getSceneY();
@@ -120,19 +122,25 @@ public class GraphicSceneController {
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
             //Element verschieben
-            _graphicsObject.setXPosition((int)newTranslateX);
-            _graphicsObject.setYPosition((int)newTranslateY);
-            if(_graphicsObject instanceof Ball){
-                ((Ball) _graphicsObject).updateDirectionLine();
-            }
-            if(_graphicsObject instanceof Spinner){
-                ((Spinner)_graphicsObject).updateOutlines();
-            }
-            if(_graphicsObject instanceof Seesaw){
-                ((Seesaw)_graphicsObject).updateOutlines();
-            }
-        });
+            if(newTranslateX > -50 && newTranslateY > -50 && newTranslateX < 1200 && newTranslateY < 870 ){
+                _graphicsObject.setXPosition((int) newTranslateX);
+                _graphicsObject.setYPosition((int) newTranslateY);
+                if (_graphicsObject instanceof Ball) {
+                    ((Ball) _graphicsObject).updateDirectionLine();
+                }
+                if (_graphicsObject instanceof Spinner) {
+                    ((Spinner) _graphicsObject).updateOutlines();
+                }
+                if (_graphicsObject instanceof Seesaw) {
+                    ((Seesaw) _graphicsObject).updateOutlines();
+                }
 
+            }else{
+                graphicScene.deleteActiveElement();
+
+            }
+
+        });
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
             if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
                 ((Ball) _graphicsObject).getVelocityText().setVisible(true);
