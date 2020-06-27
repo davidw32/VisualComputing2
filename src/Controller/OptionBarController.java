@@ -215,6 +215,7 @@ public class OptionBarController {
             }
             else if(eventType.equals("open"))
             {
+                graphicScene.clearScene();
                 graphicScene.getStartController().showStartScreen();
                 warningWindow.hide();
 

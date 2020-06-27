@@ -125,7 +125,7 @@ public class ElementEditorController {
 
     private void validate(TextField tf) {
         ObservableList<String> styleClass = tf.getStyleClass();
-        if (tf.getText().trim().length() == 0 && tf.getText().matches("[-+]?[0-9]*\\.?[0-9]*")) {
+        if (tf.getText().trim().length() == 0 || !tf.getText().matches("[-+]?[0-9]*\\.?[0-9]*")) {
             if (!styleClass.contains("error")) {
                 styleClass.add("error");
                 infoLabel.setText("Bitte eine Zahl eingeben!");

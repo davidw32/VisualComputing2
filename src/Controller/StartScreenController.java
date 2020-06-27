@@ -36,11 +36,11 @@ public class StartScreenController {
     public void openScene1() {
         LinkedList<GraphicsObject> elementsInScene1 = new LinkedList<>();
         Ball ball1 = new Ball(60, 50);
-        ball1.setRadius(20);
+        ball1.setRadius(25);
         ball1.setIsSelected(true);
         Block block1 = new Block(35, 200);
         block1.setWidth(400);
-        block1.setHeight(10);
+        block1.setHeight(20);
         block1.setAngle(10);
         block1.setXPosition(40);
         block1.setIsSelected(false);

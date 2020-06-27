@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 import java.util.Locale;
@@ -177,6 +178,7 @@ public class Ball extends GraphicsObject {
 
         } else {
             elementView.setStroke(null);
+            elementView.setStrokeType(StrokeType.INSIDE);
             velocityText.setVisible(false);
         }
     }
@@ -815,7 +817,7 @@ public class Ball extends GraphicsObject {
         // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
         boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
         //v_rel * n_Seesawkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-        boolean hit = (nX * (-this.getXVelocity() + seesaw.getXVelocity()) + nY * (-this.getYVelocity() + seesaw.getYVelocity())) < 0;
+        boolean hit = (nX * this.getXVelocity()  + nY * this.getYVelocity() ) < 0;
 
         if (onLine && abstand < 5 ) {
             //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
@@ -837,8 +839,6 @@ public class Ball extends GraphicsObject {
 
            //seesaw.setOmega(calculator.vectorLength(vneu[2], vneu[3]), schnittpunktX, schnittpunktY);
 
-
-
         }
 
     }
@@ -848,7 +848,7 @@ public class Ball extends GraphicsObject {
         //Äußerer Radius um den Spinner wird berührt
         if (isInRangeOfSpinner(spinner)) {
             Line[] outlines = spinner.getOutlines();
-            //System.out.println("Spinner in Range");
+
             double[] spinnerVelocity;
 
             if (spinner.getRotationalSpeed() == 0) {
@@ -907,11 +907,12 @@ public class Ball extends GraphicsObject {
 
                         //den Richtungsvektor für die Bahngeschwindigkeit im Lotpunkt ermitteln
                         spinnerVelocity = spinner.velocityVector(lotX, lotY);
-
+                        //System.out.println("lotx"+ lotX+" loty "+lotY);
                         //v_rel * n_Spinnerkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-                        hit = (normalX * (-this.getXVelocity() + spinnerVelocity[0]) + normalY * (-this.getYVelocity() + spinnerVelocity[1])) > 0;
-
+                        hit = (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * ( spinnerVelocity[1] - this.getYVelocity())) > 0;
+                        //hit = normalX * this.getXVelocity() + normalY * this.getYVelocity()<0;
                         if (online && hit) {
+                            // Zentralrichtung des Stosses
                             double delX = lotX - this.getXPosition();
                             double delY = lotY - this.getYPosition();
                             //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
@@ -925,6 +926,7 @@ public class Ball extends GraphicsObject {
                                 this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
                                 this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
                             }
+
                         }
                     }
                 }//endfor

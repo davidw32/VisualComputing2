@@ -7,6 +7,8 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
+import javax.script.Bindings;
+
 public class GraphicSceneController {
     @FXML
     private Pane graphicPane;
@@ -99,12 +101,10 @@ public class GraphicSceneController {
     public void addListenersToObject(GraphicsObject _graphicsObject){
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     //Element als Actives Element definieren
-
                     graphicScene.setActiveElement(_graphicsObject);
         });
-
+        //die Listener für das Drag-and-Drop
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-
             // Position Mauszeiger
             initX =(int) event.getSceneX();
             initY =(int) event.getSceneY();
@@ -133,7 +133,22 @@ public class GraphicSceneController {
             }
         });
 
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
+            if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
+                ((Ball) _graphicsObject).getVelocityText().setVisible(true);
+            }
+        });
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+            if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
+                ((Ball) _graphicsObject).getVelocityText().setVisible(false);
+            }
+        });
+
     }
+
+
+
+
     private Text createPlaceholder(double x, double y){
         Text placeholder = new Text();
         placeholder.setX(x);

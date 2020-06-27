@@ -21,7 +21,7 @@ public class Spinner extends GraphicsObject {
         super(_initX, _initY);
         setHeight(20);
         setWidth(100);
-        setWeight(100);
+        setWeight(100000);
         calculator = new VectorMath();
         rotationalSpeed = new SimpleDoubleProperty(this, "rotationalSpeed", 0.0);
 
@@ -34,6 +34,7 @@ public class Spinner extends GraphicsObject {
         elementView = new Rectangle(_initX, _initY, 100, 20);
         elementView.setFill(Color.ORANGERED);
         elementView.setStroke(Color.ORANGE);
+        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setStrokeWidth(3);
 
         // Bindings zwischen View und Objekt
@@ -164,6 +165,7 @@ public class Spinner extends GraphicsObject {
         if (getIsSelected()) {
 
             elementView.setStroke(Color.ORANGE);
+            elementView.setStrokeType(StrokeType.INSIDE);
             elementView.setStrokeWidth(3);
 
         } else elementView.setStroke(null);
@@ -180,13 +182,19 @@ public class Spinner extends GraphicsObject {
         double[] returnVector = new double[]{0,0};
         //Abstand des Punktes zum Mittelpunkt des Spinners
         double r = calculator.vectorLength(x-xMiddle, y-yMiddle);
+
+        // v = omega/(2*Pi) * (2 Pi * r)   mit omega = 2 * Pi * Umdrehung/sec
         double v = getRotationalSpeed() * time * 2 * Math.PI * r * 100; //Umrechung in cm/s
-        //Tangential zum Rotationswinkel
+
+        //senkrecht zum Verbindungsvektor mit dem Drehpunkt, mit der Länge v
         returnVector[0]= -(y-yMiddle) * v/r;
         returnVector[1]= (x-xMiddle) * v/r ;
 
         return returnVector;
     }
+
+
+
 
     public double getCenterX() {
         return xMiddle;
