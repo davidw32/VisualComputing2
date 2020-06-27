@@ -60,7 +60,6 @@ public class GraphicSceneController {
                     if(db.getString().equals("springboardDummy")){
                         Springboard springboard = new Springboard(event.getX(),event.getY());
                         addListenersToObject(springboard);
-                        addListenersToObject(springboard.getBoard());
                         graphicScene.addElement(springboard);
                         graphicScene.addElement(springboard.getBoard());
                         graphicPane.getChildren().addAll(springboard.getElementView(),springboard.getBoard().getElementView());

@@ -1,5 +1,6 @@
 package Model;
 
+import javafx.beans.value.ChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -23,6 +24,9 @@ public class Springboard extends Block
     private boolean activated = false;
     private double s = 0;
 
+    private ChangeListener changeX;
+    private ChangeListener changeY;
+
     private Board board;
 
     public Springboard(double initialX, double initialY)
@@ -38,12 +42,27 @@ public class Springboard extends Block
         board.initOutlines();
         board.updateOutlines();
 
-
-
-
         startHeight = getHeight();
         Image img = new Image(getClass().getClassLoader().getResourceAsStream("img/Model_IMG/springboard.png"));
         elementView.setFill(new ImagePattern(img));
+
+        changeX = (observable, oldValue, newValue) -> {
+            if(oldValue != newValue )
+            {
+                board.setXPosition(getXPosition() );
+            }
+        };
+
+        changeY = (observable, oldValue, newValue) -> {
+            if(oldValue != newValue )
+            {
+                board.setYPosition(getYPosition() - board.getHeight() );
+            }
+        };
+
+        xPosition.addListener(changeX);
+        yPosition.addListener(changeY);
+
     }
 
     /**
