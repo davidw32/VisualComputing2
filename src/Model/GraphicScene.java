@@ -4,6 +4,7 @@ import Controller.*;
 import Helpers.SceneTime;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -84,10 +85,8 @@ public class GraphicScene {
                     if(secondObject instanceof Spinner){
                         ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
                     }
-                    if(secondObject instanceof Springboard)
-                    {
-                        System.out.println();
-                        //((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
+                    if(secondObject instanceof Springboard.Board){
+                        ((Ball)graphicsObject).collisionDetectionBoardSpring(((Springboard.Board) secondObject).getOutlines()[0],(Springboard.Board) secondObject);
                     }
                     if(secondObject instanceof Seesaw){
                         ((Ball)graphicsObject).checkCollisionWithSeesaw((Seesaw) (secondObject));
@@ -111,10 +110,17 @@ public class GraphicScene {
             collisionLines.add(line);
         }
         for (GraphicsObject graphicsObject: elementsInScene){
-            if(graphicsObject instanceof Block){
+            if(graphicsObject instanceof Block && !(graphicsObject instanceof Springboard.Board)){
                 for (Line line: ((Block) graphicsObject).getOutlines()) {
                     collisionLines.add(line);
                 }
+            }
+            else if(graphicsObject instanceof Springboard.Board)
+            {
+
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[1]);
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[2]);
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[3]);
             }
         }
         Line[] lineArray = new Line[collisionLines.size()];
@@ -297,6 +303,7 @@ public class GraphicScene {
     public void setStartController(StartController startController) {
         this.startController = startController;
     }
+
 
     public StartController getStartController() {
         return startController;
