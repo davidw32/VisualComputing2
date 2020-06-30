@@ -75,10 +75,10 @@ public Block(double _initX, double _initY){
      * initalisiert die Kollisionslinien des Rechtecks an den Kanten des Rechtecks
      */
     protected void initOutlines(){
-        outlines[0] = new Line(getXPosition(),getYPosition(),getXPosition()+getWidth(),getYPosition());
-        outlines[1] = new Line(getXPosition()+getWidth(),getYPosition(),getXPosition()+getWidth(),getYPosition()+getHeight());
-        outlines[2] = new Line(getXPosition()+getWidth(),getYPosition()+getHeight(),getXPosition(),getYPosition()+getHeight());
-        outlines[3] = new Line(getXPosition(),getYPosition()+getHeight(),getXPosition(),getYPosition());
+        outlines[0] = new BlockLine(getXPosition(),getYPosition(),getXPosition()+getWidth(),getYPosition(),this);
+        outlines[1] = new BlockLine(getXPosition()+getWidth(),getYPosition(),getXPosition()+getWidth(),getYPosition()+getHeight(),this);
+        outlines[2] = new BlockLine(getXPosition()+getWidth(),getYPosition()+getHeight(),getXPosition(),getYPosition()+getHeight(),this);
+        outlines[3] = new BlockLine(getXPosition(),getYPosition()+getHeight(),getXPosition(),getYPosition(),this);
     }
 
     /**
@@ -148,6 +148,17 @@ public Block(double _initX, double _initY){
             elementView.setStrokeWidth(3);
 
         } else elementView.setStroke(null);
+    }
+
+    public class BlockLine extends Line {
+        private Block parentBlock;
+        public BlockLine(double x1, double y1, double x2, double y2, Block parentBlock){
+            super(x1,y1,x2,y2);
+            this.parentBlock = parentBlock;
+        }
+        public Block getParentBlock(){
+            return parentBlock;
+        }
     }
 
 

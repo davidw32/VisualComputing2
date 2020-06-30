@@ -12,18 +12,20 @@ import javafx.scene.text.Text;
 import java.util.Locale;
 
 import static Helpers.Config.GRAVITY;
+import static Helpers.Frictions.*;
 
 public class Ball extends GraphicsObject {
 
     // private DoubleProperty radius;
     private boolean collision, frictionLock;
-    private double frictionCoefficient = 0.1;
+    private double frictionCoefficient= 0.1;
     private VectorMath calculator;
     private Line directionLine;
     private double velocity;
 
     private boolean bounce = false;
     private boolean bounced = false;
+    private String collisionMaterial;
     private double contactAngle = 0;
     private double bounceDirectionX = 0;
     private double bounceDirectionY = 0;
@@ -100,6 +102,19 @@ public class Ball extends GraphicsObject {
         }));
         radiusProperty().addListener((observable -> {
             updateDirectionLine();
+        }));
+        materialProperty().addListener((observable -> {
+            switch (getMaterial()) {
+                case "Metall":
+                    this.flexibility = 0.1;
+                    break;
+                case "Holz":
+                    this.flexibility = 0.2;
+                    break;
+                case "Gummi":
+                    this.flexibility = 0.6;
+                    break;
+            }
         }));
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
@@ -280,6 +295,9 @@ public class Ball extends GraphicsObject {
                     else {
                         if(contact) { // sonst soll sich der Ball entlang der Linie bewegen
                             bounced = true;
+                            if (line instanceof Block.BlockLine) {
+                                this.collisionMaterial = ((Block.BlockLine) line).getParentBlock().getMaterial();
+                            }
                         }
                     }
                 } else { // bei der schiefen Ebene
@@ -318,6 +336,9 @@ public class Ball extends GraphicsObject {
                     } else if (contact) { // sonst soll der Ball auf der Ebene entlang rollen
                         if (!bounced) {
                             bounced = true;
+                            if (line instanceof Block.BlockLine) {
+                                this.collisionMaterial = ((Block.BlockLine) line).getParentBlock().getMaterial();
+                            }
                         }
                     }
                 }
@@ -332,6 +353,7 @@ public class Ball extends GraphicsObject {
      * Berechnungen der Bewegungen
      */
     public void move() {
+        System.out.println(frictionCoefficient);
         if (windCollision) {
             windX = 0;
             windY = 0;
@@ -403,6 +425,8 @@ public class Ball extends GraphicsObject {
      * @param angle Winkel der Ebene
      */
     public void calcAcceleration(double angle) {
+        findFrictionCoefficient();
+
         //[m/s^2]
         double FG = getWeight() * (GRAVITY + windY);
         // [N]
@@ -491,6 +515,53 @@ public class Ball extends GraphicsObject {
         setYVelocity(direction[1] * velocity);
 
 
+    }
+
+    /**
+     * Bestimmt den Rollreibungskoeffizienten je nach Materialien der Kollisionsobjekte
+     */
+    private void findFrictionCoefficient(){
+        switch(getMaterial()){
+            case "Metall":
+                switch(this.collisionMaterial) {
+                    case "Metall":
+                        this.frictionCoefficient = METAL_ON_METAL;
+                        break;
+                    case "Holz":
+                        this.frictionCoefficient = METAL_ON_WOOD;
+                        break;
+                    case "Gummi":
+                        this.frictionCoefficient = METAL_ON_RUBBER;
+                        break;
+                }
+                break;
+            case "Holz":
+                switch(this.collisionMaterial) {
+                    case "Metall":
+                        this.frictionCoefficient = WOOD_ON_METAL;
+                        break;
+                    case "Holz":
+                        this.frictionCoefficient = WOOD_ON_WOOD;
+                        break;
+                    case "Gummi":
+                        this.frictionCoefficient = WOOD_ON_RUBBER;
+                        break;
+                }
+                break;
+            case "Gummi":
+                switch(this.collisionMaterial) {
+                    case "Metall":
+                        this.frictionCoefficient = RUBBER_ON_METAL;
+                        break;
+                    case "Holz":
+                        this.frictionCoefficient = RUBBER_ON_WOOD;
+                        break;
+                    case "Gummi":
+                        this.frictionCoefficient = RUBBER_ON_RUBBER;
+                        break;
+                }
+                break;
+        }
     }
 
     /**
