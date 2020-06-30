@@ -29,6 +29,7 @@ public class Ball extends GraphicsObject {
     private double bounceDirectionY = 0;
     private boolean slowed = false;
     private double bounceVelocity = 0;
+    private double flexibility = 0.6;
     Text velocityText = new Text();
 
     private boolean windCollision = false;
@@ -87,14 +88,6 @@ public class Ball extends GraphicsObject {
             updateDirectionLine();
         }));
 
-        xPositionProperty().addListener((observable -> {
-            updateDirectionLine();
-        }));
-
-        yPositionProperty().addListener((observable -> {
-            updateDirectionLine();
-        }));
-
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
 
@@ -142,21 +135,21 @@ public class Ball extends GraphicsObject {
         directionLine.setEndY(getYPosition());
         velocityText.setText(String.format(Locale.US, "%.2f", velocity));
         velocityText.setX(getXPosition());
-        velocityText.setY(getYPosition() - radius() - 10);
+        velocityText.setY(getYPosition() - radius()*getXScale() - 10);
     }
 
     //wenn sich die Geschwindigkeit ändert
     public void updateDirectionLine() {
         velocityText.setText(String.format(Locale.US, "%.2f", velocity));
         velocityText.setX(getXPosition());
-        velocityText.setY(getYPosition() - radius() - 10);
+        velocityText.setY(getYPosition() - radius()*getXScale() - 10);
         if (getVelocity() == 0) {
             directionLine.setEndX(getXPosition());
             directionLine.setEndY(getYPosition());
 
         } else {
-            directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
-            directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
+            directionLine.setEndX(getXPosition() + radius()*getXScale() * getXVelocity() / getVelocity());
+            directionLine.setEndY(getYPosition() + radius()*getXScale() * getYVelocity() / getVelocity());
         }
         //System.out.println("startX: "+directionLine.getStartX()+" startY: "+directionLine.getStartY()+" endX: "+directionLine.getEndX()+ " endY: "+ directionLine.getEndY());
     }
@@ -249,6 +242,17 @@ public class Ball extends GraphicsObject {
             if(abstand < 0.5 && onLine){ // wenn es kollidiert
                 collision = true;
 
+                // Laenge des Normalenvektors der Ebene
+                double lengthN = calculator.vectorLength(nX,nY);
+
+                // Normierter Normalenvektor der Ebene
+                double normedNX = 1/lengthN * nX;
+                double normedNY = 1/lengthN * nY;
+
+                // Ball wird auf der Ebene poisitioniert
+                setXPosition(schnittpunktX + normedNX * (radius()*getXScale()-0.5));
+                setYPosition(schnittpunktY + normedNY * (radius()*getXScale()-0.5));
+
                 // Bestimmt ob sich der Ball überhauft auf die Linie zu bewegt
                 boolean contact = (nX * getXVelocity() * time + nY * getYVelocity() * time) < 0;
 
@@ -265,11 +269,12 @@ public class Ball extends GraphicsObject {
                 if(angleNew == 0){ // bei einer horizontalen Linie
                     if(Math.abs(getYVelocity()*time) > 2 && contact) { // wenn sich der Ball schnell genug auf die Linie zubewegt soll gesprungen werden
                         bounce = true;
+                        setYVelocity(-1*getYVelocity()*flexibility);
+                        bounce = false;
                     }
                     else {
                         if(contact) { // sonst soll sich der Ball entlang der Linie bewegen
                             bounced = true;
-                            bounce = false;
                         }
                     }
                 }
@@ -301,7 +306,10 @@ public class Ball extends GraphicsObject {
                             double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX,2)+Math.pow(bounceDirectionY,2));
                             bounceDirectionX = 1/bounceDirection * bounceDirectionX;
                             bounceDirectionY = 1/ bounceDirection * bounceDirectionY;
-                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity()*0.6, 2) + Math.pow(getYVelocity()*0.6, 2));
+                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity()*flexibility, 2));
+
+                            setXVelocity(bounceDirectionX * bounceVelocity);
+                            setYVelocity(-1*bounceDirectionY * bounceVelocity);
                         }
                     }
                     else if (contact){ // sonst soll der Ball auf der Ebene entlang rollen
@@ -326,21 +334,23 @@ public class Ball extends GraphicsObject {
             windY = 0;
         }
 
-        if(bounce) { // wenn der Ball vom Aufprall springen soll
+        /*if(bounce) { // wenn der Ball vom Aufprall springen soll
             if (contactAngle != 0) {
                 setXVelocity(bounceDirectionX * bounceVelocity);
             }
-        }
+        }*/
 
         if(bounced){ // wenn der Ball an einer Ebene entlang rollt ohne zu springen
             calcAcceleration(contactAngle);
         }
         if (getXPosition() + radius() * getXScale() >= 1150 && (getXVelocity() > 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time > 0 && !bounced)) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity()*0.6);
+            setXVelocity(-1 * getXVelocity()*flexibility);
+            setXPosition(1150 - radius()*getXScale());
             windX = 0;
 
         } else if (getXPosition() - radius() * getXScale() <= 0 && (getXVelocity() < 0 && bounced || getXVelocity()+(getXAcceleration()+windX)*time < 0 && !bounced)) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity()*0.6);
+            setXVelocity(-1 * getXVelocity()*flexibility);
+            setXPosition(0 + radius()*getXScale());
             windX = 0;
         }
         // x
@@ -364,12 +374,12 @@ public class Ball extends GraphicsObject {
             bounced = false;
         }
         if(bounce) { // wenn der Ball vom Aufprall springen soll
-            if(contactAngle != 0) {
+            /*if(contactAngle != 0) {
                 setYVelocity(-1*bounceDirectionY * bounceVelocity);
             }
             else {
-                setYVelocity(-1*getYVelocity() * 0.6);
-            }
+                setYVelocity(-1*getYVelocity() * flexibility);
+            }*/
             bounce = false;
         }
         // y
@@ -569,8 +579,13 @@ public class Ball extends GraphicsObject {
                 }
                 // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
                 boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
-                if(onLine && (windAngle <= 180 && schnittpunktY <= getYPosition() || windAngle > 180 && schnittpunktY >= getYPosition())){ // wenn der Schnittpunkt vor dem Aufprall auf den Ball liegt
-                    return true;
+                if(onLine){
+                    if(windAngle > 0 && windAngle <=180 && schnittpunktY <= getYPosition() || windAngle > 180 && schnittpunktY >= getYPosition()){ // wenn der Schnittpunkt vor dem Aufprall auf den Ball liegt
+                        return true;
+                    }
+                    else if(windAngle == 0 && schnittpunktX < getXPosition()){
+                        return true;
+                    }
                 }
 
             }
@@ -646,7 +661,7 @@ public class Ball extends GraphicsObject {
         }
 
         if (bounce && getYVelocity() > 0) {
-            setYVelocity(-1 * getYVelocity() * 0.6);
+            setYVelocity(-1 * getYVelocity() * flexibility);
             bounce = false;
         }
 

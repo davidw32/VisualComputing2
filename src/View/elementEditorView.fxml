@@ -95,7 +95,7 @@
                     <HBox prefHeight="62.0" prefWidth="331.0">
                         <children>
                             <Label prefHeight="17.0" prefWidth="47.0" text="Grad" />
-                            <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="360.0" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
+                            <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="359" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
                         </children>
                     </HBox>
                     <HBox prefHeight="52.0" prefWidth="331.0">
