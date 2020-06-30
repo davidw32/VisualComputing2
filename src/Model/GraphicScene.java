@@ -3,11 +3,9 @@ package Model;
 import Controller.*;
 import Helpers.SceneTime;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.fxml.FXML;
 import javafx.scene.shape.Line;
+import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -49,7 +47,7 @@ public class GraphicScene {
     Line[] lines = new Line[5];
 
     public GraphicScene(){
-        System.out.println("klasse graphicScene");
+
         elementsInScene= new LinkedList<>();
         // placeholder um die Textfelder im ElementEditor miteinander zu verknüpfen
         placeholder = new Ball(0,0);
@@ -87,10 +85,11 @@ public class GraphicScene {
                     if(secondObject instanceof Spinner){
                         ((Ball)graphicsObject).checkCollisionWithSpinner((Spinner)(secondObject));
                     }
-                    if(secondObject instanceof Springboard)
-                    {
-                        System.out.println();
-                        ((Ball)graphicsObject).collisionDetection(((Springboard) secondObject).getOutlines());
+                    if(secondObject instanceof Springboard.Board){
+                        ((Ball)graphicsObject).collisionDetectionBoardSpring(((Springboard.Board) secondObject).getOutlines()[0],(Springboard.Board) secondObject);
+                    }
+                    if(secondObject instanceof Seesaw){
+                        ((Ball)graphicsObject).checkCollisionWithSeesaw((Seesaw) (secondObject));
                     }
                 }
                 ((Ball)graphicsObject).collisionDetection(collisionLines);
@@ -111,10 +110,17 @@ public class GraphicScene {
             collisionLines.add(line);
         }
         for (GraphicsObject graphicsObject: elementsInScene){
-            if(graphicsObject instanceof Block){
+            if(graphicsObject instanceof Block && !(graphicsObject instanceof Springboard.Board)){
                 for (Line line: ((Block) graphicsObject).getOutlines()) {
                     collisionLines.add(line);
                 }
+            }
+            else if(graphicsObject instanceof Springboard.Board)
+            {
+
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[1]);
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[2]);
+                collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[3]);
             }
         }
         Line[] lineArray = new Line[collisionLines.size()];
@@ -177,6 +183,12 @@ public class GraphicScene {
             graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getDirectionLine());
             graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getVelocityText());
         }
+        if (getActiveElement() instanceof Spinner){
+            graphicSceneController.getGraphicPane().getChildren().remove(((Spinner)getActiveElement()).getCenter());
+        }
+        if(getActiveElement() instanceof Seesaw){
+            getGraphicSceneController().getGraphicPane().getChildren().remove(((Seesaw)getActiveElement()).getTriangle());
+        }
         setActiveElement(placeholder);
         elementsInScene.remove(getActiveElement());
     }
@@ -206,14 +218,11 @@ public class GraphicScene {
      * hier wird die gesammte Szene gelöscht
      */
     public void clearScene(){
-        for (GraphicsObject graphicsObject: elementsInScene){
-            graphicSceneController.getGraphicPane().getChildren().remove(graphicsObject.getElementView());
-            if (graphicsObject instanceof Ball) {
-                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getDirectionLine());
-                graphicSceneController.getGraphicPane().getChildren().remove(((Ball)graphicsObject).getVelocityText());
-            }
-        }
+
+        graphicSceneController.getGraphicPane().getChildren().clear();
+
         elementsInScene.clear();
+
         setActiveElement(placeholder);
 
     }
@@ -294,6 +303,7 @@ public class GraphicScene {
     public void setStartController(StartController startController) {
         this.startController = startController;
     }
+
 
     public StartController getStartController() {
         return startController;

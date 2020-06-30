@@ -3,6 +3,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <GridPane fx:id="startScreenGrid" gridLinesVisible="false" minHeight="820.0" minWidth="1150.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.StartScreenController">
 <columnConstraints>
     <ColumnConstraints percentWidth="5.0" />
@@ -21,7 +23,15 @@
     <Label fx:id="startScreenViewTitle" translateX="70" GridPane.columnIndex="1" GridPane.rowIndex="1">Choose your Scene</Label>
     <HBox fx:id="balken" alignment="CENTER" spacing="50" GridPane.columnIndex="1" GridPane.rowIndex="2">
         <!-- Einiges der buttonstyles ist in der css -->
-        <Button fx:id="startScreenButton1" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
+        <Button fx:id="startScreenButton1" minHeight="300" minWidth="300" onAction="#openScene1"  styleClass="startScreenBtn">
+            <graphic>
+                <ImageView  fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../img/Icons/scene1.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
         <Button fx:id="startScreenButton2" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
         <Button fx:id="startScreenButton3" minHeight="300" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
     </HBox>

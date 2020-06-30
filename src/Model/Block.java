@@ -49,7 +49,7 @@ public Block(double _initX, double _initY){
         updateOutlines();
     });
 
-    xPositionProperty().addListener((observable, oldValue, newValue) -> {
+    yPositionProperty().addListener((observable, oldValue, newValue) -> {
         yMiddle = getYPosition() + getHeight()/2;
         updateOutlines();
     });
@@ -74,7 +74,7 @@ public Block(double _initX, double _initY){
     /**
      * initalisiert die Kollisionslinien des Rechtecks an den Kanten des Rechtecks
      */
-    private void initOutlines(){
+    protected void initOutlines(){
         outlines[0] = new Line(getXPosition(),getYPosition(),getXPosition()+getWidth(),getYPosition());
         outlines[1] = new Line(getXPosition()+getWidth(),getYPosition(),getXPosition()+getWidth(),getYPosition()+getHeight());
         outlines[2] = new Line(getXPosition()+getWidth(),getYPosition()+getHeight(),getXPosition(),getYPosition()+getHeight());
@@ -84,7 +84,7 @@ public Block(double _initX, double _initY){
     /**
      *  Aktualisiert die Kollisionslinien des Rechtecks nach einer Skalierung/Translation
      */
-    private void updatePositionOutlines(){
+    protected void updatePositionOutlines(){
         double minX = getXPosition() -getWidth()*((elementView.getScaleX()-1)/2); // x-Wert links
         double minY = getYPosition() -getHeight()*((elementView.getScaleY()-1)/2); // y-Wert oben
         double maxX = getXPosition()+getWidth() +getWidth()*((elementView.getScaleX()-1)/2); //x-Wert rechts

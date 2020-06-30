@@ -6,74 +6,71 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
-public class Spinner extends GraphicsObject{
+public class Spinner extends GraphicsObject {
 
-    private DoubleProperty radius;
-    private double centerX,centerY;
-
+    private DoubleProperty rotationalSpeed;
+    private Line[] outlines = new Line[4]; // Kanten des Rechtecks
+    private double xMiddle; // X-Wert des Mittelpunkts
+    private double yMiddle; // Y-Wert des Mittelpunkts
     private VectorMath calculator;
+    private Line vector1;
+    private Circle center, pointA, pointB;
 
+    public Spinner(double _initX, double _initY) {
 
+        super(_initX, _initY);
+        setHeight(10);
+        setWidth(100);
+        setWeight(100);
+        calculator = new VectorMath();
+        rotationalSpeed = new SimpleDoubleProperty(this, "rotationalSpeed", 0.0);
 
-    private DoubleProperty width, height, rotationalSpeed;
-
-    private Line[] outlines;
-
-    private double[] pointA, pointB, pointC;
-    private Circle border;
-
-
-    public Spinner(double initialX, double initialY) {
-        super(initialX, initialY);
+        xMiddle = _initX + getWidth() / 2;
+        yMiddle = _initY + getHeight() / 2;
+        center= new Circle(xMiddle,yMiddle,2);
         setIsMoving(true);
 
-        centerX=initialX+50;
-        centerY=initialY+5;
-        radius = new SimpleDoubleProperty(this, "radius", 50);
-        width = new SimpleDoubleProperty(this, "width", 100);
-        height = new SimpleDoubleProperty(this, "height",10);
-        rotationalSpeed = new SimpleDoubleProperty(this, "rotationalSpeed", 0);
-        setWeight(3000);
-
-        border = new Circle(centerX, centerY, (getRadius()+3) );
-        border.setStroke(Color.GREY);
-        border.setStrokeWidth(2);
-        border.setFill(null);
-
-
-        //rotationalSpeed wird in grad/sec angegeben
-        elementView = new Rectangle(initialX - 50, initialY-5,100,10);
+        // Initialisierung der View
+        elementView = new Rectangle(_initX, _initY, 100, 10);
         elementView.setFill(Color.ORANGERED);
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeWidth(3);
 
-        ((Rectangle)elementView).xProperty().bindBidirectional(xPositionProperty());
-        ((Rectangle)elementView).yProperty().bindBidirectional(yPositionProperty());
+        // Bindings zwischen View und Objekt
+        ((Rectangle) elementView).xProperty().bindBidirectional(xPositionProperty());
+        ((Rectangle) elementView).yProperty().bindBidirectional(yPositionProperty());
         ((Rectangle) elementView).widthProperty().bindBidirectional(widthProperty());
         ((Rectangle) elementView).heightProperty().bindBidirectional(heightProperty());
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
         elementView.rotateProperty().bindBidirectional(angleProperty());
 
-        outlines = new Line[4];
+
 
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird
         isSelectedProperty().addListener((observable, oldValue, newValue) -> {
             setIsSelectedColor();
         });
 
+        //Objekt aktualisiert die Kollisionskanten nach Translation, Rotation oder Skalierung
         xPositionProperty().addListener((observable, oldValue, newValue) -> {
-            centerX = getXPosition() + getWidth()/2;
-            border.setCenterX(centerX);
+            xMiddle = getXPosition() + getWidth() / 2;
             updateOutlines();
         });
 
-        xPositionProperty().addListener((observable, oldValue, newValue) -> {
-            centerY = getYPosition() + getHeight()/2;
-            border.setCenterY(centerY);
+        yPositionProperty().addListener((observable, oldValue, newValue) -> {
+            yMiddle = getYPosition() + getHeight() / 2;
             updateOutlines();
         });
+        widthProperty().addListener(((observable, oldValue, newValue) -> {
+            xMiddle = getXPosition() + getWidth() / 2;
+            updateOutlines();
+        }));
 
+        heightProperty().addListener(((observable, oldValue, newValue) -> {
+            yMiddle = getYPosition() + getHeight() / 2;
+            updateOutlines();
+        }));
         xScaleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
@@ -87,25 +84,32 @@ public class Spinner extends GraphicsObject{
         });
 
         initOutlines();
-
-
-
-
     }
 
 
-    private void initOutlines(){
-        outlines[0] = new Line(getXPosition(),getYPosition(),getXPosition()+getWidth(),getYPosition());
-        outlines[1] = new Line(getXPosition()+getWidth(),getYPosition(),getXPosition()+getWidth(),getYPosition()+getHeight());
-        outlines[2] = new Line(getXPosition()+getWidth(),getYPosition()+getHeight(),getXPosition(),getYPosition()+getHeight());
-        outlines[3] = new Line(getXPosition(),getYPosition()+getHeight(),getXPosition(),getYPosition());
+    /**
+     * initalisiert die Kollisionslinien des Rechtecks an den Kanten des Rechtecks
+     */
+    private void initOutlines() {
+        outlines[0] = new Line(getXPosition(), getYPosition(), getXPosition() + getWidth(), getYPosition());
+        outlines[1] = new Line(getXPosition() + getWidth(), getYPosition(), getXPosition() + getWidth(), getYPosition() + getHeight());
+        outlines[2] = new Line(getXPosition() + getWidth(), getYPosition() + getHeight(), getXPosition(), getYPosition() + getHeight());
+        outlines[3] = new Line(getXPosition(), getYPosition() + getHeight(), getXPosition(), getYPosition());
+        pointA = new Circle(getXPosition(),getYPosition(), 3, Color.GREEN);
+        pointB = new Circle(getXPosition()+getWidth(), getYPosition(), 3, Color.BLUE);
+
+        vector1 = new Line(getXPosition(), getYPosition(), getXPosition(), getYPosition());
     }
 
-    private void updatePositionOutlines(){
-        double minX = getXPosition() -getWidth()*((elementView.getScaleX()-1)/2); // x-Wert links
-        double minY = getYPosition() -getHeight()*((elementView.getScaleY()-1)/2); // y-Wert oben
-        double maxX = getXPosition()+getWidth() +getWidth()*((elementView.getScaleX()-1)/2); //x-Wert rechts
-        double maxY = getYPosition()+getHeight() +getHeight()*((elementView.getScaleY()-1)/2); // y-Wert unten
+
+    /**
+     * Aktualisiert die Kollisionslinien des Rechtecks nach einer Skalierung/Translation
+     */
+    private void updatePositionOutlines() {
+        double minX = xMiddle - getWidth()  / 2; // x-Wert links
+        double minY = yMiddle - getHeight() / 2; // y-Wert oben
+        double maxX = xMiddle + getWidth()  / 2; //x-Wert rechts
+        double maxY = yMiddle + getHeight() / 2; // y-Wert unten
 
         outlines[0].setStartX(minX);
         outlines[0].setStartY(minY);
@@ -125,41 +129,36 @@ public class Spinner extends GraphicsObject{
         outlines[3].setEndY(minY);
     }
 
-    public void updateOutlines(){
+    /**
+     * Aktualisiert die Kollisionslinien nach der Rotation
+     */
+    public void updateOutlines() {
         updatePositionOutlines();
 
         double c = Math.cos(Math.toRadians(getAngle()));
         double s = Math.sin(Math.toRadians(getAngle()));
-        for(int i = 0; i<4;i++){
-            double pX = outlines[i].getStartX() - centerX;
-            double pY = outlines[i].getStartY() - centerY;
-            outlines[i].setStartX((pX*c - pY*s) + centerX);
-            outlines[i].setStartY((pX*s + pY*c) + centerY);
+        for (int i = 0; i < 4; i++) {
+            double pX = outlines[i].getStartX() - xMiddle;
+            double pY = outlines[i].getStartY() - yMiddle;
+            outlines[i].setStartX((pX * c - pY * s) + xMiddle);
+            outlines[i].setStartY((pX * s + pY * c) + yMiddle);
 
-            pX = outlines[i].getEndX() - centerX;
-            pY = outlines[i].getEndY() - centerY;
-            outlines[i].setEndX((pX*c - pY*s) + centerX);
-            outlines[i].setEndY((pX*s + pY*c) + centerY);
+            pX = outlines[i].getEndX() - xMiddle;
+            pY = outlines[i].getEndY() - yMiddle;
+            outlines[i].setEndX((pX * c - pY * s) + xMiddle);
+            outlines[i].setEndY((pX * s + pY * c) + yMiddle);
         }
+        double[] tmp = velocityVector(outlines[0].getStartX(),outlines[0].getStartY() );
+        vector1.setStartX(outlines[0].getStartX());
+        vector1.setStartY(outlines[0].getStartY());
+        vector1.setEndX(outlines[0].getStartX()+tmp[0]/10);
+        vector1.setEndY(outlines[0].getStartY()+tmp[1]/10);
+        vector1.setStrokeWidth(2);
+        vector1.setStroke(Color.LIGHTGRAY);
+        center.setCenterX(xMiddle);
+        center.setCenterY(yMiddle);
     }
 
-    public Line[] getOutlines(){ return this.outlines; }
-
-    public DoubleProperty heightProperty() { return height; }
-    public final void setHeight(double _height){ this.height.set(_height); }
-    public final double getHeight() { return this.height.get(); }
-
-    public DoubleProperty widthProperty() { return width; }
-    public final void setWidth(double _width){ this.width.set(_width); }
-    public final double getWidth() { return this.width.get(); }
-
-    public DoubleProperty rotationalSpeedProperty() { return rotationalSpeed; }
-    public final void setRotationalSpeed(double rotationalSpeed){ this.rotationalSpeed.set(rotationalSpeed); }
-    public final double getRotationalSpeed() { return this.rotationalSpeed.get(); }
-
-    public DoubleProperty radiusProperty(){ return radius;}
-    public final void setRadius(double radius){ this.radius.set(radius);}
-    public final double getRadius(){return this.radius.get();}
 
     private void setIsSelectedColor() {
         if (getIsSelected()) {
@@ -170,22 +169,56 @@ public class Spinner extends GraphicsObject{
         } else elementView.setStroke(null);
     }
 
-    public void moveElement(){
-
-        setAngle((getAngle()+ 360*getRotationalSpeed()*time)%360 );
+    @Override
+    public void moveElement() {
+        setAngle((getAngle() + 360 * getRotationalSpeed() * time) % 360);
         updateOutlines();
-
     }
 
-    public Circle getBorder() {
-        return border;
+
+    public double[] velocityVector(double x, double y){
+        double[] returnVector = new double[]{0,0};
+        //Abstand des Punktes zum Mittelpunkt des Spinners
+        double r = calculator.vectorLength(x-xMiddle, y-yMiddle);
+        double v = getRotationalSpeed() * time * 2 * Math.PI * r * 100; //Umrechung in cm/s
+        //Tangential zum Rotationswinkel
+        returnVector[0]= -(y-yMiddle) * v/r;
+        returnVector[1]= (x-xMiddle) * v/r ;
+
+        return returnVector;
     }
 
     public double getCenterX() {
-        return centerX;
+        return xMiddle;
     }
 
     public double getCenterY() {
-        return centerY;
+        return yMiddle;
     }
+
+    public DoubleProperty rotationalSpeedProperty() {
+        return rotationalSpeed;
+    }
+
+    public void setRotationalSpeed(double rotationalSpeed) {
+        this.rotationalSpeed.set(rotationalSpeed);
+    }
+
+    public double getRotationalSpeed() {
+        return this.rotationalSpeed.get();
+    }
+
+    public Line[] getOutlines() {
+        return this.outlines;
+    }
+
+    public Line getVector1(){
+        return vector1;
+    }
+    public Circle getCenter(){
+        return  center;
+    }
+    public Circle getPointA(){return pointA;}
+    public Circle getPointB(){return pointB;}
+
 }

@@ -36,7 +36,7 @@ public class PlayerController {
     private boolean isPaused = true;
 
     public void initialize(){
-        System.out.println("init player");
+        System.out.println("Init PlayerController");
         pauseI = new Image(getClass().getResourceAsStream("../img/Icons/Pause.png"));
         playI = new Image(getClass().getResourceAsStream("../img/Icons/Play.png"));
         playPauseIcon.setImage(playI);
