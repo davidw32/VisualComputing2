@@ -3,6 +3,7 @@ package Controller;
 import Model.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -20,7 +21,7 @@ public class GraphicSceneController {
 
     public void initialize(){
 
-        System.out.println("Init GraphicSceneController");
+        //System.out.println("Init GraphicSceneController");
     // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -36,7 +37,7 @@ public class GraphicSceneController {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                System.out.println("Drag dropped: "+ db.getString());
+                //System.out.println("Drag dropped: "+ db.getString());
                 boolean success = false;
                 if(db.hasString()){
 
@@ -77,7 +78,7 @@ public class GraphicSceneController {
 
                         graphicScene.addElement(newSpinner);
 
-                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter());
+                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter(), newSpinner.getPointA());
                         success = true;
                     }
                     if(db.getString().equals("seesawDummy")){
@@ -106,6 +107,7 @@ public class GraphicSceneController {
         });
         //die Listener für das Drag-and-Drop
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
+            graphicPane.setCursor(Cursor.CLOSED_HAND);
             graphicScene.setActiveElement(_graphicsObject);
             // Position Mauszeiger
             initX =(int) event.getSceneX();
@@ -116,13 +118,14 @@ public class GraphicSceneController {
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            graphicPane.setCursor(Cursor.CLOSED_HAND);
             //Verschiebung berechnen
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            if(newTranslateX > -50 && newTranslateY > -50 && newTranslateX < 1200 && newTranslateY < 870 ){
+            //Element verschieben solange es sich auf der Pane befindet
+            if(newTranslateX > -30 && newTranslateY > -30 && newTranslateX < 1170 && newTranslateY < 850 ){
                 _graphicsObject.setXPosition((int) newTranslateX);
                 _graphicsObject.setYPosition((int) newTranslateY);
                 if (_graphicsObject instanceof Ball) {
@@ -135,18 +138,22 @@ public class GraphicSceneController {
                     ((Seesaw) _graphicsObject).updateOutlines();
                 }
 
-            }else{
+            }else{ //ist es ausserhalb wird es gelöscht
                 graphicScene.deleteActiveElement();
 
             }
 
         });
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> { graphicPane.setCursor(Cursor.OPEN_HAND);});
+        // beim Hovern über einen Ball, wird seine aktuelle Geschwindigkeit angezeigt
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
+            graphicPane.setCursor(Cursor.HAND);
             if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
                 ((Ball) _graphicsObject).getVelocityText().setVisible(true);
             }
         });
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+            graphicPane.setCursor(Cursor.DEFAULT);
             if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
                 ((Ball) _graphicsObject).getVelocityText().setVisible(false);
             }

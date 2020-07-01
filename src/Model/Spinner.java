@@ -13,13 +13,13 @@ public class Spinner extends GraphicsObject {
     private double xMiddle; // X-Wert des Mittelpunkts
     private double yMiddle; // Y-Wert des Mittelpunkts
     private VectorMath calculator;
-    private Line vector1;
-    private Circle center, pointA, pointB;
+
+    private Circle center, pointA;
 
     public Spinner(double _initX, double _initY) {
 
         super(_initX, _initY);
-        setHeight(20);
+        setHeight(25);
         setWidth(100);
         setWeight(100000);
         calculator = new VectorMath();
@@ -28,6 +28,7 @@ public class Spinner extends GraphicsObject {
         xMiddle = _initX + getWidth() / 2;
         yMiddle = _initY + getHeight() / 2;
         center= new Circle(xMiddle,yMiddle,2);
+        pointA = new Circle(_initX,_initY,2, Color.BLUE);
         setIsMoving(true);
 
         // Initialisierung der View
@@ -96,10 +97,7 @@ public class Spinner extends GraphicsObject {
         outlines[1] = new Line(getXPosition() + getWidth(), getYPosition(), getXPosition() + getWidth(), getYPosition() + getHeight());
         outlines[2] = new Line(getXPosition() + getWidth(), getYPosition() + getHeight(), getXPosition(), getYPosition() + getHeight());
         outlines[3] = new Line(getXPosition(), getYPosition() + getHeight(), getXPosition(), getYPosition());
-        pointA = new Circle(getXPosition(),getYPosition(), 3, Color.GREEN);
-        pointB = new Circle(getXPosition()+getWidth(), getYPosition(), 3, Color.BLUE);
 
-        vector1 = new Line(getXPosition(), getYPosition(), getXPosition(), getYPosition());
     }
 
 
@@ -149,15 +147,12 @@ public class Spinner extends GraphicsObject {
             outlines[i].setEndX((pX * c - pY * s) + xMiddle);
             outlines[i].setEndY((pX * s + pY * c) + yMiddle);
         }
-        double[] tmp = velocityVector(outlines[0].getStartX(),outlines[0].getStartY() );
-        vector1.setStartX(outlines[0].getStartX());
-        vector1.setStartY(outlines[0].getStartY());
-        vector1.setEndX(outlines[0].getStartX()+tmp[0]/10);
-        vector1.setEndY(outlines[0].getStartY()+tmp[1]/10);
-        vector1.setStrokeWidth(2);
-        vector1.setStroke(Color.LIGHTGRAY);
+
+
         center.setCenterX(xMiddle);
         center.setCenterY(yMiddle);
+        pointA.setCenterX(outlines[0].getStartX());
+        pointA.setCenterY(outlines[0].getStartY());
     }
 
 
@@ -173,22 +168,21 @@ public class Spinner extends GraphicsObject {
 
     @Override
     public void moveElement() {
-        setAngle((getAngle() + 360 * getRotationalSpeed() * time) % 360);
+        setAngle((getAngle() + 360 * getRotationalSpeed() * time));
         updateOutlines();
     }
 
 
     public double[] velocityVector(double x, double y){
         double[] returnVector = new double[]{0,0};
-        //Abstand des Punktes zum Mittelpunkt des Spinners
-        double r = calculator.vectorLength(x-xMiddle, y-yMiddle);
 
         // v = omega/(2*Pi) * (2 Pi * r)   mit omega = 2 * Pi * Umdrehung/sec
-        double v = getRotationalSpeed() * time * 2 * Math.PI * r * 100; //Umrechung in cm/s
+        double v = getRotationalSpeed() * time * 2 * Math.PI  * 100; //Umrechung in cm/s
 
-        //senkrecht zum Verbindungsvektor mit dem Drehpunkt, mit der Länge v
-        returnVector[0]= -(y-yMiddle) * v/r;
-        returnVector[1]= (x-xMiddle) * v/r ;
+        //Der Vektor für die Bahngeschwindigkeit in dem Punkt (x,y) steht senkrecht auf dem Vektor r
+        returnVector[0] = -(y - yMiddle) * v ;
+        returnVector[1] = (x - xMiddle) * v;
+
 
         return returnVector;
     }
@@ -220,13 +214,11 @@ public class Spinner extends GraphicsObject {
         return this.outlines;
     }
 
-    public Line getVector1(){
-        return vector1;
-    }
     public Circle getCenter(){
         return  center;
     }
-    public Circle getPointA(){return pointA;}
-    public Circle getPointB(){return pointB;}
+    public Circle getPointA(){
+        return  pointA;
+    }
 
 }

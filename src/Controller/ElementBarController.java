@@ -3,7 +3,9 @@ package Controller;
 import Model.GraphicScene;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -25,14 +27,15 @@ public class ElementBarController {
     private Circle ballDummy;
     @FXML
     private Rectangle blockDummy;
-    @FXML private VBox elementBar;
+    @FXML
+    private VBox elementBar;
 
     private GraphicScene graphicScene;
 
 
     public void initialize() {
-        System.out.println("Init ElementBarController");
-
+        //System.out.println("Init ElementBarController");
+        // addListeners(ballDummy);
         ballDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -46,6 +49,7 @@ public class ElementBarController {
                 event.consume();
             }
         });
+
 
         blockDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
@@ -101,6 +105,25 @@ public class ElementBarController {
         });
 
     }
+
+    private void addListeners(Node node) {
+
+        node.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+                Dragboard db = node.startDragAndDrop(TransferMode.COPY);
+
+                ClipboardContent content = new ClipboardContent();
+                content.putString(node.getId());
+                db.setContent(content);
+
+                event.consume();
+            }
+        });
+
+    }
+
 
     public VBox getElementBar() {
         return elementBar;
