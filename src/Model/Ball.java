@@ -26,7 +26,7 @@ public class Ball extends GraphicsObject {
 
     private boolean bounce = false;
     private boolean bounced = false;
-    private String collisionMaterial;
+    private String collisionMaterial = "Rubber";
     private double contactAngle = 0;
     private double bounceDirectionX = 0;
     private double bounceDirectionY = 0;
@@ -106,13 +106,13 @@ public class Ball extends GraphicsObject {
         }));
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
-                case "Metall":
+                case "Metal":
                     this.flexibility = 0.1;
                     break;
-                case "Holz":
+                case "Wood":
                     this.flexibility = 0.2;
                     break;
-                case "Gummi":
+                case "Rubber":
                     this.flexibility = 0.6;
                     break;
             }
@@ -524,41 +524,41 @@ public class Ball extends GraphicsObject {
      */
     private void findFrictionCoefficient(){
         switch(getMaterial()){
-            case "Metall":
+            case "Metal":
                 switch(this.collisionMaterial) {
-                    case "Metall":
+                    case "Metal":
                         this.frictionCoefficient = METAL_ON_METAL;
                         break;
-                    case "Holz":
+                    case "Wood":
                         this.frictionCoefficient = METAL_ON_WOOD;
                         break;
-                    case "Gummi":
+                    case "Rubber":
                         this.frictionCoefficient = METAL_ON_RUBBER;
                         break;
                 }
                 break;
-            case "Holz":
+            case "Wood":
                 switch(this.collisionMaterial) {
-                    case "Metall":
+                    case "Metal":
                         this.frictionCoefficient = WOOD_ON_METAL;
                         break;
-                    case "Holz":
+                    case "Wood":
                         this.frictionCoefficient = WOOD_ON_WOOD;
                         break;
-                    case "Gummi":
+                    case "Rubber":
                         this.frictionCoefficient = WOOD_ON_RUBBER;
                         break;
                 }
                 break;
-            case "Gummi":
+            case "Rubber":
                 switch(this.collisionMaterial) {
-                    case "Metall":
+                    case "Metal":
                         this.frictionCoefficient = RUBBER_ON_METAL;
                         break;
-                    case "Holz":
+                    case "Wood":
                         this.frictionCoefficient = RUBBER_ON_WOOD;
                         break;
-                    case "Gummi":
+                    case "Rubber":
                         this.frictionCoefficient = RUBBER_ON_RUBBER;
                         break;
                 }

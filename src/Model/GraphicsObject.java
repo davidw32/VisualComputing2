@@ -49,7 +49,7 @@ public abstract class GraphicsObject {
         this.width = new SimpleDoubleProperty(this, "width", 0.0);
         this.height = new SimpleDoubleProperty(this, "height", 0.0);
         this.radius = new SimpleDoubleProperty(this, "radius", 0.0);
-        this.material = new SimpleStringProperty(this,"material","Gummi");
+        this.material = new SimpleStringProperty(this,"material","Rubber");
 
     }
     // statt der Werte diese als Property setzen, dann lassen sie sich mit der Gui verknüpfen
