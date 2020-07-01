@@ -43,7 +43,7 @@ public abstract class GraphicsObject {
         this.xScale = new SimpleDoubleProperty(this, "xScale", 1.0);
         this.yScale = new SimpleDoubleProperty(this, "yScale", 1.0);
         this.weight = new SimpleDoubleProperty(this,"weight",0.0);
-        this.friction = new SimpleDoubleProperty(this, "friction", 1.0);
+        this.friction = new SimpleDoubleProperty(this, "friction", 0.6);
         this.angle = new SimpleDoubleProperty(this,"angle", 0.0);
         this.isSelected = new SimpleBooleanProperty(this, "isSelected", true);
         this.width = new SimpleDoubleProperty(this, "width", 0.0);

@@ -19,7 +19,6 @@
             <items>
                 <MenuItem fx:id="copyObject" onAction="#copyObject" text="Copy Object"/>
                 <MenuItem fx:id="deleteObject" onAction="#deleteObject"  text="Delete Object"/>
-                <MenuItem fx:id="showBoundingBox" onAction="#showBoundingBox"  text="Show Bounding-Box"/>
             </items>
         </Menu>
         <Menu text="Options">

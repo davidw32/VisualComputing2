@@ -20,14 +20,14 @@ public class Seesaw extends GraphicsObject
         super(initialX, initialY);
 
 
-        setWidth(120);
+        setWidth(300);
         setHeight(20);
         setWeight(100000);
         pivotX=initialX + getWidth()/2; //Mittelpunkt des Rechtecks
         pivotY=initialY + getHeight()/2;
 
         vectorMath = new VectorMath();
-        elementView = new Rectangle(initialX,initialY,120.0,20.0);
+        elementView = new Rectangle(initialX,initialY,getWidth(),20.0);
         elementView.setFill(Color.DODGERBLUE);
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeWidth(3);
@@ -92,7 +92,7 @@ public class Seesaw extends GraphicsObject
 
 
         heightOfRectangle = 20.0;
-        lengthOfRectangle = 120.0;
+        lengthOfRectangle = getWidth();
         heightOfTriangle = 20;
         // um zu unterscheiden, in welche Richtung der Balken kippt
         left = false;

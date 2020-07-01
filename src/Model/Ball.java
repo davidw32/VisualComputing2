@@ -116,6 +116,7 @@ public class Ball extends GraphicsObject {
                     this.flexibility = 0.6;
                     break;
             }
+            setFriction(flexibility);
         }));
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
@@ -129,6 +130,13 @@ public class Ball extends GraphicsObject {
 
     }
 
+    public double getFlexibility() {
+        return flexibility;
+    }
+
+    public void setFlexibility(double flexibility) {
+        this.flexibility = flexibility;
+    }
 
     public final double radius() {
         return this.radius.get();
@@ -178,8 +186,7 @@ public class Ball extends GraphicsObject {
 
 
     public void moveElement() {
-        //moveX();
-        //moveY();
+
         move();
 
     }
@@ -840,7 +847,7 @@ public class Ball extends GraphicsObject {
 
         // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
         boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
-        //v_rel * noramle < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
+        //v_rel * normale < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
         boolean hit = (nX * this.getXVelocity()  + nY * this.getYVelocity() ) <= 0;
 
         if (onLine && abstand < 5 && hit) {

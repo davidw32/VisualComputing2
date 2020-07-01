@@ -14,7 +14,7 @@ public class Spinner extends GraphicsObject {
     private double yMiddle; // Y-Wert des Mittelpunkts
     private VectorMath calculator;
 
-    private Circle center, pointA;
+    private Circle center;
 
     public Spinner(double _initX, double _initY) {
 
@@ -28,7 +28,7 @@ public class Spinner extends GraphicsObject {
         xMiddle = _initX + getWidth() / 2;
         yMiddle = _initY + getHeight() / 2;
         center= new Circle(xMiddle,yMiddle,2);
-        pointA = new Circle(_initX,_initY,2, Color.BLUE);
+
         setIsMoving(true);
 
         // Initialisierung der View
@@ -151,8 +151,7 @@ public class Spinner extends GraphicsObject {
 
         center.setCenterX(xMiddle);
         center.setCenterY(yMiddle);
-        pointA.setCenterX(outlines[0].getStartX());
-        pointA.setCenterY(outlines[0].getStartY());
+
     }
 
 
@@ -217,8 +216,6 @@ public class Spinner extends GraphicsObject {
     public Circle getCenter(){
         return  center;
     }
-    public Circle getPointA(){
-        return  pointA;
-    }
+
 
 }

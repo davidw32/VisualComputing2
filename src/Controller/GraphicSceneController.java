@@ -77,7 +77,7 @@ public class GraphicSceneController {
 
                         graphicScene.addElement(newSpinner);
 
-                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter(), newSpinner.getPointA());
+                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter());
                         success = true;
                     }
                     if(db.getString().equals("seesawDummy")){
@@ -161,36 +161,6 @@ public class GraphicSceneController {
     }
 
 
-
-
-    private Text createPlaceholder(double x, double y){
-        Text placeholder = new Text();
-        placeholder.setX(x);
-        placeholder.setY(y);
-        placeholder.addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-
-            // Position Mauszeiger
-            initX = (int)event.getSceneX();
-            initY = (int)event.getSceneY();
-            //Position des Elements
-            initTranslateX = ((Text)event.getSource()).getX();
-            initTranslateY = ((Text)event.getSource()).getY();
-        });
-        // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
-        placeholder.addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
-            //Verschiebung berechnen
-            double offsetX = event.getSceneX() - initX;
-            double offsetY = event.getSceneY() - initY;
-            double newTranslateX = initTranslateX + offsetX;
-            double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            ((Text) (event.getSource())).setX(newTranslateX);
-            ((Text) (event.getSource())).setY(newTranslateY);
-
-        });
-        return placeholder;
-
-    }
 
 
     public void setGraphicScene(GraphicScene graphicScene) {
