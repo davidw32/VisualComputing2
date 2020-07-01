@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 public class Block extends GraphicsObject{
 
@@ -26,6 +27,7 @@ public Block(double _initX, double _initY){
     elementView = new Rectangle(_initX, _initY, 80,20);
     elementView.setFill(Color.SEAGREEN);
     elementView.setStroke(Color.ORANGE);
+    elementView.setStrokeType(StrokeType.INSIDE);
     elementView.setStrokeWidth(3);
 
     // Bindings zwischen View und Objekt
@@ -145,6 +147,7 @@ public Block(double _initX, double _initY){
         if (getIsSelected()){
 
             elementView.setStroke(Color.ORANGE);
+            elementView.setStrokeType(StrokeType.INSIDE);
             elementView.setStrokeWidth(3);
 
         } else elementView.setStroke(null);

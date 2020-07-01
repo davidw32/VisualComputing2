@@ -3,9 +3,13 @@ package Controller;
 import Model.*;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import javax.script.Bindings;
 
 public class GraphicSceneController {
     @FXML
@@ -17,7 +21,7 @@ public class GraphicSceneController {
 
     public void initialize(){
 
-        System.out.println("Init GraphicSceneController");
+        //System.out.println("Init GraphicSceneController");
     // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -33,7 +37,7 @@ public class GraphicSceneController {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                System.out.println("Drag dropped: "+ db.getString());
+                //System.out.println("Drag dropped: "+ db.getString());
                 boolean success = false;
                 if(db.hasString()){
 
@@ -73,7 +77,7 @@ public class GraphicSceneController {
 
                         graphicScene.addElement(newSpinner);
 
-                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter());
+                        graphicPane.getChildren().addAll(newSpinner.getElementView(), newSpinner.getCenter(), newSpinner.getPointA());
                         success = true;
                     }
                     if(db.getString().equals("seesawDummy")){
@@ -98,12 +102,12 @@ public class GraphicSceneController {
     public void addListenersToObject(GraphicsObject _graphicsObject){
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     //Element als Actives Element definieren
-
                     graphicScene.setActiveElement(_graphicsObject);
         });
-
+        //die Listener für das Drag-and-Drop
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_PRESSED, event -> {
-
+            graphicPane.setCursor(Cursor.CLOSED_HAND);
+            graphicScene.setActiveElement(_graphicsObject);
             // Position Mauszeiger
             initX =(int) event.getSceneX();
             initY =(int) event.getSceneY();
@@ -113,26 +117,52 @@ public class GraphicSceneController {
         });
         // hier wird Drag-and-Drop innerhalb der Szene durchgeführt
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_DRAGGED, event -> {
+            graphicPane.setCursor(Cursor.CLOSED_HAND);
             //Verschiebung berechnen
             double offsetX = event.getSceneX() - initX;
             double offsetY = event.getSceneY() - initY;
             double newTranslateX = initTranslateX + offsetX;
             double newTranslateY = initTranslateY + offsetY;
-            //Element verschieben
-            _graphicsObject.setXPosition((int)newTranslateX);
-            _graphicsObject.setYPosition((int)newTranslateY);
-            if(_graphicsObject instanceof Ball){
-                ((Ball) _graphicsObject).updateDirectionLine();
+            //Element verschieben solange es sich auf der Pane befindet
+            if(newTranslateX > -30 && newTranslateY > -30 && newTranslateX < 1170 && newTranslateY < 850 ){
+                _graphicsObject.setXPosition((int) newTranslateX);
+                _graphicsObject.setYPosition((int) newTranslateY);
+                if (_graphicsObject instanceof Ball) {
+                    ((Ball) _graphicsObject).updateDirectionLine();
+                }
+                if (_graphicsObject instanceof Spinner) {
+                    ((Spinner) _graphicsObject).updateOutlines();
+                }
+                if (_graphicsObject instanceof Seesaw) {
+                    ((Seesaw) _graphicsObject).updateOutlines();
+                }
+
+            }else{ //ist es ausserhalb wird es gelöscht
+                graphicScene.deleteActiveElement();
+
             }
-            if(_graphicsObject instanceof Spinner){
-                ((Spinner)_graphicsObject).updateOutlines();
+
+        });
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_RELEASED, event -> { graphicPane.setCursor(Cursor.OPEN_HAND);});
+        // beim Hovern über einen Ball, wird seine aktuelle Geschwindigkeit angezeigt
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_ENTERED, event -> {
+            graphicPane.setCursor(Cursor.HAND);
+            if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
+                ((Ball) _graphicsObject).getVelocityText().setVisible(true);
             }
-            if(_graphicsObject instanceof Seesaw){
-                ((Seesaw)_graphicsObject).updateOutlines();
+        });
+        _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+            graphicPane.setCursor(Cursor.DEFAULT);
+            if (_graphicsObject instanceof Ball && !_graphicsObject.equals(graphicScene.getActiveElement())){
+                ((Ball) _graphicsObject).getVelocityText().setVisible(false);
             }
         });
 
     }
+
+
+
+
     private Text createPlaceholder(double x, double y){
         Text placeholder = new Text();
         placeholder.setX(x);

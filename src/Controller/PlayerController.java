@@ -57,7 +57,7 @@ public class PlayerController {
             }
 
             timeline = new Timeline(new KeyFrame(
-                    Duration.millis(16 * graphicScene.getTimeFactor()), event -> {
+                    Duration.millis(16.66 * graphicScene.getTimeFactor()), event -> {
                             graphicScene.getTimer().updateTime(clock);
                             graphicScene.updateScene();
             }));
