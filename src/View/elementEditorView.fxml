@@ -18,7 +18,7 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Button?>
-<StackPane fx:id="elementEditor" maxHeight="820.0" maxWidth="350.0" minHeight="820.0" minWidth="350.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+<StackPane fx:id="elementEditor" maxHeight="820.0" minHeight="820.0" minWidth="350.0" maxWidth="350.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
 
     <GridPane fx:id="editor" hgap="10.0" vgap="10.0">
         <columnConstraints>
@@ -50,60 +50,56 @@
         </rowConstraints>
         <children>
             <Label fx:id="elementEditorTitle" text="Editor" />
-            <Label text="Position" GridPane.rowIndex="1" />
-            <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
             <Label alignment="CENTER" text="X" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
             <Label alignment="CENTER" text="Y" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
-            <Label fx:id="scaleFactor" text="Width/Height" GridPane.rowIndex="2" />
-            <Label text="Velocity" GridPane.rowIndex="3" />
-            <TextField fx:id="textFieldWidth" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="textFieldHeight" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label text="Acceleration" GridPane.rowIndex="4" />
-            <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-            <Label text="Rotate" GridPane.rowIndex="7" />
-            <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="85.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-            <Label text="Weight" GridPane.rowIndex="6" />
-            <TextField fx:id="textFieldWeight" prefHeight="27.0" prefWidth="83.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Label text="Color" GridPane.rowIndex="10" />
-            <ColorPicker fx:id="colorPicker" prefHeight="27.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="10" />
-            <Label text="Pattern" GridPane.rowIndex="11" />
-            <TextField fx:id="textFieldRadius" prefHeight="27.0" prefWidth="80.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" visible="false"/>
-            <ChoiceBox fx:id="choiceBoxPattern" prefHeight="27.0" prefWidth="204.0" value="Gummi" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="11">
+            <Label text="Physical Attributes" GridPane.rowIndex="1"/>
+            <Label text="Position" GridPane.rowIndex="2" />
+            <TextField fx:id="textFieldXPosition" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="textFieldYPosition" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="scaleFactor" text="Width/Height" GridPane.rowIndex="3" />
+            <TextField fx:id="textFieldRadius" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" visible="false"/>
+            <TextField fx:id="textFieldWidth" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="textFieldHeight" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="Rotate" GridPane.rowIndex="4" />
+            <TextField fx:id="textFieldRotate" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Weight" GridPane.rowIndex="5" />
+            <TextField fx:id="textFieldWeight" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Elasticity" GridPane.rowIndex="6" />
+            <TextField fx:id="textFieldElasticity" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="Surface" GridPane.rowIndex="7" />
+            <ChoiceBox fx:id="choiceBoxPattern" prefHeight="27.0" prefWidth="204.0" value="Rubber" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="Gummi" />
-                        <String fx:value="Holz" />
-                        <String fx:value="Metall" />
+                        <String fx:value="Rubber" />
+                        <String fx:value="Wood" />
+                        <String fx:value="Metal" />
                     </FXCollections>
                 </items>
             </ChoiceBox>
-            <Label text="Elasticity" GridPane.rowIndex="8" />
-            <TextField fx:id="textFieldElasticity" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-            <VBox prefHeight="52.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="13">
+            <Label text="Color" GridPane.rowIndex="8" />
+            <ColorPicker fx:id="colorPicker" prefHeight="27.0" prefWidth="211.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="8" />
+
+            <Label text="Movement" GridPane.rowIndex="9"></Label>
+            <Label text="Velocity" GridPane.rowIndex="10" />
+            <TextField fx:id="textFieldVelocityX" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+            <TextField fx:id="textFieldVelocityY" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+            <Label text="Acceleration" GridPane.rowIndex="11" />
+            <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+            <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" prefWidth="40.0" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+            <VBox prefHeight="52.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="12">
                 <children>
-                    <Label prefHeight="17.0" prefWidth="112.0" text="Rotational Speed" />
+                    <Label prefHeight="17.0" text="Rotational Speed" />
                     <Slider fx:id="spinnerSlider" majorTickUnit="1" max="3.0" maxWidth="326.0" min="-3.0" minorTickCount="0" prefHeight="38.0" prefWidth="326.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                 </children>
             </VBox>
+
             <VBox fx:id="windEditor" prefHeight="148.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="15">
                 <children>
                     <CheckBox fx:id="checkBoxWind" mnemonicParsing="false" onAction="#setOnWind" prefHeight="34.0" prefWidth="157.0" text="Wind" />
-                    <HBox prefHeight="62.0" prefWidth="331.0">
-                        <children>
-                            <Label prefHeight="17.0" prefWidth="47.0" text="Grad" />
+                            <Label prefHeight="17.0" text="Degree" />
                             <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="359" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="52.0" prefWidth="331.0">
-                        <children>
-                            <Label prefHeight="17.0" prefWidth="50.0" text="Stärke" />
+                            <Label prefHeight="17.0" text="Beaufort Scale" />
                             <Slider fx:id="windForceSlider" majorTickUnit="1.0" max="12.0" minorTickCount="0" prefHeight="38.0" prefWidth="278.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
-                        </children>
-                    </HBox>
                 </children>
             </VBox>
             <Label fx:id="infoLabel" GridPane.columnSpan="3" GridPane.rowIndex="14" />
@@ -130,7 +126,18 @@
         </rowConstraints>
         <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0"
-                  text="I need somebody(Help!) not just anybody(Help!) you know I need someoneHelp!I never needed anybody's help in any wayBut now these days are gone, I'm not so self assured (but now these days are gone)(And now I find) Now I find I've changed my mind and opened up the doorsHelp me if you can, I'm feeling downAnd I do appreciate you being 'roundHelp me get my feet back on the groundWon't you please, please help me?And now my life has changed in oh so many ways (and now my life has changed)My independence seems to vanish in the hazeBut every now and then I feel so insecure (I know that I)I know that I just need you like I've never done beforeHelp me if you can, I'm feeling downAnd I do appreciate you being 'roundHelp me get my feet back on the…"
+                  text="What is Rolling Stones?&#10;
+Rolling Stones is a little ball-track-simulation. You can build your own track and modify properties to see how how a ball interacts with different objects.
+&#10; &#10;
+How can I build a track?&#10;
+To build a track you can drag elements from the left hand side of the interface into the scene in the center.  You can place them where ever you want inside this scene.
+It is possible to modify the properties of the elements on the right hand side.
+You can also turn on some wind if you like.
+&#10; &#10;
+How do I start the simulation?&#10;
+As your track is ready, make sure you place at least one Ball inside the scene, to let it run through your track.
+Now you can push the play button which you can find at the bottom of the interface.
+You can also pause the simulation or play it in slow motion or time-lapse which you can do by clicking either the rabbit or the snail button. If you want to repeat the same simulation you can just hit the reset button. By clicking 'stop' the simulation will be determined."
                   wrappingWidth="350.22900390625" GridPane.columnIndex="3" GridPane.rowIndex="2">
                 <GridPane.margin>
                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

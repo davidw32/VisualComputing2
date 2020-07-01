@@ -7,7 +7,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <MenuBar fx:id="optionBar" minHeight="20.0" minWidth="1600.0"  xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.OptionBarController">
     <menus>
-        <Menu  fx:id="sceneMenu" text="Szene">
+        <Menu  fx:id="sceneMenu" text="Scene">
             <items >
                 <MenuItem onAction="#openScene"  fx:id="sceneMenuOpen" text="Open Scene"/>
                 <MenuItem onAction="#clearScene" fx:id="sceneMenuClear" text="Clear Scene"/>
@@ -15,14 +15,14 @@
                 <MenuItem   onAction="#closeApplication" text="Exit"/>
             </items>
         </Menu>
-        <Menu text="Objekt">
+        <Menu text="Object">
             <items>
                 <MenuItem fx:id="copyObject" onAction="#copyObject" text="Copy Object"/>
                 <MenuItem fx:id="deleteObject" onAction="#deleteObject"  text="Delete Object"/>
                 <MenuItem fx:id="showBoundingBox" onAction="#showBoundingBox"  text="Show Bounding-Box"/>
             </items>
         </Menu>
-        <Menu text="Fenster">
+        <Menu text="Options">
             <items>
                 <MenuItem fx:id="camera" onAction="#takeSnapshot" text="Snapshot" />
                 <MenuItem fx:id="help" onAction="#openHelp" text="Help" />
