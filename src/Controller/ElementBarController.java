@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
 public class ElementBarController {
 
 
-    public Text springboardDummy;
+    public VBox springboardDummy;
     @FXML
     private VBox spinnerDummy;
     @FXML

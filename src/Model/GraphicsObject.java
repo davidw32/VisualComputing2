@@ -14,6 +14,7 @@ public abstract class GraphicsObject {
     protected Shape elementView;
     protected boolean isMoving;
     protected double time = 0.01666;
+    protected StringProperty material;
 
     // Werte für das Reset
     protected double  startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
@@ -48,6 +49,7 @@ public abstract class GraphicsObject {
         this.width = new SimpleDoubleProperty(this, "width", 0.0);
         this.height = new SimpleDoubleProperty(this, "height", 0.0);
         this.radius = new SimpleDoubleProperty(this, "radius", 0.0);
+        this.material = new SimpleStringProperty(this,"material","Gummi");
 
     }
     // statt der Werte diese als Property setzen, dann lassen sie sich mit der Gui verknüpfen
@@ -122,6 +124,10 @@ public abstract class GraphicsObject {
     public DoubleProperty angleProperty() { return angle;}
     public final void setAngle(double _angle){this.angle.set(_angle);}
     public final double getAngle(){ return this.angle.get();}
+
+    public StringProperty materialProperty () { return material;}
+    public final void setMaterial(String _material){this.material.set(_material);}
+    public final String getMaterial(){ return this.material.get();}
 
     public BooleanProperty isSelectedProperty(){ return isSelected;}
     public final void setIsSelected(Boolean _isSelected){ this.isSelected.set(_isSelected); }

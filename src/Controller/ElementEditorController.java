@@ -258,6 +258,7 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldRotate.textProperty(), oldValue.angleProperty());
         Bindings.unbindBidirectional(textFieldWeight.textProperty(), oldValue.weightProperty());
         Bindings.unbindBidirectional(textFieldElasticity.textProperty(), oldValue.frictionProperty());
+        Bindings.unbindBidirectional(choiceBoxPattern.valueProperty(),oldValue.materialProperty());
 
 
         if (oldValue instanceof Spinner) {
@@ -293,6 +294,7 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldRotate.textProperty(), newValue.angleProperty(), converter);
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
         Bindings.bindBidirectional(textFieldElasticity.textProperty(), newValue.frictionProperty(), converter);
+        Bindings.bindBidirectional(choiceBoxPattern.valueProperty(), newValue.materialProperty());
 
         if (newValue instanceof Spinner) {
             Bindings.bindBidirectional(spinnerSlider.valueProperty(), ((Spinner) newValue).rotationalSpeedProperty());
