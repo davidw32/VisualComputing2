@@ -70,10 +70,7 @@ public class OptionBarController {
     }
 
     //Die Menu-Items von Object
-    @FXML
-    public void showBoundingBox(ActionEvent actionEvent) {
-        System.out.println("BoundingBox des aktiven Elements anzeigen");
-    }
+
 
     @FXML
     public void copyObject(ActionEvent actionEvent) {
@@ -100,11 +97,19 @@ public class OptionBarController {
             ((Spinner) copy).setHeight(((Spinner) active).getHeight());
             ((Spinner) copy).setWidth(((Spinner) active).getWidth());
             ((Spinner) copy).setRotationalSpeed(((Spinner) active).getRotationalSpeed());
+            copy.setIsMoving(true);
         }
         if(active instanceof Seesaw){
             copy = new Seesaw(40,40);
             ((Seesaw) copy).setHeight(((Seesaw) active).getHeight());
             ((Seesaw) copy).setWidth(((Seesaw) active).getWidth());
+            copy.setIsMoving(true);
+        }
+        if(active instanceof Springboard){
+            copy = new Springboard(40,40);
+            ((Springboard) copy).setHeight(((Springboard) active).getHeight());
+            ((Springboard) copy).setWidth(((Springboard) active).getWidth());
+            copy.setIsMoving(true);
         }
 
         //kopiere die Werte
@@ -116,6 +121,7 @@ public class OptionBarController {
         copy.setYScale(active.getYScale());
         copy.setFriction(active.getFriction());
         copy.getElementView().setFill(active.getElementView().getFill());
+        copy.setMaterial(active.getMaterial());
 
         //füge die Kopie in der Szene und in er Liste ein
         graphicScene.getGraphicSceneController().getGraphicPane().getChildren().add(copy.getElementView());
@@ -128,6 +134,9 @@ public class OptionBarController {
         }
         if (copy instanceof Seesaw){
             graphicScene.getGraphicSceneController().getGraphicPane().getChildren().addAll(((Seesaw)copy).getTriangle());
+        }
+        if (copy instanceof Springboard){
+            graphicScene.getGraphicSceneController().getGraphicPane().getChildren().addAll(((Springboard) copy).getBoard().getElementView());
         }
 
         graphicScene.getGraphicSceneController().addListenersToObject(copy);

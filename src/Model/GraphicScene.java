@@ -189,8 +189,9 @@ public class GraphicScene {
         if(getActiveElement() instanceof Seesaw){
             getGraphicSceneController().getGraphicPane().getChildren().remove(((Seesaw)getActiveElement()).getTriangle());
         }
-        setActiveElement(placeholder);
+
         elementsInScene.remove(getActiveElement());
+        setActiveElement(placeholder);
     }
 
     /**

@@ -16,6 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -29,6 +32,8 @@ public class ElementEditorController {
     private HBox spinnerEditor;
     @FXML
     private Slider spinnerSlider;
+    @FXML
+    private Slider flexibilitySlider;
     @FXML
     private VBox windEditor;
     @FXML
@@ -73,7 +78,7 @@ public class ElementEditorController {
     @FXML private Label infoLabel;
 
     @FXML private Label scaleFactor;
-
+    private StringConverter<Number> converter;
     private LinkedList<TextField> allTextFields;
     private GraphicScene graphicScene;
 
@@ -101,8 +106,21 @@ public class ElementEditorController {
         windDirectionSlider.setDisable(true);
         windForceSlider.setDisable(true);
 
+
         windDirectionSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindDirection((Double) newValue)));
         windForceSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindForce((Double) newValue)));
+
+        converter = new NumberStringConverter(Locale.US, "######.##") {
+
+            @Override
+            public Number fromString(String string) throws NumberFormatException {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException ex) {
+                    return 0;
+                }
+            }
+        };
 
 
     }
@@ -133,6 +151,7 @@ public class ElementEditorController {
             }
         } else {
             // remove all occurrences:
+
             infoLabel.setText("");
             styleClass.removeAll(Collections.singleton("error"));
         }
@@ -180,7 +199,7 @@ public class ElementEditorController {
             textFieldWeight.setDisable(true);
             textFieldRadius.setDisable(true);
             textFieldRadius.setVisible(false);
-
+            textFieldElasticity.setVisible(false);
             scaleFactor.setText("Width/Height");
 
 
@@ -200,6 +219,7 @@ public class ElementEditorController {
             textFieldVelocityY.setDisable(false);
             textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(false);
+            textFieldElasticity.setVisible(true);
             textFieldWeight.setDisable(false);
             scaleFactor.setText("Radius");
 
@@ -219,10 +239,31 @@ public class ElementEditorController {
             textFieldVelocityY.setDisable(true);
             textFieldRotate.setDisable(false);
             textFieldElasticity.setDisable(true);
+            textFieldElasticity.setVisible(false);
             textFieldWeight.setDisable(true);
             scaleFactor.setText("Width/Height");
 
         }else if (newValue instanceof Seesaw){
+
+            spinnerSlider.setDisable(true);
+            textFieldXPosition.setDisable(false);
+            textFieldYPosition.setDisable(false);
+            textFieldWidth.setDisable(false);
+            textFieldWidth.setVisible(true);
+            textFieldHeight.setDisable(true);
+            textFieldHeight.setVisible(true);
+            textFieldRadius.setDisable(true);
+            textFieldRadius.setVisible(false);
+            textFieldAccelerationX.setDisable(true);
+            textFieldAccelerationY.setDisable(true);
+            textFieldVelocityX.setDisable(true);
+            textFieldVelocityY.setDisable(true);
+            textFieldRotate.setDisable(true);
+            textFieldElasticity.setDisable(true);
+            textFieldElasticity.setVisible(false);
+            textFieldWeight.setDisable(true);
+            scaleFactor.setText("Width/Height");
+        }else if (newValue instanceof Springboard){
 
             spinnerSlider.setDisable(true);
             textFieldXPosition.setDisable(false);
@@ -239,6 +280,7 @@ public class ElementEditorController {
             textFieldVelocityY.setDisable(true);
             textFieldRotate.setDisable(true);
             textFieldElasticity.setDisable(true);
+            textFieldElasticity.setVisible(false);
             textFieldWeight.setDisable(true);
             scaleFactor.setText("Width/Height");
         }
@@ -259,28 +301,13 @@ public class ElementEditorController {
         Bindings.unbindBidirectional(textFieldWeight.textProperty(), oldValue.weightProperty());
         Bindings.unbindBidirectional(textFieldElasticity.textProperty(), oldValue.frictionProperty());
         Bindings.unbindBidirectional(choiceBoxPattern.valueProperty(),oldValue.materialProperty());
-
+        Bindings.unbindBidirectional(flexibilitySlider.valueProperty(), oldValue.frictionProperty());
 
         if (oldValue instanceof Spinner) {
             Bindings.unbindBidirectional(spinnerSlider.valueProperty(), ((Spinner) oldValue).rotationalSpeedProperty());
         }
 
-        //die Textfelder mit dem neuen Element verbinden
-        StringConverter<Number> converter = new NumberStringConverter(Locale.US, "#####.###") {
-            @Override
-            public String toString(Number object) {
-                return object == null ? "" : object.toString();
-            }
 
-            @Override
-            public Number fromString(String string) throws NumberFormatException {
-                try {
-                    return Double.parseDouble(string);
-                } catch (NumberFormatException ex) {
-                    return 0;
-                }
-            }
-        };
 
         Bindings.bindBidirectional(textFieldXPosition.textProperty(), newValue.xPositionProperty(), converter);
         Bindings.bindBidirectional(textFieldYPosition.textProperty(), newValue.yPositionProperty(), converter);
@@ -295,6 +322,8 @@ public class ElementEditorController {
         Bindings.bindBidirectional(textFieldWeight.textProperty(), newValue.weightProperty(), converter);
         Bindings.bindBidirectional(textFieldElasticity.textProperty(), newValue.frictionProperty(), converter);
         Bindings.bindBidirectional(choiceBoxPattern.valueProperty(), newValue.materialProperty());
+        Bindings.bindBidirectional(flexibilitySlider.valueProperty(), newValue.frictionProperty());
+
 
         if (newValue instanceof Spinner) {
             Bindings.bindBidirectional(spinnerSlider.valueProperty(), ((Spinner) newValue).rotationalSpeedProperty());
@@ -323,6 +352,7 @@ public class ElementEditorController {
             graphicScene.getWind().setIsActivated(false);
         }
     }
+
 
 
     public TextField getTextFieldWidth() {
