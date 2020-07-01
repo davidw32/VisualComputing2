@@ -285,7 +285,10 @@ public class ElementEditorController {
             scaleFactor.setText("Width/Height");
         }
 
-        colorPicker.setValue((Color) newValue.getElementView().getFill());
+        if(!(newValue  instanceof Springboard))
+        {
+            colorPicker.setValue((Color) newValue.getElementView().getFill());
+        }
 
         // die alten Bindungen löschen
         Bindings.unbindBidirectional(textFieldXPosition.textProperty(), oldValue.xPositionProperty());
