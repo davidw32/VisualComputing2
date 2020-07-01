@@ -139,7 +139,6 @@ public class GraphicSceneController {
 
             }else{ //ist es ausserhalb wird es gelöscht
                 graphicScene.deleteActiveElement();
-
             }
 
         });
