@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 
 import java.util.Locale;
@@ -193,6 +194,7 @@ public class Ball extends GraphicsObject {
 
         } else {
             elementView.setStroke(null);
+            elementView.setStrokeType(StrokeType.INSIDE);
             velocityText.setVisible(false);
         }
     }
@@ -660,81 +662,7 @@ public class Ball extends GraphicsObject {
         return false;
     }
 
-
-    /**
-     * Haftreibung
-     *
-     * @param m            Gewicht
-     * @param g            Gravität
-     * @param frictionCoff Haftreibungskoeffizient
-     * @return true, falls Geschwindigkeit nicht maximale Haftreibung ueberschreitet. False,falls diese uberschritten wird.
-     */
-    public boolean haftReibung(double m, double g, double frictionCoff) {
-        //Kraft geschwindigkeit
-        // [m/s^2]  a = v / t
-        double VN = getXVelocity() / time;
-        // [N] F = m * a
-        VN = getWeight() * VN;
-        //[N] Normalkraft
-        double FN = m * g;
-        // [N] Haftkraft bzw. Gravitation
-        double FR = FN * frictionCoff;
-        //System.out.println("HAFT:   " +FR);
-        //System.out.println("SPEED:  "+ VN);
-
-        if (Math.abs(VN) < Math.abs(FR) && VN != 0) {
-            //System.out.println(" HAFT TRUE");
-            return true;
-        }
-
-        //System.out.println(" HAFT FALSE");
-        frictionLock = false;
-        return false;
-    }
-
-    /**
-     * Wird aktiv,wenn Haftreibung ueberschritten wird
-     *
-     * @param m            Gewicht
-     * @param g            Gravitation
-     * @param frictionCoff Gleitreibungskoeffizient
-     * @return
-     */
-    public double gleitReibung(double m, double g, double frictionCoff) {
-        //Kraft der Geschwindigkeit (VelocityX)
-        // [m/s^2] a = v / t
-        double VN = getXVelocity() / time;
-        // [N] F = m * a
-        VN = getWeight() * VN;
-
-        // [m/s^2]
-        double FN = m * g;
-        // Reibung
-        double FR = FN * frictionCoff;
-
-
-        //Es kommt zum Stillstand,sobald Geschwindigkeit < 0.25 und Beschleunigung < 0.25f
-        if (Math.abs(getXVelocity()) < 2.5 && Math.abs(getXAcceleration()) < 2.5) {
-            setXVelocity(0);
-            setXAcceleration(0);
-            frictionLock = true;
-            //System.out.println("GLEIT FALSE");
-            return 0;
-        }
-
-        //System.out.println("GLEIT TRUE");
-        if (getXVelocity() < 0) {
-            // [m/s^2]
-            double acceleration = FR / getWeight();
-            return acceleration;
-        } else if (getXVelocity() > 0) {
-            // [m/s^2]
-            double acceleration = FR / getWeight();
-            return -acceleration;
-        }
-        return 0;
-    }
-
+    
 
     /**
      * Ermitteln eines Winkel einer Geraden
@@ -782,23 +710,24 @@ public class Ball extends GraphicsObject {
         if (intersecting(ball2)) {
 
             double normalX, normalY, relX, relY;
-
+            //die Relativgeschwindigkeit beider Kugeln
             relX = ball2.getXVelocity();
             relY = ball2.getYVelocity();
+            // Berührnormale zwischen den diesem und ball2
             normalX = ball2.getXPosition() - this.getXPosition();
             normalY = ball2.getYPosition() - this.getYPosition();
 
             double test = normalX * relX + normalY * relY;
 
-            if (test <= 0) {
-
+            if (test < 0) {
+                // v = v_t + v_z => v_t = v - v_z, v_z mit ParallelProjektion bestimmen
                 double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), normalX, normalY);
                 double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), normalX, normalY);
 
                 if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
                     // elastischen Stoß nur für die Anteile in Zentralrichtung berechnen
                     vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], ball2.getWeight());
-                    // Geschwindigkeit aus der neuen Zentralrichtung plus dem tangentialen Anteil
+                    // Geschwindigkeit aus der neuen Zentralrichtung plus dem (unveränderten) tangentialen Anteil v_t = v - v_z
                     this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
                     this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
                     ball2.setXVelocity(vneu[2] + ball2.getXVelocity() - v2_z[0]);
@@ -831,13 +760,13 @@ public class Ball extends GraphicsObject {
      *
      * @param vx_2    - x-Geschwindikeit des zweiten Objekts
      * @param vy_2    - y-Geschwindikeit des zweiten Objekts
-     * @param weigth2 - Gewischt des zweiten Objekts
+     * @param weigth2 - Gewicht des zweiten Objekts
      * @return _ double[] mit vx1_neu, vy1_neu, vx2_neu, vx3_neu
      */
     private double[] zentralerStoss(double vx_1, double vy_1, double weigth1, double vx_2, double vy_2, double weigth2) {
 
         double[] vnew = {0, 0, 0, 0};
-        // Falls beide Objekte das gleiche Gewicht haben, werden die Geschwindikeiten getauscht
+        // Falls beide Objekte das gleiche Gewicht haben, werden die Geschwindigkeiten getauscht
         if (weigth1 == weigth2) {
             vnew[0] = vx_2;
             vnew[1] = vy_2;
@@ -859,6 +788,7 @@ public class Ball extends GraphicsObject {
 
     public void checkCollisionWithSeesaw(Seesaw seesaw) {
         Line[] outlines = seesaw.getOutlines();
+
         double linePx = outlines[0].getStartX();
         double linePy = outlines[0].getStartY();
         double lineRx = outlines[0].getEndX() - outlines[0].getStartX();
@@ -910,10 +840,10 @@ public class Ball extends GraphicsObject {
 
         // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
         boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
-        //v_rel * n_Seesawkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-        boolean hit = (nX * (-this.getXVelocity() + seesaw.getXVelocity()) + nY * (-this.getYVelocity() + seesaw.getYVelocity())) < 0;
+        //v_rel * noramle < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
+        boolean hit = (nX * this.getXVelocity()  + nY * this.getYVelocity() ) <= 0;
 
-        if (onLine && abstand < 5 ) {
+        if (onLine && abstand < 5 && hit) {
             //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
             seesaw.setLeft(leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX);
             seesaw.setRight((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX);
@@ -931,10 +861,14 @@ public class Ball extends GraphicsObject {
             this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
             this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
 
-            //seesaw.setOmega(calculator.vectorLength(vneu[2], vneu[3]), schnittpunktX, schnittpunktY);
-
-
-
+        } else { // falls nicht die obere Kante getroffen wird, teste die restlichen Kanten
+            Line[] testLines = new Line[outlines.length-1];
+            //System.out.println("ElseFall Seesaw");
+            for ( int i = 1; i < outlines.length; i++){
+                // alle anderen bis auf die Erste Kante
+                testLines[i-1] = outlines[i];
+            }
+            collisionDetection(testLines);
         }
 
     }
@@ -942,9 +876,9 @@ public class Ball extends GraphicsObject {
     public void checkCollisionWithSpinner(Spinner spinner) {
 
         //Äußerer Radius um den Spinner wird berührt
-        if (isInRangeOfSpinner(spinner)) {
+        //if (isInRangeOfSpinner(spinner)) {
             Line[] outlines = spinner.getOutlines();
-            //System.out.println("Spinner in Range");
+
             double[] spinnerVelocity;
 
             if (spinner.getRotationalSpeed() == 0) {
@@ -953,7 +887,7 @@ public class Ball extends GraphicsObject {
 
                 for (Line line : outlines) {
 
-                    double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, lotX = 0, lotY = 0, distance;
+                    double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, lotX, lotY, distance;
                     boolean online;
                     boolean hit;
 
@@ -994,20 +928,23 @@ public class Ball extends GraphicsObject {
                     normalX = deltaY;
                     normalY = -deltaX;
 
-                    //Abstand Kugel / Kante klein genug
-                    if (Math.abs(distance - this.getRadius()) < 10) {
+                    //Lotfusspunkt liegt zwischen A und B
+                    online = (((ax <= bx && ax <= lotX && lotX <= bx) || (bx <= ax && bx <= lotX && lotX <= ax)) &&
+                            ((ay <= by && ay <= lotY && lotY <= by) || (by <= ay && by <= lotY && lotY <= ay)));
+                    //System.out.println("online "+online+" Abstand "+Math.abs(distance - this.getRadius()));
 
-                        //Lotfusspunkt liegt zwischen A und B
-                        online = (((ax <= bx && ax <= lotX && lotX <= bx) || (bx <= ax && bx <= lotX && lotX <= ax)) &&
-                                ((ay <= by && ay <= lotY && lotY <= by) || (by <= ay && by <= lotY && lotY <= ay)));
+                    //Abstand Kugel / Kante klein genug
+                    if ( online && Math.abs(distance - this.getRadius()) < 15) {
 
                         //den Richtungsvektor für die Bahngeschwindigkeit im Lotpunkt ermitteln
                         spinnerVelocity = spinner.velocityVector(lotX, lotY);
-
-                        //v_rel * n_Spinnerkante < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-                        hit = (normalX * (-this.getXVelocity() + spinnerVelocity[0]) + normalY * (-this.getYVelocity() + spinnerVelocity[1])) < 0;
-
-                        if (online && hit) {
+                        System.out.println("lotx"+ lotX+" loty "+lotY+ " vx "+spinnerVelocity[0]+" vy "+spinnerVelocity[1]);
+                        //v_rel * n_Spinnerkante > 0  (bilden spitzen Winkel, also rollen aufeinander zu)
+                        hit = (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * ( spinnerVelocity[1] - this.getYVelocity())) > 0;
+                        System.out.println("hit:" + (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * ( spinnerVelocity[1] - this.getYVelocity())));
+                        //hit = normalX * this.getXVelocity() + normalY * this.getYVelocity()<0;
+                        if (hit) {
+                            // Zentralrichtung des Stosses
                             double delX = lotX - this.getXPosition();
                             double delY = lotY - this.getYPosition();
                             //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
@@ -1021,11 +958,12 @@ public class Ball extends GraphicsObject {
                                 this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
                                 this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
                             }
+
                         }
                     }
                 }//endfor
             }
-        }
+       // }
     }
 
     public void collisionDetectionBoardSpring(Line line, Springboard.Board board){

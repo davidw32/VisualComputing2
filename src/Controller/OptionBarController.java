@@ -41,7 +41,7 @@ public class OptionBarController {
 
     public void initialize()
     {
-        System.out.println("Init OptionBarController");
+       // System.out.println("Init OptionBarController");
         text.setStyle("-fx-font-size: 20");
     }
 
@@ -161,7 +161,7 @@ public class OptionBarController {
     @FXML
     public void openHelp(ActionEvent actionEvent)
     {
-        System.out.println("Zeige Hilfetext an");
+        //System.out.println("Zeige Hilfetext an");
         graphicScene.getElementEditorController().getEditor().setVisible(false);
         graphicScene.getElementEditorController().getHelpText().setVisible(true);
 
@@ -215,6 +215,7 @@ public class OptionBarController {
             }
             else if(eventType.equals("open"))
             {
+                graphicScene.clearScene();
                 graphicScene.getStartController().showStartScreen();
                 warningWindow.hide();
 
