@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <BorderPane fx:id="Start" fx:controller="Controller.StartController"
-             prefHeight="900.0" prefWidth="1600.0"
+             prefHeight="900.0" prefWidth="1600.0 "
             xmlns:fx="http://javafx.com/fxml">
     <right>
 
