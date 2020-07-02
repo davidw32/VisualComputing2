@@ -4,7 +4,10 @@ package Model;
 import Helpers.VectorMath;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.effect.*;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
@@ -40,6 +43,8 @@ public class Ball extends GraphicsObject {
     private double windY = 0;
     private double windAngle = 0;
 
+
+    private ImageInput image1;
     public boolean springboardCollision = false;
 
     public Ball(double _initXPosition, double _initYPosition) {
@@ -74,6 +79,8 @@ public class Ball extends GraphicsObject {
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
 
+        image1 = new ImageInput(new Image("img/Patterns/wave.png", 4*getRadius(),4*getRadius(),false, true));
+
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird
         isSelectedProperty().addListener((observable, oldValue, newValue) -> {
             setIsSelectedColor();
@@ -81,10 +88,12 @@ public class Ball extends GraphicsObject {
 
         xVelocityProperty().addListener((observable -> {
             setVelocity();
+            updateImage();
             updateDirectionLine();
         }));
         yVelocityProperty().addListener((observable -> {
             setVelocity();
+            updateImage();
             updateDirectionLine();
         }));
         xPositionProperty().addListener((observable -> {
@@ -102,12 +111,27 @@ public class Ball extends GraphicsObject {
             updateDirectionLine();
         }));
         radiusProperty().addListener((observable -> {
+
+            updateImage();
             updateDirectionLine();
         }));
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
                     this.flexibility = 0.1;
+                    Light.Distant distantLight = new Light.Distant();
+                    distantLight.setAzimuth(225);
+                    InnerShadow shadow =new InnerShadow();
+                    shadow.setOffsetX(-3);
+                    shadow.setOffsetY(-3);
+                    shadow.setRadius(getRadius()/2);
+                    Lighting lighting = new Lighting(distantLight);
+                    updateImage();
+                    lighting.setBumpInput(image1);
+                    lighting.setSurfaceScale(20);
+                    shadow.setInput(lighting);
+                    elementView.setFill(Color.ORCHID);
+                    elementView.setEffect(shadow);
                     break;
                 case "Wood":
                     this.flexibility = 0.2;
@@ -130,12 +154,9 @@ public class Ball extends GraphicsObject {
 
     }
 
-    public double getFlexibility() {
-        return flexibility;
-    }
-
-    public void setFlexibility(double flexibility) {
-        this.flexibility = flexibility;
+    private void updateImage(){
+        image1.setX(getXPosition()-getRadius());
+        image1.setY(getYPosition()-getRadius());
     }
 
     public final double radius() {
