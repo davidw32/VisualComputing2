@@ -1,7 +1,6 @@
 package Model;
 
 import Helpers.VectorMath;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
@@ -46,7 +45,8 @@ public class Seesaw extends GraphicsObject
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
         elementView.rotateProperty().bindBidirectional(angleProperty());
-
+        elementView.setEffect(getDefaultSurface());
+        triangle.setEffect(getDefaultSurface());
 
 
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird

@@ -46,7 +46,7 @@ public class Spinner extends GraphicsObject {
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
         elementView.rotateProperty().bindBidirectional(angleProperty());
-
+        elementView.setEffect(getDefaultSurface());
 
 
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird

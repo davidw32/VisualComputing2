@@ -17,10 +17,10 @@ public class Block extends GraphicsObject{
 
 public Block(double _initX, double _initY){
     super(_initX, _initY);
-    width = new SimpleDoubleProperty(this, "width", 80);
-    height = new SimpleDoubleProperty(this, "height",20);
-    xMiddle = _initX + width.get()/2;
-    yMiddle = _initY + height.get()/2;
+    //width = new SimpleDoubleProperty(this, "width", 80);
+    //height = new SimpleDoubleProperty(this, "height",20);
+    xMiddle = _initX + getWidth()/2;
+    yMiddle = _initY + getHeight()/2;
 
     setIsMoving(false);
     // Initialisierung der View
@@ -29,6 +29,7 @@ public Block(double _initX, double _initY){
     elementView.setStroke(Color.ORANGE);
     elementView.setStrokeType(StrokeType.INSIDE);
     elementView.setStrokeWidth(3);
+    elementView.setEffect(getDefaultSurface());
 
     // Bindings zwischen View und Objekt
     ((Rectangle)elementView).xProperty().bindBidirectional(xPositionProperty());
@@ -134,13 +135,13 @@ public Block(double _initX, double _initY){
     public Line[] getOutlines(){ return this.outlines; }
 
 
-    public DoubleProperty heightProperty() { return height; }
+ /*   public DoubleProperty heightProperty() { return height; }
     public final void setHeight(double _height){ this.height.set(_height); }
     public final double getHeight() { return this.height.get(); }
 
     public DoubleProperty widthProperty() { return width; }
     public final void setWidth(double _width){ this.width.set(_width); }
-    public final double getWidth() { return this.width.get(); }
+    public final double getWidth() { return this.width.get(); }*/
 
 
     private void setIsSelectedColor(){
