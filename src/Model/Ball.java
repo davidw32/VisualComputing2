@@ -1035,7 +1035,8 @@ public class Ball extends GraphicsObject {
             board.getParentSpringboard().move(this);
 
         }
-        else{
+        else if(abstand > 1 && (xPosition.get() < line.getStartX() || xPosition.get() > line.getEndX()))
+        {
             springboardCollision = false;
         }
     }

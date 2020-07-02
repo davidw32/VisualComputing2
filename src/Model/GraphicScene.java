@@ -95,7 +95,14 @@ public class GraphicScene {
                 ((Ball)graphicsObject).collisionDetection(collisionLines);
 
             }
-            graphicsObject.moveElement();
+            if(graphicsObject instanceof  Springboard)
+            {
+                ((Springboard)graphicsObject).moveElement(elementsInScene);
+            }
+            else
+            {
+                graphicsObject.moveElement();
+            }
         }
 
     }
