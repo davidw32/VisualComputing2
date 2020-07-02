@@ -2,12 +2,8 @@ package Model;
 
 
 import Helpers.VectorMath;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.effect.*;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeType;
@@ -53,11 +49,14 @@ public class Ball extends GraphicsObject {
         //radius = new SimpleDoubleProperty(this, "radius", 30.0);
         setWeight(0.5);
         setIsMoving(true);
-        setRadius(30.0);
+        setRadius(25.0);
+        setWidth(2*getRadius());
+        setHeight(2*getRadius());
 
         elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
+        elementView.setEffect(getDefaultBallSurface());
 
         directionLine = new Line();
         directionLine.setStrokeWidth(3);
@@ -75,11 +74,9 @@ public class Ball extends GraphicsObject {
         directionLine.setEndX(getXPosition());
         directionLine.setEndY(getYPosition());
 
-
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
 
-        image1 = new ImageInput(new Image("img/Patterns/wave.png", 4*getRadius(),4*getRadius(),false, true));
 
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird
         isSelectedProperty().addListener((observable, oldValue, newValue) -> {
@@ -88,12 +85,10 @@ public class Ball extends GraphicsObject {
 
         xVelocityProperty().addListener((observable -> {
             setVelocity();
-            updateImage();
             updateDirectionLine();
         }));
         yVelocityProperty().addListener((observable -> {
             setVelocity();
-            updateImage();
             updateDirectionLine();
         }));
         xPositionProperty().addListener((observable -> {
@@ -111,33 +106,23 @@ public class Ball extends GraphicsObject {
             updateDirectionLine();
         }));
         radiusProperty().addListener((observable -> {
-
-            updateImage();
+            setWidth(2*getRadius());
+            setHeight(2*getRadius());
             updateDirectionLine();
         }));
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
                     this.flexibility = 0.1;
-                    Light.Distant distantLight = new Light.Distant();
-                    distantLight.setAzimuth(225);
-                    InnerShadow shadow =new InnerShadow();
-                    shadow.setOffsetX(-3);
-                    shadow.setOffsetY(-3);
-                    shadow.setRadius(getRadius()/2);
-                    Lighting lighting = new Lighting(distantLight);
-                    updateImage();
-                    lighting.setBumpInput(image1);
-                    lighting.setSurfaceScale(20);
-                    shadow.setInput(lighting);
-                    elementView.setFill(Color.ORCHID);
-                    elementView.setEffect(shadow);
+                    elementView.setEffect(getMetalSurface());
                     break;
                 case "Wood":
                     this.flexibility = 0.2;
+                    elementView.setEffect(getWoodSurface());
                     break;
                 case "Rubber":
                     this.flexibility = 0.6;
+                    elementView.setEffect(getRubberSurface());
                     break;
             }
             setFriction(flexibility);
@@ -154,10 +139,6 @@ public class Ball extends GraphicsObject {
 
     }
 
-    private void updateImage(){
-        image1.setX(getXPosition()-getRadius());
-        image1.setY(getYPosition()-getRadius());
-    }
 
     public final double radius() {
         return this.radius.get();
@@ -747,6 +728,10 @@ public class Ball extends GraphicsObject {
 
             double test = normalX * relX + normalY * relY;
 
+            double normlength = calculator.vectorLength(normalX,normalY);
+            ball2.setXPosition(this.getXPosition()+normalX/normlength *(this.getRadius()+ball2.getRadius()));
+            ball2.setYPosition(this.getYPosition()+normalY/normlength *(this.getRadius()+ball2.getRadius()));
+
             if (test < 0) {
                 // v = v_t + v_z => v_t = v - v_z, v_z mit ParallelProjektion bestimmen
                 double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), normalX, normalY);
@@ -871,23 +856,37 @@ public class Ball extends GraphicsObject {
         //v_rel * normale < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
         boolean hit = (nX * this.getXVelocity()  + nY * this.getYVelocity() ) <= 0;
 
-        if (onLine && abstand < 5 && hit) {
-            //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
-            seesaw.setLeft(leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX);
-            seesaw.setRight((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX);
+        if (onLine && abstand < 1 ) {
+            // Laenge des Normalenvektors der Ebene
+            double lengthN = calculator.vectorLength(nX,nY);
 
-            double delX = schnittpunktX - this.getXPosition();
-            double delY = schnittpunktY - this.getYPosition();
-            //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
-            double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), delX, delY); //Projektion der Kugelvelocity
-            double[] v2_z = calculator.parallelProjection(seesaw.getXVelocity(), seesaw.getYVelocity(), delX, delY); // Projektion der spinnerVelocity
+            // Normierter Normalenvektor der Ebene
+            double normedNX = 1/lengthN * nX;
+            double normedNY = 1/lengthN * nY;
+
+            // Ball wird auf der Ebene poisitioniert
+            setXPosition(schnittpunktX + normedNX * (radius()*getXScale()-0.5));
+            setYPosition(schnittpunktY + normedNY * (radius()*getXScale()-0.5));
+
+            //Ball rollt auf Wippe zu
+            if (hit) {
+                //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
+                seesaw.setLeft(leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX);
+                seesaw.setRight((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX);
+
+                double delX = schnittpunktX - this.getXPosition();
+                double delY = schnittpunktY - this.getYPosition();
+                //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
+                double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), delX, delY); //Projektion der Kugelvelocity
+                double[] v2_z = calculator.parallelProjection(seesaw.getXVelocity(), seesaw.getYVelocity(), delX, delY); // Projektion der spinnerVelocity
 
 
-            // nur die parallelen Anteile werden verändert
-            double[] vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], seesaw.getWeight());
-            // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
-            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
-            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                // nur die parallelen Anteile werden verändert
+                double[] vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], seesaw.getWeight());
+                // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
+                this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+            }
 
         } else { // falls nicht die obere Kante getroffen wird, teste die restlichen Kanten
             Line[] testLines = new Line[outlines.length-1];
@@ -963,6 +962,11 @@ public class Ball extends GraphicsObject {
 
                     //Abstand Kugel / Kante klein genug
                     if ( online && Math.abs(distance - this.getRadius()) < 15) {
+
+                        double normLength = calculator.vectorLength(normalX,normalY);
+                        // Ball wird auf der Ebene poisitioniert
+                        setXPosition(lotX + normalX/normLength * (radius()*getXScale()-0.5));
+                        setYPosition(lotY + normalY/normLength * (radius()*getXScale()-0.5));
 
                         //den Richtungsvektor für die Bahngeschwindigkeit im Lotpunkt ermitteln
                         spinnerVelocity = spinner.velocityVector(lotX, lotY);

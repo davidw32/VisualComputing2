@@ -1,8 +1,14 @@
 package Model;
 
 import javafx.beans.property.*;
-import javafx.scene.Group;
+import javafx.scene.effect.ImageInput;
+import javafx.scene.effect.Light;
+import javafx.scene.effect.Lighting;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
+
+import javax.swing.event.ChangeListener;
 
 /**
  * Parentklasse aller Elemente in der Szene
@@ -15,6 +21,13 @@ public abstract class GraphicsObject {
     protected boolean isMoving;
     protected double time = 0.01666;
     protected StringProperty material;
+
+    private Lighting woodSurface, metalSurface, rubberSurface, defaultSurface, defaultBallSurface;
+
+    protected ImageInput woodImage, metalImage, rubberImage;
+
+
+
 
     // Werte für das Reset
     protected double  startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
@@ -50,6 +63,27 @@ public abstract class GraphicsObject {
         this.height = new SimpleDoubleProperty(this, "height", 0.0);
         this.radius = new SimpleDoubleProperty(this, "radius", 0.0);
         this.material = new SimpleStringProperty(this,"material","Rubber");
+
+        woodImage = new ImageInput(new Image("img/Patterns/wood.png",400,400,false,true));
+        metalImage = new ImageInput(new Image("img/Patterns/metal.png",360,200,false,true));
+        rubberImage = new ImageInput(new Image("img/Patterns/rubber.png",350,350,false, true));
+        woodImage.setX(getXPosition()-50);
+        metalImage.setX(getXPosition()-100);
+        rubberImage.setX(getXPosition()-100);
+        woodImage.setY(getYPosition()-50);
+        metalImage.setY(getYPosition()-50);
+        rubberImage.setY(getYPosition()-100);
+        xPositionProperty().addListener(observable -> {
+            woodImage.setX(getXPosition() - getWidth());
+            metalImage.setX(getXPosition() - getWidth());
+            rubberImage.setX(getXPosition() - getWidth());
+        });
+        yPositionProperty().addListener(observable -> {
+            woodImage.setY(getYPosition() - getHeight());
+            metalImage.setY(getYPosition() - getHeight());
+            rubberImage.setY(getYPosition() - getHeight());
+        });
+        createSurfaces();
 
     }
     // statt der Werte diese als Property setzen, dann lassen sie sich mit der Gui verknüpfen
@@ -143,7 +177,6 @@ public abstract class GraphicsObject {
 
     // hier werden die Werte für das Reset festgelegt
     public final void setStartValues(){
-
         startX = this.getXPosition();
         startY = this.getYPosition();
         startAccX = this.getXAcceleration();
@@ -156,9 +189,6 @@ public abstract class GraphicsObject {
         startWeight = this.getWeight();
         startHeight = this.getHeight();
         startWidth = this.getWidth();
-
-
-
     }
 
     // das Element wird auf die Startwerte zurückgesetzt
@@ -176,6 +206,42 @@ public abstract class GraphicsObject {
         setWidth(startWidth);
         setHeight(startHeight);
     }
+
+    private void createSurfaces(){
+
+        Light.Point pointLight = new Light.Point(30, 20, 50, Color.WHITE);
+        Light.Distant distantLight = new Light.Distant();
+        distantLight.setAzimuth(225);
+        distantLight.setElevation(90);
+
+        defaultSurface = new Lighting(distantLight);
+        defaultSurface.setSurfaceScale(10);
+
+        defaultBallSurface = new Lighting(pointLight);
+        defaultBallSurface.setSpecularExponent(5);
+        defaultBallSurface.setSurfaceScale(5);
+
+        metalSurface = new Lighting(pointLight);
+        metalSurface.setSurfaceScale(5);
+        metalSurface.setSpecularExponent(5);
+        metalSurface.setBumpInput(metalImage);
+
+        rubberSurface = new Lighting(pointLight);
+        rubberSurface.setSurfaceScale(20);
+        rubberSurface.setSpecularExponent(5);
+        rubberSurface.setBumpInput(rubberImage);
+
+        woodSurface = new Lighting(pointLight);
+        woodSurface.setSurfaceScale(10);
+        woodSurface.setSpecularExponent(5);
+        woodSurface.setBumpInput(woodImage);
+
+    }
+    public Lighting getDefaultSurface(){ return defaultSurface;}
+    public Lighting getMetalSurface(){return metalSurface;}
+    public Lighting getDefaultBallSurface(){ return defaultBallSurface;}
+    public Lighting getRubberSurface(){return rubberSurface;}
+    public Lighting getWoodSurface(){return woodSurface;}
 
     public void moveElement(){//diese Methode muss von den Objekten jeweils selbst implementiert werden
     }
