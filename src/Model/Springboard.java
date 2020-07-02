@@ -199,6 +199,7 @@ public class Springboard extends Block
         super.resetElement();
         this.activated = false;
         this.down = false;
+        collided = false;
         setHeight(startHeight);
         this.setYVelocity(0);
     }

@@ -196,8 +196,14 @@ public class GraphicScene {
         if(getActiveElement() instanceof Seesaw){
             getGraphicSceneController().getGraphicPane().getChildren().remove(((Seesaw)getActiveElement()).getTriangle());
         }
+        if(getActiveElement() instanceof  Springboard)
+        {
+            getGraphicSceneController().getGraphicPane().getChildren().remove(((Springboard)getActiveElement()).getBoard().getElementView());
+            elementsInScene.remove(((Springboard)getActiveElement()).getBoard());
+        }
 
         elementsInScene.remove(getActiveElement());
+
         setActiveElement(placeholder);
     }
 
