@@ -110,6 +110,11 @@ public class Springboard extends Block
                 setYPosition(getYPosition() - getYVelocity() * time);
                 board.setYPosition(getYPosition() - board.getHeight() );
             }
+            else
+            {
+                activated = false;
+                down = false;
+            }
         }
 
         /**
