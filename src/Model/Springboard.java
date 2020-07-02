@@ -8,6 +8,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 
+import java.util.LinkedList;
+
 import static Helpers.Config.GRAVITY;
 
 /**
@@ -23,6 +25,7 @@ public class Springboard extends Block
     private boolean down = false;
     private boolean activated = false;
     private double s = 0;
+    private boolean collided = false;
 
     private ChangeListener changeX;
     private ChangeListener changeY;
@@ -69,7 +72,7 @@ public class Springboard extends Block
      * Hier werden die Bewegungne + Kollisione aussgeführt
      * @param ball Der Ball,mit dem die Kollsionen + Bewegungen verglichen werden
      */
-    public void move(Ball ball)
+         public void move(Ball ball)
         {
 
             if(!activated)
@@ -81,6 +84,37 @@ public class Springboard extends Block
             flex(ball);
 
 
+        }
+
+        public void moveElement(LinkedList<GraphicsObject> obj)
+        {
+
+            boolean verifier = false;
+            for(GraphicsObject o : obj)
+            {
+                if(o instanceof Ball)
+                {
+                    if(((Ball) o).springboardCollision)
+                    {
+                        verifier = true;
+                        break;
+                    }
+                }
+            }
+            collided = verifier;
+            if(collided) return;
+            if (getHeight() < startHeight)
+            {
+                setYVelocity(getYVelocity() - getYAcceleration() * time);
+                ((Rectangle) elementView).setHeight(getHeight() + getYVelocity() * time);
+                setYPosition(getYPosition() - getYVelocity() * time);
+                board.setYPosition(getYPosition() - board.getHeight() );
+            }
+            else
+            {
+                activated = false;
+                down = false;
+            }
         }
 
         /**
@@ -122,6 +156,14 @@ public class Springboard extends Block
                     setYPosition(getYPosition() + difference);
                     board.setYPosition(getYPosition() - board.getHeight() );
                 }
+                else if(getHeight() < 15)
+                {
+                    ((Rectangle) elementView).setHeight(15);
+                    setYPosition(getYPosition() - difference );
+                    board.setYPosition(getYPosition() - board.getHeight() );
+                    down = true;
+                    setYVelocity(0);
+                }
                 else
                 {
                     down = true;
@@ -162,6 +204,7 @@ public class Springboard extends Block
         super.resetElement();
         this.activated = false;
         this.down = false;
+        collided = false;
         setHeight(startHeight);
         this.setYVelocity(0);
     }

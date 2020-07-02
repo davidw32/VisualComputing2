@@ -1,7 +1,7 @@
 package Controller;
 
-import Model.Spinner;
 import Model.*;
+import Model.Spinner;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -12,11 +12,18 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
 
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Locale;
+
+import static javafx.scene.paint.Color.rgb;
 
 public class ElementEditorController {
 
@@ -79,7 +86,7 @@ public class ElementEditorController {
 
     @FXML private Label scaleFactor;
     private StringConverter<Number> converter;
-
+    private LinkedList<TextField> allTextFields;
     private GraphicScene graphicScene;
 
 
@@ -113,7 +120,7 @@ public class ElementEditorController {
 
         windDirectionSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindDirection((Double) newValue)));
         windForceSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindForce((Double) newValue)));
-        
+
         //Converter für die Textfelder
         converter = new NumberStringConverter(Locale.US, "######.##") {
 
@@ -172,7 +179,8 @@ public class ElementEditorController {
         graphicScene.getActiveElementProperty().addListener(this::changed);
 
         // für den Colorpicker
-        //colorPicker.setValue((Color) graphicScene.getActiveElement().getElementView().getFill());
+
+        colorPicker.setValue((Color) graphicScene.getActiveElement().getElementView().getFill());
         colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
             colorPicker.setValue(newValue);
             graphicScene.getActiveElement().getElementView().setFill(newValue);
@@ -309,7 +317,10 @@ public class ElementEditorController {
             textFieldWeight.setDisable(true);
         }
 
-        //colorPicker.setValue((Color) newValue.getElementView().getFill());
+        if(!(newValue  instanceof Springboard))
+        {
+            colorPicker.setValue((Color) newValue.getElementView().getFill());
+        }
 
         // die alten Bindungen löschen
         Bindings.unbindBidirectional(textFieldXPosition.textProperty(), oldValue.xPositionProperty());
