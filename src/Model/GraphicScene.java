@@ -48,7 +48,7 @@ public class GraphicScene {
         placeholder = new Ball(0,0);
         placeholder.setWeight(0);
         placeholder.setRadius(0);
-
+        //das aktuell ausgewählte Element
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
 
         wind = new Wind();
@@ -148,6 +148,7 @@ public class GraphicScene {
      * @param _graphicsObject - das per Mausklick ausgewählte Element
      */
     public final void setActiveElement(GraphicsObject _graphicsObject) {
+
         this.getActiveElement().setIsSelected(false);
         _graphicsObject.setIsSelected(true);
         this.activeElement.set(_graphicsObject);
@@ -170,7 +171,6 @@ public class GraphicScene {
 
     public void deleteActiveElement(){
 
-        //getActiveElement().getElementView().setVisible(false);
         graphicSceneController.getGraphicPane().getChildren().remove(getActiveElement().getElementView());
         if (getActiveElement() instanceof Ball) {
             graphicSceneController.getGraphicPane().getChildren().remove(((Ball)getActiveElement()).getDirectionLine());
@@ -228,15 +228,14 @@ public class GraphicScene {
     }
 
     /**
-     * um die Liste speichern zu können
-     * @return
+     * @return die Liste aller Elemente in der Szene
      */
     public LinkedList<GraphicsObject> getElementsInScene() {
         return elementsInScene;
     }
 
     /**
-     * wird aufgerufen eine vorhande Szene geladen wird
+     * Eine komplette Szene laden
      * @param _elements
      */
     public void setElementsInScene(LinkedList<GraphicsObject> _elements) {

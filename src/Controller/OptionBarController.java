@@ -195,7 +195,7 @@ public class OptionBarController {
         Stage warningWindow = new Stage();
 
         warningWindow.setResizable(false);
-        warningWindow.setTitle("Hinweis");
+        warningWindow.setTitle("Notify!");
         warningWindow.setScene(modalScene);
         warningWindow.initModality(Modality.WINDOW_MODAL);
         //Sucht die momentane Stage ( im dessen Sinne die Parent Stage)

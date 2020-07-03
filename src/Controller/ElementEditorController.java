@@ -96,7 +96,7 @@ public class ElementEditorController {
 
     //Die Textfleder werden initialisiert und mit den Listenern versehen
     public void initialize() {
-        System.out.println("Init ElementEditorController");
+        //System.out.println("Init ElementEditorController");
         setUpValidation(textFieldXPosition);
         setUpValidation(textFieldYPosition);
         setUpValidation(textFieldVelocityX);
@@ -215,6 +215,7 @@ public class ElementEditorController {
             labelWeight.setOpacity(0.6);
             textFieldRadius.setDisable(true);
             textFieldRadius.setVisible(false);
+            choiceBoxPattern.setDisable(true);
 
         } else if (newValue instanceof Ball) {
             spinnerSlider.setDisable(true);
@@ -240,6 +241,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             labelWeight.setOpacity(1.0);
             textFieldWeight.setDisable(false);
+            choiceBoxPattern.setDisable(false);
 
         } else if (newValue instanceof Block &&  !(newValue instanceof Springboard) &&  !(newValue instanceof Springboard.Board)){
             spinnerSlider.setDisable(true);
@@ -265,7 +267,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(false);
             labelWeight.setOpacity(0.6);
             textFieldWeight.setDisable(true);
-
+            choiceBoxPattern.setDisable(false);
         }else if (newValue instanceof Seesaw){
             spinnerSlider.setDisable(true);
             spinnerSlider.setVisible(false);
@@ -290,7 +292,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             labelWeight.setOpacity(0.6);
             textFieldWeight.setDisable(true);
-
+            choiceBoxPattern.setDisable(true);
         }else if (newValue instanceof Springboard || newValue instanceof Springboard.Board){
             spinnerSlider.setDisable(true);
             spinnerSlider.setVisible(false);
@@ -315,6 +317,7 @@ public class ElementEditorController {
             textFieldRotate.setDisable(true);
             labelWeight.setOpacity(0.6);
             textFieldWeight.setDisable(true);
+            choiceBoxPattern.setDisable(true);
         }
 
         if(!(newValue  instanceof Springboard))

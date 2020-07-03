@@ -6,10 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 
-import javax.script.Bindings;
 
 public class GraphicSceneController {
     @FXML
@@ -21,7 +18,6 @@ public class GraphicSceneController {
 
     public void initialize(){
 
-        //System.out.println("Init GraphicSceneController");
     // hier wird es ermöglicht ein Objekt per Drag-and-Drop in die Szene zu ziehen
         graphicPane.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -60,7 +56,6 @@ public class GraphicSceneController {
                         success = true;
                     }
 
-                    //Platzhalter für Drag-and-Drop bis die Elemente implementiert wurden
                     if(db.getString().equals("springboardDummy")){
                         Springboard springboard = new Springboard(event.getX(),event.getY());
                         addListenersToObject(springboard);
@@ -99,6 +94,11 @@ public class GraphicSceneController {
     }
 
 
+    /**
+     * Hier werden die Listener für das Drag-and-Drop innerhalb der Szene und für einen Hover-Effekt bei den Kugeln gesetzt
+     *
+     * @param _graphicsObject
+     */
     public void addListenersToObject(GraphicsObject _graphicsObject){
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     //Element als Actives Element definieren
@@ -158,9 +158,6 @@ public class GraphicSceneController {
         });
 
     }
-
-
-
 
     public void setGraphicScene(GraphicScene graphicScene) {
         this.graphicScene = graphicScene;

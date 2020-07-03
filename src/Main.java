@@ -1,13 +1,13 @@
-import Controller.StartController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * Die Main Klasse für unser Programm
+ */
 public class Main extends Application {
 
     //Hauptszene des Programms
@@ -30,19 +30,15 @@ public class Main extends Application {
     public void init() throws Exception {
         super.init();
 
-
         mainPane = (BorderPane)initFXML(mainPaneLoader,"./View/mainView.fxml", mainPane);
         mainScene = new Scene(mainPane,1700,980);
         initCSS(mainScene,"./css/style.css");
-
-
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
         this.primaryStage = primaryStage;
-
         primaryStage.setTitle("Rolling Stones");
         primaryStage.setScene(mainScene);
         primaryStage.show();
@@ -92,7 +88,4 @@ public class Main extends Application {
             System.out.println(cssFile);
         }
     }
-
-
-
 }

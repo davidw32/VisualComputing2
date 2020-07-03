@@ -40,13 +40,12 @@ public class Ball extends GraphicsObject {
     private double windAngle = 0;
 
 
-    private ImageInput image1;
     public boolean springboardCollision = false;
 
     public Ball(double _initXPosition, double _initYPosition) {
 
         super(_initXPosition, _initYPosition);
-        //radius = new SimpleDoubleProperty(this, "radius", 30.0);
+
         setWeight(0.5);
         setIsMoving(true);
         setRadius(25.0);
@@ -57,13 +56,12 @@ public class Ball extends GraphicsObject {
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeType(StrokeType.INSIDE);
-        elementView.setEffect(getDefaultBallSurface());
+        elementView.setEffect(getRubberSurface());
 
         directionLine = new Line();
         directionLine.setStrokeWidth(3);
         directionLine.setStartX(getXPosition());
         directionLine.setStartY(getYPosition());
-        //velocity = new SimpleDoubleProperty(this, "velocity");
 
         //hier werden die Properties des Objektes an die der Shape getackert
         ((Circle) elementView).centerXProperty().bindBidirectional(xPositionProperty());

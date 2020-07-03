@@ -2,6 +2,7 @@ package Model;
 
 import javafx.beans.property.*;
 import javafx.scene.effect.ImageInput;
+import javafx.scene.effect.InnerShadow;
 import javafx.scene.effect.Light;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
@@ -22,11 +23,8 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
     protected StringProperty material;
 
-    private Lighting woodSurface, metalSurface, rubberSurface, defaultSurface, defaultBallSurface;
-
-    protected ImageInput woodImage, metalImage, rubberImage;
-
-
+    private Lighting woodSurface, metalSurface, rubberSurface, defaultSurface, defaultBallSurface, woodSurfaceBlock, metalSurfaceBlock, rubberSurfaceBlock;
+    protected ImageInput woodImage, metalImage, rubberImage, woodImageBlock, metalImageBlock, rubberImageBlock;
 
 
     // Werte für das Reset
@@ -41,7 +39,6 @@ public abstract class GraphicsObject {
                                  friction, weight, angle;
 
     protected final BooleanProperty isSelected;
-
 
 
 
@@ -65,24 +62,39 @@ public abstract class GraphicsObject {
         this.material = new SimpleStringProperty(this,"material","Rubber");
 
         woodImage = new ImageInput(new Image("img/Patterns/wood.png",400,400,false,true));
-        metalImage = new ImageInput(new Image("img/Patterns/metal.png",360,200,false,true));
-        rubberImage = new ImageInput(new Image("img/Patterns/rubber.png",350,350,false, true));
-
         woodImage.setX(getXPosition()-50);
-        metalImage.setX(getXPosition()-100);
-        rubberImage.setX(getXPosition()-100);
         woodImage.setY(getYPosition()-50);
+        metalImage = new ImageInput(new Image("img/Patterns/metal.png",360,200,false,true));
+        metalImage.setX(getXPosition()-100);
         metalImage.setY(getYPosition()-50);
+        rubberImage = new ImageInput(new Image("img/Patterns/rubber.png",350,350,false, true));
+        rubberImage.setX(getXPosition()-100);
         rubberImage.setY(getYPosition()-100);
+        woodImageBlock = new ImageInput(new Image("img/Patterns/wood.png",1000,400,false,true));
+        woodImageBlock.setX(getXPosition()-10);
+        woodImageBlock.setY(getYPosition()-10);
+        metalImageBlock = new ImageInput(new Image("img/Patterns/metal.png",1000,200,false,true));
+        metalImageBlock.setX(getXPosition()-50);
+        metalImageBlock.setY(getYPosition()-50);
+        rubberImageBlock = new ImageInput(new Image("img/Patterns/rubber.png",800,800,false, true));
+        rubberImageBlock.setX(getXPosition()-10);
+        rubberImageBlock.setY(getYPosition()-10);
+
         xPositionProperty().addListener(observable -> {
             woodImage.setX(getXPosition() - getWidth());
             metalImage.setX(getXPosition() - getWidth());
             rubberImage.setX(getXPosition() - getWidth());
+            woodImageBlock.setX(getXPosition() - 10);
+            metalImageBlock.setX(getXPosition() - 50);
+            rubberImageBlock.setX(getXPosition() - 10);
         });
         yPositionProperty().addListener(observable -> {
             woodImage.setY(getYPosition() - getHeight());
             metalImage.setY(getYPosition() - getHeight());
             rubberImage.setY(getYPosition() - getHeight());
+            woodImageBlock.setY(getYPosition() - 10);
+            metalImageBlock.setY(getYPosition() - 50);
+            rubberImageBlock.setY(getYPosition() - 10);
         });
         createSurfaces();
 
@@ -201,19 +213,21 @@ public abstract class GraphicsObject {
         setXVelocity(startVelX);
         setYVelocity(startVelY);
         setAngle(startAngle);
-        //setXScale(startScaleX);
-        //setYScale(startScaleY);
         setWeight(startWeight);
         setWidth(startWidth);
         setHeight(startHeight);
     }
 
+    // die Oberflächenstrukturen für die Modelle
     private void createSurfaces(){
 
         Light.Point pointLight = new Light.Point(30, 20, 50, Color.WHITE);
         Light.Distant distantLight = new Light.Distant();
         distantLight.setAzimuth(225);
         distantLight.setElevation(90);
+        InnerShadow innerShadow = new InnerShadow();
+        innerShadow.setColor(Color.BLACK);
+        innerShadow.setRadius(10);
 
         defaultSurface = new Lighting(distantLight);
         defaultSurface.setSurfaceScale(10);
@@ -225,17 +239,37 @@ public abstract class GraphicsObject {
         metalSurface = new Lighting(pointLight);
         metalSurface.setSurfaceScale(5);
         metalSurface.setSpecularExponent(5);
+        metalSurface.setContentInput(innerShadow);
         metalSurface.setBumpInput(metalImage);
 
         rubberSurface = new Lighting(pointLight);
         rubberSurface.setSurfaceScale(20);
         rubberSurface.setSpecularExponent(5);
+        rubberSurface.setContentInput(innerShadow);
         rubberSurface.setBumpInput(rubberImage);
 
         woodSurface = new Lighting(pointLight);
         woodSurface.setSurfaceScale(10);
         woodSurface.setSpecularExponent(5);
         woodSurface.setBumpInput(woodImage);
+
+        metalSurfaceBlock = new Lighting(distantLight);
+        metalSurfaceBlock.setSurfaceScale(5);
+        metalSurfaceBlock.setSpecularExponent(5);
+        metalSurfaceBlock.setContentInput(innerShadow);
+        metalSurfaceBlock.setBumpInput(metalImageBlock);
+
+        rubberSurfaceBlock = new Lighting(distantLight);
+        rubberSurfaceBlock.setSurfaceScale(10);
+        rubberSurfaceBlock.setSpecularExponent(5);
+        rubberSurfaceBlock.setContentInput(innerShadow);
+        rubberSurfaceBlock.setBumpInput(rubberImageBlock);
+
+        woodSurfaceBlock = new Lighting(distantLight);
+        woodSurfaceBlock.setSurfaceScale(10);
+        woodSurfaceBlock.setSpecularExponent(5);
+        woodSurfaceBlock.setContentInput(innerShadow);
+        woodSurfaceBlock.setBumpInput(woodImageBlock);
 
     }
     public Lighting getDefaultSurface(){ return defaultSurface;}
@@ -244,8 +278,16 @@ public abstract class GraphicsObject {
     public Lighting getRubberSurface(){return rubberSurface;}
     public Lighting getWoodSurface(){return woodSurface;}
 
-    public void moveElement(){//diese Methode muss von den Objekten jeweils selbst implementiert werden
-    }
+
+    public Lighting getWoodSurfaceBlock() { return woodSurfaceBlock; }
+
+    public Lighting getMetalSurfaceBlock() { return metalSurfaceBlock; }
+
+    public Lighting getRubberSurfaceBlock() { return rubberSurfaceBlock; }
+
+    public void moveElement(){
+        //diese Methode muss von den Objekten jeweils selbst implementiert werden
+        }
 
 
     @Override

@@ -36,7 +36,7 @@ public class PlayerController {
     private boolean isPaused = true;
 
     public void initialize(){
-        System.out.println("Init PlayerController");
+        //System.out.println("Init PlayerController");
         pauseI = new Image(getClass().getResourceAsStream("../img/Icons/Pause.png"));
         playI = new Image(getClass().getResourceAsStream("../img/Icons/Play.png"));
         playPauseIcon.setImage(playI);
@@ -65,16 +65,12 @@ public class PlayerController {
             timeline.setCycleCount(Animation.INDEFINITE);
             isRunning = true;
             isPaused = false;
-
-
             timeline.play();
         } else { //mache Pause
             if (isRunning){
                 timeline.pause();
                 playPauseIcon.setImage(playI);
-
                 isPaused = true;
-
             }
         }
     }
