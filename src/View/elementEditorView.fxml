@@ -18,7 +18,11 @@
 
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Button?>
-<StackPane fx:id="elementEditor" maxHeight="820.0" minHeight="820.0" minWidth="300" maxWidth="500"  prefWidth="400" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.paint.ImagePattern?>
+<StackPane fx:id="elementEditor" maxHeight="820.0" minHeight="820.0" minWidth="300" maxWidth="500" prefWidth="400" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
 
     <GridPane fx:id="editor" alignment="CENTER"  vgap="10.0">
         <columnConstraints>
@@ -64,7 +68,7 @@
             <TextField fx:id="textFieldRotate" prefHeight="27.0" minWidth="80.0"  maxWidth="95" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label fx:id ="labelWeight" text="Weight" GridPane.rowIndex="5" />
             <TextField fx:id="textFieldWeight" prefHeight="27.0" minWidth="80.0"  maxWidth="95" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-            <Label  text="Flexibility" GridPane.rowIndex="16" visible="false"/>
+            <Label  text="Elasticity" GridPane.rowIndex="16" visible="false"/>
             <TextField fx:id="textFieldElasticity" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="16" />
             <Label text="Surface" GridPane.rowIndex="7" />
             <ChoiceBox fx:id="choiceBoxPattern" prefHeight="27.0" maxWidth="200" minWidth="170" value="Rubber" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="7">
@@ -101,6 +105,15 @@
             <VBox fx:id="windEditor" prefHeight="148.0" maxWidth="350" minWidth="250" GridPane.columnSpan="3" GridPane.rowIndex="15">
                 <children>
                     <CheckBox fx:id="checkBoxWind" mnemonicParsing="false" onAction="#setOnWind" prefHeight="34.0" prefWidth="157.0" text="Wind" />
+                    <Circle fx:id="windDirectionCircle" radius="20" stroke="black">
+                        <fill>
+                            <ImagePattern>
+                                <image>
+                                    <Image url="@../img/Icons/WindPfeilIcon.png"></Image>
+                                </image>
+                            </ImagePattern>
+                        </fill>
+                    </Circle>
                             <Label prefHeight="17.0" text="Degree" />
                             <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="359" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
                             <Label prefHeight="17.0" text="Beaufort Scale" />

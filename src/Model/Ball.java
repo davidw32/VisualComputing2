@@ -25,13 +25,13 @@ public class Ball extends GraphicsObject {
 
     private boolean bounce = false;
     private boolean bounced = false;
-    private String collisionMaterial = "Rubber";
+    private String collisionMaterial = "Wood";
     private double contactAngle = 0;
     private double bounceDirectionX = 0;
     private double bounceDirectionY = 0;
     private boolean slowed = false;
     private double bounceVelocity = 0;
-    private double flexibility = 0.6;
+    private double elasticity = 0.2;
     Text velocityText = new Text();
 
     private boolean windCollision = false;
@@ -112,19 +112,22 @@ public class Ball extends GraphicsObject {
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
-                    this.flexibility = 0.1;
+                    this.elasticity = 0.1;
                     elementView.setEffect(getDefaultBallSurface());
                     break;
                 case "Wood":
-                    this.flexibility = 0.2;
+                    this.elasticity = 0.2;
                     elementView.setEffect(getWoodSurface());
                     break;
                 case "Rubber":
-                    this.flexibility = 0.6;
+                    this.elasticity = 0.6;
                     elementView.setEffect(getRubberSurface());
                     break;
             }
-            setFriction(flexibility);
+            setFriction(elasticity);
+        }));
+        frictionProperty().addListener((observable -> {
+            this.elasticity = getFriction();
         }));
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
@@ -298,7 +301,7 @@ public class Ball extends GraphicsObject {
                 if (angleNew == 0) { // bei einer horizontalen Linie
                     if (Math.abs(getYVelocity() * time) > 2 && contact) { // wenn sich der Ball schnell genug auf die Linie zubewegt soll gesprungen werden
                         bounce = true;
-                        setYVelocity(-1 * getYVelocity() * flexibility);
+                        setYVelocity(-1 * getYVelocity() * elasticity);
                         bounce = false;
                     } else {
                         if (contact) { // sonst soll sich der Ball entlang der Linie bewegen
@@ -336,7 +339,7 @@ public class Ball extends GraphicsObject {
                             double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX, 2) + Math.pow(bounceDirectionY, 2));
                             bounceDirectionX = 1 / bounceDirection * bounceDirectionX;
                             bounceDirectionY = 1 / bounceDirection * bounceDirectionY;
-                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity() * flexibility, 2));
+                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity() * elasticity, 2) + Math.pow(getYVelocity() * elasticity, 2));
 
                             setXVelocity(bounceDirectionX * bounceVelocity);
                             setYVelocity(-1 * bounceDirectionY * bounceVelocity);
@@ -376,12 +379,12 @@ public class Ball extends GraphicsObject {
             calcAcceleration(contactAngle);
         }
         if (getXPosition() + radius() * getXScale() >= 1150 && (getXVelocity() > 0 && bounced || getXVelocity() + (getXAcceleration() + windX) * time > 0 && !bounced)) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity() * flexibility);
+            setXVelocity(-1 * getXVelocity() * elasticity);
             setXPosition(1150 - radius() * getXScale());
             windX = 0;
 
         } else if (getXPosition() - radius() * getXScale() <= 0 && (getXVelocity() < 0 && bounced || getXVelocity() + (getXAcceleration() + windX) * time < 0 && !bounced)) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity() * flexibility);
+            setXVelocity(-1 * getXVelocity() * elasticity);
             setXPosition(0 + radius() * getXScale());
             windX = 0;
         }
