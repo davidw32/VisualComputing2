@@ -136,7 +136,6 @@
 #spinnerDummy:hover,
 #springboardDummy:hover{
     -fx-cursor: hand;
-    -fx-border-color: orange;
 }
 
 /*
