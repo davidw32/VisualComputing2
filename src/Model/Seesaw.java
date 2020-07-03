@@ -135,7 +135,7 @@ public class Seesaw extends GraphicsObject {
         outlines[1] = new Line(getXPosition() + getWidth(), getYPosition(), getXPosition() + getWidth(), getYPosition() + heightOfRectangle);
         outlines[2] = new Line(getXPosition() + getWidth(), getYPosition() + getHeight(), getXPosition(), getYPosition() + heightOfRectangle);
         outlines[3] = new Line(getXPosition(), getYPosition() + heightOfRectangle, getXPosition(), getYPosition());
-        // für das Dreieck
+        // für das Dreieck, ein gleichseitiges Dreieck unterhalb des Drehpunkts
         outlines[4] = new Line(pivotX, pivotY + 10, pivotX + 15, pivotY + 10 + heightOfTriangle);
         outlines[5] = new Line(pivotX + 15, pivotY + 10 + heightOfTriangle, pivotX - 15, pivotY + 10 + heightOfTriangle);
         outlines[6] = new Line(pivotX - 15, pivotY + 10 + heightOfTriangle, pivotX, pivotY + 10);
@@ -253,7 +253,7 @@ public class Seesaw extends GraphicsObject {
     /**
      * Die Kraft die auf den linken Hebel des Wippe wirken
      *
-     * @param mass - der Kugel
+     * @param mass - Masse der Kugel
      * @param x    - x-Koordinate des Auftreffpunkts
      * @param y    - y-Koordinate des Auftreffpunkts
      */
@@ -265,7 +265,7 @@ public class Seesaw extends GraphicsObject {
     /**
      * Die Kraft die auf den rechten Hebel des Wippe wirken
      *
-     * @param mass - der Kugel
+     * @param mass - Masse der Kugel
      * @param x    - x-Koordinate des Auftreffpunkts
      * @param y    - y-Koordinate des Auftreffpunkts
      */

@@ -113,7 +113,7 @@ public class Ball extends GraphicsObject {
             switch (getMaterial()) {
                 case "Metal":
                     this.flexibility = 0.1;
-                    elementView.setEffect(getMetalSurface());
+                    elementView.setEffect(getDefaultBallSurface());
                     break;
                 case "Wood":
                     this.flexibility = 0.2;
@@ -679,14 +679,6 @@ public class Ball extends GraphicsObject {
      */
     public double detectAngle(double x1, double y1, double x2, double y2) {
         if (y1 == y2) return 0;
-        /*x1 = Math.abs(x1);
-        x2 = Math.abs(x2);
-        y1 = y1;
-        y2 = y2;*/
-         /*
-        double x = Math.sqrt(Math.pow(x2-x1,2));
-        double y = Math.sqrt(Math.pow(y2-y1,2));
-        */
 
         double x = x2 - x1;
         double y = y2 - y1;
@@ -755,12 +747,10 @@ public class Ball extends GraphicsObject {
      */
 
     private boolean intersecting(Ball ball2) {
-
-        double tolerance = 5;
+        double tolerance = 1;
         // der Abstand zwichen den Mittelpunkte ist kleiner als sie Summe der Radien (+ einem Toleranzwert)
         if (calculator.computeDistance(this.getXPosition(), this.getYPosition(), ball2.getXPosition(), ball2.getYPosition())
                 <= this.radius() + ball2.radius() + tolerance) {
-
             return true;
         } else return false;
     }
@@ -770,22 +760,22 @@ public class Ball extends GraphicsObject {
      *
      * @param vx_2    - x-Geschwindikeit des zweiten Objekts
      * @param vy_2    - y-Geschwindikeit des zweiten Objekts
-     * @param weigth2 - Gewicht des zweiten Objekts
+     * @param weight2 - Gewicht des zweiten Objekts
      * @return _ double[] mit vx1_neu, vy1_neu, vx2_neu, vx3_neu
      */
-    private double[] zentralerStoss(double vx_1, double vy_1, double weigth1, double vx_2, double vy_2, double weigth2) {
+    private double[] zentralerStoss(double vx_1, double vy_1, double weight1, double vx_2, double vy_2, double weight2) {
 
         double[] vnew = {0, 0, 0, 0};
         // Falls beide Objekte das gleiche Gewicht haben, werden die Geschwindigkeiten getauscht
-        if (weigth1 == weigth2) {
+        if (weight1 == weight2) {
             vnew[0] = vx_2;
             vnew[1] = vy_2;
             vnew[2] = vx_1;
             vnew[3] = vy_1;
         } else {
             // Berechnung gemäß der Formeln für den elastischen Stoß
-            double xFactor = (weigth1 * vx_1 + weigth2 * vx_2) / (weigth1 + weigth2);
-            double yFactor = (weigth1 * vy_1 + weigth2 * vy_2) / (weigth1 + weigth2);
+            double xFactor = (weight1 * vx_1 + weight2 * vx_2) / (weight1 + weight2);
+            double yFactor = (weight1 * vy_1 + weight2 * vy_2) / (weight1 + weight2);
 
             vnew[0] = 2 * xFactor - vx_1;
             vnew[1] = 2 * yFactor - vy_2;
