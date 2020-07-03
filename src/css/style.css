@@ -36,13 +36,18 @@
 }
 
 
+@font-face {
+    font-family: Poppins-Light;
+    src: url('Poppins-ExtraLight.otf');
+}
 
 @font-face {
     font-family: Poppins;
     src: url('Poppins-Medium.otf');
 }
 
-.label{
+.label,
+.check-box .text{
     -fx-font-size: 18;
     -fx-font-family: Poppins;
     -fx-text-fill: #3e3e3e;
@@ -82,8 +87,15 @@
     -fx-effect: dropshadow(three-pass-box, rgba(50,50,93,0.9), 5, 0, 0, 0);
 }
 
-#elementEditor .label{
+#elementEditor .label,
+.check-box .text{
     -fx-font-size: 15;
+    -fx-font-family: Poppins-Light;
+}
+
+#elementEditorTitle{
+    -fx-font-family: Poppins!important;
+    -fx-font-size: 18!important;
 }
 
 .menu{
@@ -93,9 +105,15 @@
 .text-field,
 .choice-box,
 .color-picker,
-#player .button{
+#player .button
+{
     -fx-border-radius: 7;
     -fx-background-radius: 7;
+}
+
+.check-box .box{
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
 }
 
 #startScreenGrid .button{
@@ -114,10 +132,14 @@
   -fx-focus-color: red ;
 }
 
+
+
 .text-field:focused,
 .color-picker:focused,
 .choice-box:focused,
-.button:focused{
+.button:focused,
+.check-box:selected .box,
+.check-box:focused .box{
     -fx-border-color: orange;
     -fx-background-insets: 1;
 }
@@ -170,4 +192,4 @@
 borderPane{
     -fx-background-color: violet;
 }
- */
+*/
