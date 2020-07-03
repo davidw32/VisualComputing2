@@ -272,12 +272,12 @@ public class ElementEditorController {
             labelSpinner.setVisible(false);
             flexibilitySlider.setDisable(true);
             labelFlexSlider.setOpacity(0.6);
-            scaleFactor.setText("Width");
+            scaleFactor.setText("Width/Height");
             scaleFactor.setOpacity(1.0);
             textFieldWidth.setDisable(false);
             textFieldWidth.setVisible(true);
-            textFieldHeight.setDisable(true);
-            textFieldHeight.setVisible(false);
+            textFieldHeight.setDisable(false);
+            textFieldHeight.setVisible(true);
             textFieldRadius.setDisable(true);
             textFieldRadius.setVisible(false);
             labelAcceleration.setOpacity(0.6);

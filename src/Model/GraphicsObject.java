@@ -67,6 +67,7 @@ public abstract class GraphicsObject {
         woodImage = new ImageInput(new Image("img/Patterns/wood.png",400,400,false,true));
         metalImage = new ImageInput(new Image("img/Patterns/metal.png",360,200,false,true));
         rubberImage = new ImageInput(new Image("img/Patterns/rubber.png",350,350,false, true));
+
         woodImage.setX(getXPosition()-50);
         metalImage.setX(getXPosition()-100);
         rubberImage.setX(getXPosition()-100);
