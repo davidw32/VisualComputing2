@@ -146,7 +146,7 @@ public class Block extends GraphicsObject {
         return this.outlines;
     }
 
-    private void setIsSelectedColor() {
+    protected void setIsSelectedColor() {
         if (getIsSelected()) {
 
             elementView.setStroke(Color.ORANGE);

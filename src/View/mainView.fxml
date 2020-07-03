@@ -11,11 +11,7 @@
             xmlns:fx="http://javafx.com/fxml">
     <right>
 
-
-                <fx:include BorderPane.alignment="CENTER" fx:id="elementEditor" source="elementEditorView.fxml"></fx:include>
-
-
-
+                <fx:include BorderPane.alignment="CENTER_LEFT" fx:id="elementEditor" source="elementEditorView.fxml"></fx:include>
 
     </right>
 

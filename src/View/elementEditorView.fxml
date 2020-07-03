@@ -20,7 +20,7 @@
 <?import javafx.scene.control.Button?>
 <StackPane fx:id="elementEditor" maxHeight="820.0" minHeight="820.0" minWidth="300" maxWidth="500"  prefWidth="400" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ElementEditorController">
 
-    <GridPane fx:id="editor" alignment="CENTER"  vgap="10.0">
+    <GridPane fx:id="editor" alignment="BASELINE_CENTER"  minHeight="820.0" minWidth="300" maxWidth="500"  vgap="10.0">
         <columnConstraints>
             <ColumnConstraints percentWidth="33" prefWidth="100"/>
             <ColumnConstraints percentWidth="33.0" prefWidth="50"  />
