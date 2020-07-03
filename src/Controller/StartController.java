@@ -20,7 +20,7 @@ public class StartController {
     @FXML
     public void initialize(){
         // die GraphicScene erhält Referenzen auf alle Controller
-        System.out.println("Init StartController");
+        //System.out.println("Init StartController");
         myGraphicScene = new GraphicScene();
 
         myGraphicScene.setElementEditorController(elementEditorController);

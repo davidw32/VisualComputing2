@@ -34,7 +34,7 @@
                     </ImageView>
                 </graphic>
             </Button>
-            <Button fx:id="startScreenButton2" minHeight="214" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
+            <Button fx:id="startScreenButton2" minHeight="214" minWidth="300" onAction="#openScene2"  styleClass="startScreenBtn" />
             <Button fx:id="startScreenButton3" minHeight="214" minWidth="300" onAction="#openScene"  styleClass="startScreenBtn" />
         </HBox>
         <HBox fx:id="titel" alignment="CENTER"  spacing="50" GridPane.columnIndex="1" GridPane.rowIndex="4">

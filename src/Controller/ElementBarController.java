@@ -3,9 +3,6 @@ package Controller;
 import Model.GraphicScene;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -13,8 +10,13 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
+
+
+/**
+ * Liefert eine Vorschau aller verfügbaren Elemente auf der Linken Seite des Bildschirms
+ * diese Elemente lassen sich per Drag-and-Drop in der Szener einfügen
+ */
 public class ElementBarController {
 
 
@@ -32,10 +34,12 @@ public class ElementBarController {
 
     private GraphicScene graphicScene;
 
-
+    /**
+     * Die Listener für das Drag-and-Drop werden initialisiert
+     */
     public void initialize() {
         //System.out.println("Init ElementBarController");
-        // addListeners(ballDummy);
+
         ballDummy.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -98,24 +102,6 @@ public class ElementBarController {
 
                 ClipboardContent content = new ClipboardContent();
                 content.putString(spinnerDummy.getId());
-                db.setContent(content);
-
-                event.consume();
-            }
-        });
-
-    }
-
-    private void addListeners(Node node) {
-
-        node.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-                Dragboard db = node.startDragAndDrop(TransferMode.COPY);
-
-                ClipboardContent content = new ClipboardContent();
-                content.putString(node.getId());
                 db.setContent(content);
 
                 event.consume();
