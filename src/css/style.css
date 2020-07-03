@@ -5,7 +5,7 @@
 
 .startScreenBtn:hover
 {
-    -fx-border-color: #ffd700;
+    -fx-border-color: orange;
     -fx-cursor: hand;
 
 }
@@ -63,8 +63,13 @@
     -fx-border-width: 0;
 }
 
-#startScreenGrid .label{
-    -fx-font-size: 50;
+#startScreenViewTitle{
+    -fx-font-size: 120;
+    -fx-text-fill: #2980ff;
+}
+
+#chooseSceneText{
+    -fx-font-size: 23;
 }
 
 #seesawDummy,
@@ -109,6 +114,29 @@
   -fx-focus-color: red ;
 }
 
+.text-field:focused,
+.color-picker:focused,
+.choice-box:focused,
+.button:focused{
+    -fx-border-color: orange;
+    -fx-background-insets: 1;
+}
+
+.menu-item:focused,
+.menu:focused,
+.menu:selected,
+#sceneMenu:focused{
+    -fx-background-color : orange;
+    -fx-text-fill: #fff;
+}
+
+#seesawDummy:hover,
+#ballDummy:hover,
+#blockDummy:hover,
+#spinnerDummy:hover,
+#springboardDummy:hover{
+    -fx-cursor: hand;
+}
 
 /*
 #editor{
