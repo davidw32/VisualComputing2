@@ -5,7 +5,7 @@
 
 .startScreenBtn:hover
 {
-    -fx-border-color: #ffd700;
+    -fx-border-color: orange;
     -fx-cursor: hand;
 
 }
@@ -130,7 +130,14 @@
     -fx-text-fill: #fff;
 }
 
-
+#seesawDummy:hover,
+#ballDummy:hover,
+#blockDummy:hover,
+#spinnerDummy:hover,
+#springboardDummy:hover{
+    -fx-cursor: hand;
+    -fx-border-color: orange;
+}
 
 /*
 #editor{
