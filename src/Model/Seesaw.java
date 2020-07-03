@@ -4,11 +4,13 @@ import Helpers.VectorMath;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
+import static Helpers.Config.GRAVITY;
+
 
 public class Seesaw extends GraphicsObject
 {
     private double heightOfRectangle,lengthOfRectangle, heightOfTriangle, alpha, pivotX, pivotY, omega;
-
+    private double leftForce, rightForce;
     Rectangle elementView;
     Polygon triangle;
     private boolean left, right;
@@ -18,22 +20,27 @@ public class Seesaw extends GraphicsObject
     public Seesaw(double initialX, double initialY){
         super(initialX, initialY);
 
+        heightOfRectangle = 20.0;
 
         setWidth(300);
-        setHeight(20);
+        setHeight(30);
         setWeight(100000);
         pivotX=initialX + getWidth()/2; //Mittelpunkt des Rechtecks
-        pivotY=initialY + getHeight()/2;
+        pivotY=initialY + heightOfRectangle/2;
+        lengthOfRectangle = getWidth();
+        heightOfTriangle = getHeight();
 
         vectorMath = new VectorMath();
-        elementView = new Rectangle(initialX,initialY,getWidth(),20.0);
+        elementView = new Rectangle(initialX,initialY,getWidth(),20);
         elementView.setFill(Color.DODGERBLUE);
         elementView.setStroke(Color.ORANGE);
+        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setStrokeWidth(3);
 
-        triangle = new Polygon( pivotX - 15, pivotY + 30.0, pivotX+15, pivotY + 30.0, pivotX, pivotY + 10.0);
+        triangle = new Polygon( pivotX - 15, pivotY + 10+heightOfTriangle, pivotX+15, pivotY + 10+heightOfTriangle, pivotX, pivotY + 10.0);
         triangle.setFill(Color.DODGERBLUE);
         triangle.setStroke(Color.ORANGE);
+        triangle.setStrokeType(StrokeType.INSIDE);
         triangle.setStrokeWidth(3);
 
 
@@ -41,7 +48,7 @@ public class Seesaw extends GraphicsObject
         elementView.xProperty().bindBidirectional(xPositionProperty());
         elementView.yProperty().bindBidirectional(yPositionProperty());
         elementView.widthProperty().bindBidirectional(widthProperty());
-        elementView.heightProperty().bindBidirectional(heightProperty());
+       //elementView.heightProperty().bindBidirectional(heightProperty());
         elementView.scaleXProperty().bindBidirectional(xScaleProperty());
         elementView.scaleYProperty().bindBidirectional(yScaleProperty());
         elementView.rotateProperty().bindBidirectional(angleProperty());
@@ -50,31 +57,31 @@ public class Seesaw extends GraphicsObject
 
 
         //hier ändert sich die Farbe wenn das Objekt angeklickt wird
-        isSelectedProperty().addListener((observable, oldValue, newValue) -> {
+        isSelectedProperty().addListener(observable -> {
             setIsSelectedColor();
         });
 
         //Objekt aktualisiert die Kollisionskanten nach Translation, Rotation oder Skalierung
         xPositionProperty().addListener((observable, oldValue, newValue) -> {
             pivotX = getXPosition() + getWidth() / 2;
-
             updateOutlines();
         });
 
-        yPositionProperty().addListener((observable, oldValue, newValue) -> {
-            pivotY = getYPosition() + getHeight() / 2;
-
+        yPositionProperty().addListener(observable -> {
+            pivotY = getYPosition() + heightOfRectangle / 2;
             updateOutlines();
         });
-        widthProperty().addListener(((observable, oldValue, newValue) -> {
+        widthProperty().addListener(observable -> {
             pivotX = getXPosition() + getWidth() / 2;
             updateOutlines();
-        }));
+        });
 
-        heightProperty().addListener(((observable, oldValue, newValue) -> {
-            pivotY = getYPosition() + getHeight() / 2;
+        heightProperty().addListener(observable -> {
+            pivotY = getYPosition() + heightOfRectangle / 2;
+            heightOfTriangle=getHeight();
+            calculateKippWinkel();
             updateOutlines();
-        }));
+        });
         xScaleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
@@ -86,25 +93,22 @@ public class Seesaw extends GraphicsObject
         angleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
+
         elementView.fillProperty().addListener(observable -> {triangle.setFill(elementView.getFill());});
 
-        initOutlines();
-
-
-        heightOfRectangle = 20.0;
-        lengthOfRectangle = getWidth();
-        heightOfTriangle = 20;
         // um zu unterscheiden, in welche Richtung der Balken kippt
         left = false;
         right = false;
         //maximaler Kippwinkel des Balkens
-        alpha = Math.toDegrees(Math.atan( 2* heightOfTriangle / lengthOfRectangle));
+        calculateKippWinkel();
+
         //Kippgeschwindigkeit omega = 360 / 60, (eine Umdrehung pro Sekunde/60 Frames)
-        omega = 60;
+        omega = 10;
+
+        initOutlines();
     }
-
+    //Für die Grafikanzeige
     public Shape getElementView(){ return elementView;}
-
     public Polygon getTriangle() {
         return triangle;
     }
@@ -112,12 +116,12 @@ public class Seesaw extends GraphicsObject
 
     private void setIsSelectedColor() {
         if (getIsSelected()) {
-
             elementView.setStroke(Color.ORANGE);
             elementView.setStrokeWidth(3);
+            elementView.setStrokeType(StrokeType.INSIDE);
             triangle.setStroke((Color.ORANGE));
             triangle.setStrokeWidth(3);
-
+            triangle.setStrokeType(StrokeType.INSIDE);
         } else {
             elementView.setStroke(null);
             triangle.setStroke(null);
@@ -128,22 +132,24 @@ public class Seesaw extends GraphicsObject
      * initalisiert die Kollisionslinien des Rechtecks an den Kanten des Rechtecks
      */
     private void initOutlines() {
+        //für den Balken
         outlines[0] = new Line(getXPosition(), getYPosition(), getXPosition() + getWidth(), getYPosition());
-        outlines[1] = new Line(getXPosition() + getWidth(), getYPosition(), getXPosition() + getWidth(), getYPosition() + getHeight());
-        outlines[2] = new Line(getXPosition() + getWidth(), getYPosition() + getHeight(), getXPosition(), getYPosition() + getHeight());
-        outlines[3] = new Line(getXPosition(), getYPosition() + getHeight(), getXPosition(), getYPosition());
-        outlines[4] = new Line(pivotX,pivotY+10,pivotX+15, pivotY+30);
-        outlines[5] = new Line(pivotX+15, pivotY+30,pivotX-15, pivotY+30);
-        outlines[6] = new Line(pivotX-15, pivotY+30,pivotX, pivotY+10);
+        outlines[1] = new Line(getXPosition() + getWidth(), getYPosition(), getXPosition() + getWidth(), getYPosition() + heightOfRectangle);
+        outlines[2] = new Line(getXPosition() + getWidth(), getYPosition() + getHeight(), getXPosition(), getYPosition() + heightOfRectangle);
+        outlines[3] = new Line(getXPosition(), getYPosition() + heightOfRectangle, getXPosition(), getYPosition());
+        // für das Dreieck
+        outlines[4] = new Line(pivotX,pivotY+10,pivotX+15, pivotY+10+heightOfTriangle);
+        outlines[5] = new Line(pivotX+15, pivotY+10+heightOfTriangle,pivotX-15, pivotY+10+heightOfTriangle);
+        outlines[6] = new Line(pivotX-15, pivotY+10+heightOfTriangle,pivotX, pivotY+10);
     }
     /**
      * Aktualisiert die Kollisionslinien des Rechtecks und Dreiecks nach einer Skalierung/Translation
      */
     private void updatePositionOutlines() {
         double minX = pivotX - getWidth()  / 2; // x-Wert links
-        double minY = pivotY - getHeight() / 2; // y-Wert oben
+        double minY = pivotY - heightOfRectangle / 2; // y-Wert oben
         double maxX = pivotX + getWidth()  / 2; //x-Wert rechts
-        double maxY = pivotY + getHeight() / 2; // y-Wert unten
+        double maxY = pivotY + heightOfRectangle / 2; // y-Wert unten
         //Balken
         outlines[0].setStartX(minX);
         outlines[0].setStartY(minY);
@@ -165,13 +171,13 @@ public class Seesaw extends GraphicsObject
         outlines[4].setStartX(pivotX);
         outlines[4].setStartY(pivotY+10);
         outlines[4].setEndX(pivotX+15);
-        outlines[4].setEndY(pivotY+30);
+        outlines[4].setEndY(pivotY+10+heightOfTriangle);
         outlines[5].setStartX(pivotX+15);
-        outlines[5].setStartY(pivotY+30);
+        outlines[5].setStartY(pivotY+10+heightOfTriangle);
         outlines[5].setEndX(pivotX-15);
-        outlines[5].setEndY(pivotY+30);
+        outlines[5].setEndY(pivotY+10+heightOfTriangle);
         outlines[6].setStartX(pivotX-15);
-        outlines[6].setStartY(pivotY+30);
+        outlines[6].setStartY(pivotY+10+heightOfTriangle);
         outlines[6].setEndX(pivotX);
         outlines[6].setEndY(pivotY+10);
 
@@ -184,7 +190,7 @@ public class Seesaw extends GraphicsObject
         updatePositionOutlines();
 
         triangle.getPoints().clear();
-        triangle.getPoints().addAll(pivotX - 15, pivotY + 30.0, pivotX+15, pivotY + 30.0, pivotX, pivotY + 10.0);
+        triangle.getPoints().addAll(pivotX - 15, pivotY + 10+heightOfTriangle, pivotX+15, pivotY + 10+heightOfTriangle, pivotX, pivotY + 10.0);
         double c = Math.cos(Math.toRadians(getAngle()));
         double s = Math.sin(Math.toRadians(getAngle()));
         //nur der Balken kippt, das Dreieck bleibt stehen
@@ -203,34 +209,33 @@ public class Seesaw extends GraphicsObject
     }
 
     public void moveElement(){
-        //System.out.println("Alpha: "+alpha+" left "+left+" right "+right);
+
         //den Balken nach links kippen bis zum maximalen Kippwinkel
-        if(left){
+        if(leftForce>rightForce ){
             if (this.getAngle()> -alpha){
+                right= false;
+                rightForce=0;
                 this.setAngle(this.getAngle() - omega * time);
                 updateOutlines();
             } else if (this.getAngle() <= -alpha ){
                 left = false;
+                leftForce = 0;
                 updateOutlines();
             }
         }// den Balken nach rechts kippen bis zum maximalen Kippwinkel
-        else if (right){
+        else if (rightForce>leftForce ){
             if (this.getAngle() < alpha){
+                left=false;
+                leftForce=0;
                 this.setAngle(this.getAngle() + omega * time);
                 updateOutlines();
             } else if (this.getAngle() >= alpha ){
                 right = false;
+                rightForce = 0;
                 updateOutlines();
             }
         }
-
     }
-
-
-    public Line[] getOutlines(){
-        return this.outlines;
-    }
-
 
 
     public void setLeft(boolean _left){
@@ -240,29 +245,44 @@ public class Seesaw extends GraphicsObject
         this.right = _right;
     }
 
-    private void kippWinkel(){
+    private void calculateKippWinkel(){
         //maximaler Kippwinkel
-        alpha = Math.atan( 2* heightOfTriangle / lengthOfRectangle);
-    }
-
-    public void setOmega(double velocity, double x, double y){
-
-        double radius = vectorMath.vectorLength(x-pivotX, y-pivotY);
-        this.omega= Math.toDegrees(velocity/radius);
-        System.out.println("Radius: "+radius+" Omega: "+omega+" Velocity: "+velocity);
-    }
-    private void setKippGeschwindigkeit(double ballWeight, double ballAccX, double ballAccY){
-
-        double forceX = ballWeight * ballAccX;
-        double forceY = ballWeight * ballAccY;
-
-        this.setXAcceleration( forceX / this.getWeight() );
-        this.setYAcceleration( forceY / this.getWeight() );
-
-        this.setXVelocity(this.getXVelocity() + this.getXAcceleration() * time * Math.toRadians(alpha));
-        this.setYVelocity(this.getYVelocity() + this.getYAcceleration() * time * Math.toRadians(alpha));
+        alpha = Math.toDegrees(Math.atan( 2 * heightOfTriangle / lengthOfRectangle));
 
     }
 
+    /**
+     * Die Kraft die auf den Linken Hebel des Wippe wirken
+     * @param mass - der Kugel
+     * @param x - x-Koordinate des Auftreffpunkts
+     * @param y - y-Koordinate des Auftreffpunkts
+     */
+    public void setLeftForce(double mass, double x, double y){
+        double length = Math.abs(x-pivotX);
+        leftForce = mass * GRAVITY * length;
+    }
+    /**
+     * Die Kraft die auf den Rechten Hebel des Wippe wirken
+     * @param mass - der Kugel
+     * @param x - x-Koordinate des Auftreffpunkts
+     * @param y - y-Koordinate des Auftreffpunkts
+     */
+    public void setRightForce(double mass, double x, double y){
+        double length = Math.abs(x-pivotX);
+        rightForce = mass * GRAVITY * length;
+    }
 
+
+    public Line[] getOutlines(){
+        return this.outlines;
+    }
+
+    @Override
+    public void resetElement() {
+        super.resetElement();
+       left = false;
+       right = false;
+       leftForce = 0;
+       rightForce = 0;
+    }
 }

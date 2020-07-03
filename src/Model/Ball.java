@@ -18,7 +18,7 @@ public class Ball extends GraphicsObject {
 
     // private DoubleProperty radius;
     private boolean collision, frictionLock;
-    private double frictionCoefficient= 0.1;
+    private double frictionCoefficient = 0.1;
     private VectorMath calculator;
     private Line directionLine;
     private double velocity;
@@ -50,12 +50,13 @@ public class Ball extends GraphicsObject {
         setWeight(0.5);
         setIsMoving(true);
         setRadius(25.0);
-        setWidth(2*getRadius());
-        setHeight(2*getRadius());
+        setWidth(2 * getRadius());
+        setHeight(2 * getRadius());
 
         elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
+        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setEffect(getDefaultBallSurface());
 
         directionLine = new Line();
@@ -106,8 +107,8 @@ public class Ball extends GraphicsObject {
             updateDirectionLine();
         }));
         radiusProperty().addListener((observable -> {
-            setWidth(2*getRadius());
-            setHeight(2*getRadius());
+            setWidth(2 * getRadius());
+            setHeight(2 * getRadius());
             updateDirectionLine();
         }));
         materialProperty().addListener((observable -> {
@@ -129,7 +130,6 @@ public class Ball extends GraphicsObject {
         }));
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
-
 
         calculator = new VectorMath();
         velocity = calculator.vectorLength(getXVelocity(), getYVelocity());
@@ -183,7 +183,6 @@ public class Ball extends GraphicsObject {
             directionLine.setEndX(getXPosition() + radius() * getXVelocity() / getVelocity());
             directionLine.setEndY(getYPosition() + radius() * getYVelocity() / getVelocity());
         }
-        //System.out.println("startX: "+directionLine.getStartX()+" startY: "+directionLine.getStartY()+" endX: "+directionLine.getEndX()+ " endY: "+ directionLine.getEndY());
     }
 
 
@@ -198,6 +197,7 @@ public class Ball extends GraphicsObject {
         if (getIsSelected()) {
 
             elementView.setStroke(Color.ORANGE);
+            elementView.setStrokeType(StrokeType.INSIDE);
             elementView.setStrokeWidth(3);
             velocityText.setVisible(true);
 
@@ -274,15 +274,15 @@ public class Ball extends GraphicsObject {
                 collision = true;
 
                 // Laenge des Normalenvektors der Ebene
-                double lengthN = calculator.vectorLength(nX,nY);
+                double lengthN = calculator.vectorLength(nX, nY);
 
                 // Normierter Normalenvektor der Ebene
-                double normedNX = 1/lengthN * nX;
-                double normedNY = 1/lengthN * nY;
+                double normedNX = 1 / lengthN * nX;
+                double normedNY = 1 / lengthN * nY;
 
                 // Ball wird auf der Ebene poisitioniert
-                setXPosition(schnittpunktX + normedNX * (radius()*getXScale()-0.5));
-                setYPosition(schnittpunktY + normedNY * (radius()*getXScale()-0.5));
+                setXPosition(schnittpunktX + normedNX * (radius() * getXScale() - 0.5));
+                setYPosition(schnittpunktY + normedNY * (radius() * getXScale() - 0.5));
 
                 // Bestimmt ob sich der Ball überhauft auf die Linie zu bewegt
                 boolean contact = (nX * getXVelocity() * time + nY * getYVelocity() * time) < 0;
@@ -297,14 +297,13 @@ public class Ball extends GraphicsObject {
                     bounced = false;
                 }
 
-                if(angleNew == 0){ // bei einer horizontalen Linie
-                    if(Math.abs(getYVelocity()*time) > 2 && contact) { // wenn sich der Ball schnell genug auf die Linie zubewegt soll gesprungen werden
+                if (angleNew == 0) { // bei einer horizontalen Linie
+                    if (Math.abs(getYVelocity() * time) > 2 && contact) { // wenn sich der Ball schnell genug auf die Linie zubewegt soll gesprungen werden
                         bounce = true;
-                        setYVelocity(-1*getYVelocity()*flexibility);
+                        setYVelocity(-1 * getYVelocity() * flexibility);
                         bounce = false;
-                    }
-                    else {
-                        if(contact) { // sonst soll sich der Ball entlang der Linie bewegen
+                    } else {
+                        if (contact) { // sonst soll sich der Ball entlang der Linie bewegen
                             bounced = true;
                             if (line instanceof Block.BlockLine) {
                                 this.collisionMaterial = ((Block.BlockLine) line).getParentBlock().getMaterial();
@@ -336,13 +335,13 @@ public class Ball extends GraphicsObject {
                             bounceDirectionY = (getXVelocity() * sin + (getYVelocity()) * cos);
 
                             // Normierung des Richtungsvektors
-                            double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX,2)+Math.pow(bounceDirectionY,2));
-                            bounceDirectionX = 1/bounceDirection * bounceDirectionX;
-                            bounceDirectionY = 1/ bounceDirection * bounceDirectionY;
-                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity()*flexibility, 2));
+                            double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX, 2) + Math.pow(bounceDirectionY, 2));
+                            bounceDirectionX = 1 / bounceDirection * bounceDirectionX;
+                            bounceDirectionY = 1 / bounceDirection * bounceDirectionY;
+                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity() * flexibility, 2));
 
                             setXVelocity(bounceDirectionX * bounceVelocity);
-                            setYVelocity(-1*bounceDirectionY * bounceVelocity);
+                            setYVelocity(-1 * bounceDirectionY * bounceVelocity);
                         }
                     } else if (contact) { // sonst soll der Ball auf der Ebene entlang rollen
                         if (!bounced) {
@@ -405,7 +404,7 @@ public class Ball extends GraphicsObject {
             setXAcceleration(0 + windX);
             bounced = false;
         }
-        if(bounce) { // wenn der Ball vom Aufprall springen soll
+        if (bounce) { // wenn der Ball vom Aufprall springen soll
             /*if (contactAngle != 0) {
                 setYVelocity(-1 * bounceDirectionY * bounceVelocity);
             }
@@ -530,10 +529,10 @@ public class Ball extends GraphicsObject {
     /**
      * Bestimmt den Rollreibungskoeffizienten je nach Materialien der Kollisionsobjekte
      */
-    private void findFrictionCoefficient(){
-        switch(getMaterial()){
+    private void findFrictionCoefficient() {
+        switch (getMaterial()) {
             case "Metal":
-                switch(this.collisionMaterial) {
+                switch (this.collisionMaterial) {
                     case "Metal":
                         this.frictionCoefficient = METAL_ON_METAL;
                         break;
@@ -546,7 +545,7 @@ public class Ball extends GraphicsObject {
                 }
                 break;
             case "Wood":
-                switch(this.collisionMaterial) {
+                switch (this.collisionMaterial) {
                     case "Metal":
                         this.frictionCoefficient = WOOD_ON_METAL;
                         break;
@@ -559,7 +558,7 @@ public class Ball extends GraphicsObject {
                 }
                 break;
             case "Rubber":
-                switch(this.collisionMaterial) {
+                switch (this.collisionMaterial) {
                     case "Metal":
                         this.frictionCoefficient = RUBBER_ON_METAL;
                         break;
@@ -657,10 +656,9 @@ public class Ball extends GraphicsObject {
                 // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
                 boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
                 if (onLine) {
-                    if (windAngle > 0 && windAngle <=180 && schnittpunktY <= getYPosition() || windAngle > 180 && schnittpunktY >= getYPosition()) { // wenn der Schnittpunkt vor dem Aufprall auf den Ball liegt
+                    if (windAngle > 0 && windAngle <= 180 && schnittpunktY <= getYPosition() || windAngle > 180 && schnittpunktY >= getYPosition()) { // wenn der Schnittpunkt vor dem Aufprall auf den Ball liegt
                         return true;
-                    }
-                    else if (windAngle == 0 && schnittpunktX < getXPosition()) {
+                    } else if (windAngle == 0 && schnittpunktX < getXPosition()) {
                         return true;
                     }
                 }
@@ -671,7 +669,6 @@ public class Ball extends GraphicsObject {
         return false;
     }
 
-    
 
     /**
      * Ermitteln eines Winkel einer Geraden
@@ -728,11 +725,13 @@ public class Ball extends GraphicsObject {
 
             double test = normalX * relX + normalY * relY;
 
-            double normlength = calculator.vectorLength(normalX,normalY);
-            ball2.setXPosition(this.getXPosition()+normalX/normlength *(this.getRadius()+ball2.getRadius()));
-            ball2.setYPosition(this.getYPosition()+normalY/normlength *(this.getRadius()+ball2.getRadius()));
+            double normlength = calculator.vectorLength(normalX, normalY);
+            //ball2.setXPosition(this.getXPosition()+normalX/normlength *(this.getRadius()+ball2.getRadius()));
+            // ball2.setYPosition(this.getYPosition()+normalY/normlength *(this.getRadius()+ball2.getRadius()));
 
             if (test < 0) {
+                ball2.setXPosition(this.getXPosition() + normalX / normlength * (this.getRadius() + ball2.getRadius()));
+                ball2.setYPosition(this.getYPosition() + normalY / normlength * (this.getRadius() + ball2.getRadius()));
                 // v = v_t + v_z => v_t = v - v_z, v_z mit ParallelProjektion bestimmen
                 double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), normalX, normalY);
                 double[] v2_z = calculator.parallelProjection(ball2.getXVelocity(), ball2.getYVelocity(), normalX, normalY);
@@ -799,9 +798,13 @@ public class Ball extends GraphicsObject {
         return vnew;
     }
 
+    /**
+     * Kollisionserkennung mit der Seesaw/Wippe
+     * @param seesaw
+     */
     public void checkCollisionWithSeesaw(Seesaw seesaw) {
         Line[] outlines = seesaw.getOutlines();
-
+        //Bestimmung des Schnittpunktes mit der Oberkante der Wippe
         double linePx = outlines[0].getStartX();
         double linePy = outlines[0].getStartY();
         double lineRx = outlines[0].getEndX() - outlines[0].getStartX();
@@ -854,25 +857,30 @@ public class Ball extends GraphicsObject {
         // bestimmt ob sich der Schnittpunkt zwischen dem Start- und Endpunkt der Linie befindet
         boolean onLine = leftX <= schnittpunktX && rightX >= schnittpunktX && topY <= schnittpunktY && bottomY >= schnittpunktY;
         //v_rel * normale < 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-        boolean hit = (nX * this.getXVelocity()  + nY * this.getYVelocity() ) <= 0;
+        boolean hit = (nX * this.getXVelocity() + nY * this.getYVelocity()) <= 0;
 
-        if (onLine && abstand < 1 ) {
+        if (onLine && abstand < 1) {
             // Laenge des Normalenvektors der Ebene
-            double lengthN = calculator.vectorLength(nX,nY);
+            double lengthN = calculator.vectorLength(nX, nY);
 
             // Normierter Normalenvektor der Ebene
-            double normedNX = 1/lengthN * nX;
-            double normedNY = 1/lengthN * nY;
+            double normedNX = 1 / lengthN * nX;
+            double normedNY = 1 / lengthN * nY;
 
             // Ball wird auf der Ebene poisitioniert
-            setXPosition(schnittpunktX + normedNX * (radius()*getXScale()-0.5));
-            setYPosition(schnittpunktY + normedNY * (radius()*getXScale()-0.5));
+            setXPosition(schnittpunktX + normedNX * (radius() * getXScale() - 0.5));
+            setYPosition(schnittpunktY + normedNY * (radius() * getXScale() - 0.5));
 
             //Ball rollt auf Wippe zu
             if (hit) {
                 //trifft die Kugel auf der linken oder rechten Seite der Wippe auf
-                seesaw.setLeft(leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX);
-                seesaw.setRight((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX);
+                if (leftX <= schnittpunktX && (leftX + rightX) / 2 >= schnittpunktX) {
+                    seesaw.setLeft(true);
+                    seesaw.setLeftForce(this.getWeight(), schnittpunktX, schnittpunktY);
+                } else if ((leftX + rightX) / 2 < schnittpunktX && rightX >= schnittpunktX) { //oder auf der rechten Hälfte
+                    seesaw.setRight(true);
+                    seesaw.setRightForce(this.getWeight(), schnittpunktX, schnittpunktY);
+                }
 
                 double delX = schnittpunktX - this.getXPosition();
                 double delY = schnittpunktY - this.getYPosition();
@@ -888,117 +896,117 @@ public class Ball extends GraphicsObject {
                 this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
             }
 
-        } else { // falls nicht die obere Kante getroffen wird, teste die restlichen Kanten
-            Line[] testLines = new Line[outlines.length-1];
+        } else { // falls nicht die obere Kante getroffen wird, teste die restlichen Kanten auf Kollision
+            Line[] testLines = new Line[outlines.length - 1];
             //System.out.println("ElseFall Seesaw");
-            for ( int i = 1; i < outlines.length; i++){
+            for (int i = 1; i < outlines.length; i++) {
                 // alle anderen bis auf die Erste Kante
-                testLines[i-1] = outlines[i];
+                testLines[i - 1] = outlines[i];
             }
             collisionDetection(testLines);
         }
 
     }
 
+    /**
+     * Kollisionserkennung Spinner
+     *
+     * @param spinner
+     */
     public void checkCollisionWithSpinner(Spinner spinner) {
 
-        //Äußerer Radius um den Spinner wird berührt
-        //if (isInRangeOfSpinner(spinner)) {
-            Line[] outlines = spinner.getOutlines();
+        Line[] outlines = spinner.getOutlines();
 
-            double[] spinnerVelocity;
+        double[] spinnerVelocity;
 
-            if (spinner.getRotationalSpeed() == 0) {
-                collisionDetection(outlines);//wenn der Spinner sich nicht dreht, behandle ihn wie Block
-            } else {//ansonsten
+        if (spinner.getRotationalSpeed() == 0) {
+            collisionDetection(outlines);//wenn der Spinner sich nicht dreht, behandle ihn wie Block
+        } else {//ansonsten
 
-                for (Line line : outlines) {
+            for (Line line : outlines) {
 
-                    double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, lotX, lotY, distance;
-                    boolean online;
-                    boolean hit;
+                double ax, ay, bx, by, deltaX, deltaY, normalX, normalY, lotX, lotY, distance;
+                boolean online;
+                boolean hit;
 
-                    //Anfangs und Endpunkt, der zu prüfenden Kante
-                    ax = line.getStartX();
-                    ay = line.getStartY();
-                    bx = line.getEndX();
-                    by = line.getEndY();
-                    deltaX = bx - ax;
-                    deltaY = by - ay;
+                //Anfangs und Endpunkt, der zu prüfenden Kante
+                ax = line.getStartX();
+                ay = line.getStartY();
+                bx = line.getEndX();
+                by = line.getEndY();
+                deltaX = bx - ax;
+                deltaY = by - ay;
 
-                    double steigung = deltaY / deltaX;
-                    double b = ay - ax * steigung;
+                double steigung = deltaY / deltaX;
+                double b = ay - ax * steigung;
 
-                    if (deltaY == 0) { //der spinner ist waagerecht
-                        lotX = this.getXPosition();
-                        lotY = ay;
-                        distance = Math.abs(this.getYPosition() - ay);
-                    } else if (deltaX == 0) { // der Spinner ist senkrecht
-                        lotX = ax;
-                        lotY = this.getYPosition();
-                        distance = Math.abs(this.getXPosition() - ax);
+                if (deltaY == 0) { //der spinner ist waagerecht
+                    lotX = this.getXPosition();
+                    lotY = ay;
+                    distance = Math.abs(this.getYPosition() - ay);
+                } else if (deltaX == 0) { // der Spinner ist senkrecht
+                    lotX = ax;
+                    lotY = this.getYPosition();
+                    distance = Math.abs(this.getXPosition() - ax);
 
-                    } else {
+                } else {
 
-                        double steigung2 = -deltaY / deltaX;
-                        double b2 = this.getYPosition() - this.getXPosition() * steigung2;
+                    double steigung2 = -deltaY / deltaX;
+                    double b2 = this.getYPosition() - this.getXPosition() * steigung2;
 
-                        //Berührpunkt von Kugel zur Kante
-                        lotX = (b2 - b) / (steigung - steigung2);
-                        lotY = steigung2 * lotX + b2;
-                        //Abstand Mittelpunkt Kugel zur Kante
-                        distance = calculator.vectorLength((this.getXPosition() - lotX), (this.getYPosition() - lotY));
+                    //Berührpunkt von Kugel zur Kante
+                    lotX = (b2 - b) / (steigung - steigung2);
+                    lotY = steigung2 * lotX + b2;
+                    //Abstand Mittelpunkt Kugel zur Kante
+                    distance = calculator.vectorLength((this.getXPosition() - lotX), (this.getYPosition() - lotY));
 
-                    }
+                }
 
-                    // Normalenvektor zur Kante
-                    normalX = deltaY;
-                    normalY = -deltaX;
+                // Normalenvektor zur Kante
+                normalX = deltaY;
+                normalY = -deltaX;
 
-                    //Lotfusspunkt liegt zwischen A und B
-                    online = (((ax <= bx && ax <= lotX && lotX <= bx) || (bx <= ax && bx <= lotX && lotX <= ax)) &&
-                            ((ay <= by && ay <= lotY && lotY <= by) || (by <= ay && by <= lotY && lotY <= ay)));
-                    //System.out.println("online "+online+" Abstand "+Math.abs(distance - this.getRadius()));
+                //Lotfusspunkt liegt zwischen A und B
+                online = (((ax <= bx && ax <= lotX && lotX <= bx) || (bx <= ax && bx <= lotX && lotX <= ax)) &&
+                        ((ay <= by && ay <= lotY && lotY <= by) || (by <= ay && by <= lotY && lotY <= ay)));
+                //System.out.println("online "+online+" Abstand "+Math.abs(distance - this.getRadius()));
 
-                    //Abstand Kugel / Kante klein genug
-                    if ( online && Math.abs(distance - this.getRadius()) < 15) {
+                //Abstand Kugel / Kante klein genug
+                if (online && Math.abs(distance - this.getRadius()) < 15) {
 
-                        double normLength = calculator.vectorLength(normalX,normalY);
-                        // Ball wird auf der Ebene poisitioniert
-                        setXPosition(lotX + normalX/normLength * (radius()*getXScale()-0.5));
-                        setYPosition(lotY + normalY/normLength * (radius()*getXScale()-0.5));
+                    double normLength = calculator.vectorLength(normalX, normalY);
+                    // Ball wird auf der Ebene poisitioniert
+                    setXPosition(lotX + normalX / normLength * (radius() * getXScale() - 0.5));
+                    setYPosition(lotY + normalY / normLength * (radius() * getXScale() - 0.5));
 
-                        //den Richtungsvektor für die Bahngeschwindigkeit im Lotpunkt ermitteln
-                        spinnerVelocity = spinner.velocityVector(lotX, lotY);
-                        System.out.println("lotx"+ lotX+" loty "+lotY+ " vx "+spinnerVelocity[0]+" vy "+spinnerVelocity[1]);
-                        //v_rel * n_Spinnerkante > 0  (bilden spitzen Winkel, also rollen aufeinander zu)
-                        hit = (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * ( spinnerVelocity[1] - this.getYVelocity())) > 0;
-                        System.out.println("hit:" + (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * ( spinnerVelocity[1] - this.getYVelocity())));
-                        //hit = normalX * this.getXVelocity() + normalY * this.getYVelocity()<0;
-                        if (hit) {
-                            // Zentralrichtung des Stosses
-                            double delX = lotX - this.getXPosition();
-                            double delY = lotY - this.getYPosition();
-                            //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
-                            double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), delX, delY); //Projektion der Kugelvelocity
-                            double[] v2_z = calculator.parallelProjection(spinnerVelocity[0], spinnerVelocity[1], delX, delY); // Projektion der spinnerVelocity
+                    //den Richtungsvektor für die Bahngeschwindigkeit im Lotpunkt ermitteln
+                    spinnerVelocity = spinner.velocityVector(lotX, lotY);
 
-                            if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
-                                // nur die parallelen Anteile werden verändert
-                                double[] vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], spinner.getWeight());
-                                // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
-                                this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
-                                this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
-                            }
+                    //v_rel * n_Spinnerkante > 0  (bilden spitzen Winkel, also rollen aufeinander zu)
+                    hit = (normalX * (spinnerVelocity[0] - this.getXVelocity()) + normalY * (spinnerVelocity[1] - this.getYVelocity())) > 0;
 
+                    if (hit) {
+                        // Zentralrichtung des Stosses
+                        double delX = lotX - this.getXPosition();
+                        double delY = lotY - this.getYPosition();
+                        //Bestimmung der Anteile der Geschwindigkeitsvektoren, die parallel zur  Zentralrichtung liegen
+                        double[] v1_z = calculator.parallelProjection(this.getXVelocity(), this.getYVelocity(), delX, delY); //Projektion der Kugelvelocity
+                        double[] v2_z = calculator.parallelProjection(spinnerVelocity[0], spinnerVelocity[1], delX, delY); // Projektion der spinnerVelocity
+
+                        if (v1_z != new double[]{0, 0} && v2_z != new double[]{0, 0}) {
+                            // nur die parallelen Anteile werden verändert
+                            double[] vneu = zentralerStoss(v1_z[0], v1_z[1], this.getWeight(), v2_z[0], v2_z[1], spinner.getWeight());
+                            // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
+                            this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
+                            this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
                         }
                     }
-                }//endfor
-            }
-       // }
+                }
+            }//endfor
+        }
     }
 
-    public void collisionDetectionBoardSpring(Line line, Springboard.Board board){
+    public void collisionDetectionBoardSpring(Line line, Springboard.Board board) {
 
 
         // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b (lineare Funktion)
@@ -1059,29 +1067,11 @@ public class Ball extends GraphicsObject {
             springboardCollision = true;
             board.getParentSpringboard().move(this);
 
-        }
-        else if(abstand > 1 && (xPosition.get() < line.getStartX() || xPosition.get() > line.getEndX()))
-        {
+        } else if (abstand > 1 && (xPosition.get() < line.getStartX() || xPosition.get() > line.getEndX())) {
             springboardCollision = false;
         }
     }
 
-    //berechnet ob sich die Kugel in einem groben Radius des Spinners befindet, wenn ja, wird die eigentliche Kollisionsprüfung durchgeführt
-    private boolean isInRangeOfSpinner(Spinner spinner) {
-
-        boolean isInRange = false;
-        double spinnerX = spinner.getCenterX();
-        double spinnerY = spinner.getCenterY();
-        double spinnerRadius = spinner.getWidth() / 2;
-        double xPos = this.getXPosition();
-        double yPos = this.getYPosition();
-
-        if (xPos >= spinnerX - (spinnerRadius + 1.5 * this.radius()) && xPos <= spinnerX + (spinnerRadius + 1.5 * this.radius()) &&
-                yPos >= spinnerY - (spinnerRadius + 1.5 * this.radius()) && yPos <= spinnerY + (spinnerRadius + 1.5 * this.radius())) {
-            isInRange = true;
-        }
-        return isInRange;
-    }
 
     // das Element wird auf die Startwerte zurückgesetzt
     @Override

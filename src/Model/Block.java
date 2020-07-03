@@ -9,7 +9,6 @@ import javafx.scene.shape.StrokeType;
 
 public class Block extends GraphicsObject{
 
-
     private DoubleProperty width, height;
     private Line[] outlines = new Line[4]; // Kanten des Rechtecks
     double xMiddle; // X-Wert des Mittelpunkts
@@ -68,10 +67,21 @@ public Block(double _initX, double _initY){
     angleProperty().addListener((observable, oldValue, newValue) -> {
         updateOutlines();
     });
+    materialProperty().addListener((observable -> {
+        switch (getMaterial()) {
+            case "Metal":
+                elementView.setEffect(getMetalSurface());
+                break;
+            case "Wood":
+                elementView.setEffect(getWoodSurface());
+                break;
+            case "Rubber":
+                elementView.setEffect(getRubberSurface());
+                break;
+        }
+    }));
 
     initOutlines();
-
-
 }
 
     /**
