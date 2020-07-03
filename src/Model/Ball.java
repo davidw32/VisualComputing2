@@ -576,14 +576,14 @@ public class Ball extends GraphicsObject {
      */
     public void calcWind(Wind sceneWind) {
         if (sceneWind.getIsActivated()) {
-            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius
-            double dragCoefficient = 0.47; // für eine Kugel
-            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(), 3f / 2) * 100; // Umrechnung Bft(Beaufort) in cm/s
+            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius. Willig, Hans-Peter, (2020). Luftdichte. Abgerufen von https://www.chemie-schule.de/KnowHow/Luftdichte [03.07.2020].
+            double dragCoefficient = 0.5; // für eine Kugel. Engineering ToolBox, (2004). Drag Coefficient. Abgerufen von https://www.engineeringtoolbox.com/drag-coefficient-d_627.html [03.07.2020].
+            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(), 3f / 2) * 100; // Umrechnung Bft(Beaufort) in cm/s. Siegmann, Hartmut, (2017). Windstärke und Beaufortskala. Abgerufen von https://www.aerodesign.de/aero/beaufort.htm [03.07.2020].
             this.windAngle = sceneWind.getWindDirection();
 
             double affectedArea = Math.PI * Math.pow(radius() * getXScale(), 2);
 
-            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2);
+            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2); //Hall, Nancy, (2015). The Drag Equation. Abgerufen von https://www.grc.nasa.gov/www/k-12/airplane/drageq.html [03.07.2020].
 
             double windAcceleration = dragForce / getWeight();
 
