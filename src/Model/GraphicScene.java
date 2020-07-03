@@ -39,12 +39,7 @@ public class GraphicScene {
     // das Aktive Element als Property
     private final SimpleObjectProperty<GraphicsObject> activeElement;
 
-    //für die erste Szene
-    Line line1 = new Line(0,0,0,0);
-    Line line2 = new Line(0,0,0,0);
-    Line line3 = new Line(0,0,0,0);
-    Line line4 = new Line(0,0,0,0);
-    Line[] lines = new Line[5];
+    Line ground = new Line(0,820,1250,820);
 
     public GraphicScene(){
 
@@ -55,14 +50,6 @@ public class GraphicScene {
         placeholder.setRadius(0);
         //das aktuell ausgewählte Element
         activeElement = new SimpleObjectProperty<>(this, "activeElement", placeholder);
-
-        //für die erste Szene
-        lines[0] = line1;
-        lines[1] = line2;
-        lines[2] = line3;
-        lines[3] = line4;
-        //Unterer Rand
-        lines[4] = new Line(0,820,1250,820);
 
         wind = new Wind();
     }
@@ -113,9 +100,7 @@ public class GraphicScene {
      */
     public Line[] findCollisionLines(){
         ArrayList<Line> collisionLines = new ArrayList<>();
-        for(Line line : lines){
-            collisionLines.add(line);
-        }
+
         for (GraphicsObject graphicsObject: elementsInScene){
             if(graphicsObject instanceof Block && !(graphicsObject instanceof Springboard.Board)){
                 for (Line line: ((Block) graphicsObject).getOutlines()) {
@@ -130,6 +115,7 @@ public class GraphicScene {
                 collisionLines.add( ( (Springboard.Board)graphicsObject).getOutlines()[3]);
             }
         }
+        collisionLines.add(ground);
         Line[] lineArray = new Line[collisionLines.size()];
         for(int i = 0; i < collisionLines.size(); i++){
             lineArray[i] = collisionLines.get(i);

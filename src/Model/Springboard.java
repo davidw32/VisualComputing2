@@ -112,6 +112,8 @@ public class Springboard extends Block
             }
             else
             {
+                setYPosition(startY);
+                setHeight(startHeight);
                 activated = false;
                 down = false;
             }
@@ -130,7 +132,6 @@ public class Springboard extends Block
             // [m] Federweg
             s = (-1*(-weight*GRAVITY)+ Math.sqrt(Math.pow(weight*GRAVITY,2)-4*((0.5)*k*(-0.5)*weight*Math.pow(velocityY,2)))/(k));
 
-            //System.out.println(s);
             //[N] Federkraft F = m * a  als: F = k * s
             double Fk = k * s;
 
@@ -149,24 +150,30 @@ public class Springboard extends Block
             double difference = ball.getYPosition()+ball.radius() - board.getYPosition();
             if(!down)
             {
-                if (getHeight() > startHeight - s && getYVelocity() > 1)
+                if(getHeight() <= 0)
+                {
+                    setHeight(0);
+                    ((Rectangle) elementView).setHeight(0);
+                    setYPosition(this.startY + startHeight);
+                    board.setYPosition(getYPosition() - board.getHeight() );
+                    ball.setYPosition(board.getYPosition() - ball.getRadius());
+                    down = true;
+                    setYVelocity(0);
+                }
+                else if (getHeight() > startHeight - s && getYVelocity() > 0)
                 {
                     setYVelocity(getYVelocity() + getYAcceleration() * time);
+                    if(getYVelocity() < 0){
+                        setYVelocity(0);
+                    }
                     ((Rectangle) elementView).setHeight(getHeight() - difference);
                     setYPosition(getYPosition() + difference);
                     board.setYPosition(getYPosition() - board.getHeight() );
                 }
-                else if(getHeight() < 15)
-                {
-                    ((Rectangle) elementView).setHeight(15);
-                    setYPosition(getYPosition() - difference );
-                    board.setYPosition(getYPosition() - board.getHeight() );
-                    down = true;
-                    setYVelocity(0);
-                }
                 else
                 {
                     down = true;
+                    ball.setYPosition(board.getYPosition()-ball.getRadius());
                     setYVelocity(0);
                 }
                 ball.setYVelocity(this.getYVelocity());
@@ -188,7 +195,7 @@ public class Springboard extends Block
                     activated = false;
                     down = false;
                     ball.setYVelocity(-getYVelocity());
-                    ball.setYPosition(board.getYPosition()-ball.radius()-3);
+                    ball.setYPosition(board.getYPosition()-ball.radius());
                     ball.setSpringboardCollision(false);
                 }
 

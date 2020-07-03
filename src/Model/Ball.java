@@ -361,7 +361,6 @@ public class Ball extends GraphicsObject {
      * Berechnungen der Bewegungen
      */
     public void move() {
-        System.out.println(frictionCoefficient);
         if (windCollision) {
             windX = 0;
             windY = 0;
@@ -604,7 +603,8 @@ public class Ball extends GraphicsObject {
      * @return Wahrheitswert ob der Wind vor dem Ball mit einer Linie kollidiert
      */
     public boolean calcWindCollision(Line[] lines) {
-        for (Line line : lines) {
+        for (int i = 0; i < lines.length -1; i++) { // Der Boden wird nicht als Windkollision betrachtet
+            Line line = lines[i];
             // x = Px + t*Rx   y = Py + t*Ry   y = m*x + b (lineare Funktion)
             // Umformung der Parameterform der Geraden in eine lineare Funktion
             double linePx = line.getStartX();
