@@ -70,7 +70,7 @@ public class Block extends GraphicsObject {
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
-                    elementView.setEffect(getMetalSurfaceBlock());
+                    elementView.setEffect(getDefaultSurface());
                     break;
                 case "Wood":
                     elementView.setEffect(getWoodSurfaceBlock());

@@ -25,13 +25,13 @@ public class Ball extends GraphicsObject {
 
     private boolean bounce = false;
     private boolean bounced = false;
-    private String collisionMaterial = "Rubber";
+    private String collisionMaterial = "Wood";
     private double contactAngle = 0;
     private double bounceDirectionX = 0;
     private double bounceDirectionY = 0;
     private boolean slowed = false;
     private double bounceVelocity = 0;
-    private double flexibility = 0.6;
+    private double elasticity = 0.2;
     Text velocityText = new Text();
 
     private boolean windCollision = false;
@@ -112,19 +112,22 @@ public class Ball extends GraphicsObject {
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
-                    this.flexibility = 0.1;
-                    elementView.setEffect(getMetalSurface());
+                    this.elasticity = 0.1;
+                    elementView.setEffect(getDefaultBallSurface());
                     break;
                 case "Wood":
-                    this.flexibility = 0.2;
+                    this.elasticity = 0.2;
                     elementView.setEffect(getWoodSurface());
                     break;
                 case "Rubber":
-                    this.flexibility = 0.6;
+                    this.elasticity = 0.6;
                     elementView.setEffect(getRubberSurface());
                     break;
             }
-            setFriction(flexibility);
+            setFriction(elasticity);
+        }));
+        frictionProperty().addListener((observable -> {
+            this.elasticity = getFriction();
         }));
         // ein Ball kann nur proportional skaliert werden.
         xScaleProperty().bindBidirectional(yScaleProperty());
@@ -298,7 +301,7 @@ public class Ball extends GraphicsObject {
                 if (angleNew == 0) { // bei einer horizontalen Linie
                     if (Math.abs(getYVelocity() * time) > 2 && contact) { // wenn sich der Ball schnell genug auf die Linie zubewegt soll gesprungen werden
                         bounce = true;
-                        setYVelocity(-1 * getYVelocity() * flexibility);
+                        setYVelocity(-1 * getYVelocity() * elasticity);
                         bounce = false;
                     } else {
                         if (contact) { // sonst soll sich der Ball entlang der Linie bewegen
@@ -336,7 +339,7 @@ public class Ball extends GraphicsObject {
                             double bounceDirection = Math.sqrt(Math.pow(bounceDirectionX, 2) + Math.pow(bounceDirectionY, 2));
                             bounceDirectionX = 1 / bounceDirection * bounceDirectionX;
                             bounceDirectionY = 1 / bounceDirection * bounceDirectionY;
-                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity(), 2) + Math.pow(getYVelocity() * flexibility, 2));
+                            bounceVelocity = Math.sqrt(Math.pow(getXVelocity() * elasticity, 2) + Math.pow(getYVelocity() * elasticity, 2));
 
                             setXVelocity(bounceDirectionX * bounceVelocity);
                             setYVelocity(-1 * bounceDirectionY * bounceVelocity);
@@ -376,12 +379,12 @@ public class Ball extends GraphicsObject {
             calcAcceleration(contactAngle);
         }
         if (getXPosition() + radius() * getXScale() >= 1150 && (getXVelocity() > 0 && bounced || getXVelocity() + (getXAcceleration() + windX) * time > 0 && !bounced)) { // Kollision mit rechtem Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity() * flexibility);
+            setXVelocity(-1 * getXVelocity() * elasticity);
             setXPosition(1150 - radius() * getXScale());
             windX = 0;
 
         } else if (getXPosition() - radius() * getXScale() <= 0 && (getXVelocity() < 0 && bounced || getXVelocity() + (getXAcceleration() + windX) * time < 0 && !bounced)) { // Kollision mit linken Szenen-Rand kehrt die x-Geschwindigkeit um
-            setXVelocity(-1 * getXVelocity() * flexibility);
+            setXVelocity(-1 * getXVelocity() * elasticity);
             setXPosition(0 + radius() * getXScale());
             windX = 0;
         }
@@ -576,14 +579,14 @@ public class Ball extends GraphicsObject {
      */
     public void calcWind(Wind sceneWind) {
         if (sceneWind.getIsActivated()) {
-            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius
-            double dragCoefficient = 0.47; // für eine Kugel
-            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(), 3f / 2) * 100; // Umrechnung Bft(Beaufort) in cm/s
+            double airDensity = 1.2041 * Math.pow(10, -6); // kg/cm^3 bei 20 Grad Celsius. Willig, Hans-Peter, (2020). Luftdichte. Abgerufen von https://www.chemie-schule.de/KnowHow/Luftdichte [03.07.2020].
+            double dragCoefficient = 0.5; // für eine Kugel. Engineering ToolBox, (2004). Drag Coefficient. Abgerufen von https://www.engineeringtoolbox.com/drag-coefficient-d_627.html [03.07.2020].
+            double windVelocity = 0.8369 * Math.pow(sceneWind.getWindForce(), 3f / 2) * 100; // Umrechnung Bft(Beaufort) in cm/s. Siegmann, Hartmut, (2017). Windstärke und Beaufortskala. Abgerufen von https://www.aerodesign.de/aero/beaufort.htm [03.07.2020].
             this.windAngle = sceneWind.getWindDirection();
 
             double affectedArea = Math.PI * Math.pow(radius() * getXScale(), 2);
 
-            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2);
+            double dragForce = 0.5 * airDensity * dragCoefficient * affectedArea * Math.pow(windVelocity, 2); //Hall, Nancy, (2015). The Drag Equation. Abgerufen von https://www.grc.nasa.gov/www/k-12/airplane/drageq.html [03.07.2020].
 
             double windAcceleration = dragForce / getWeight();
 
@@ -679,14 +682,6 @@ public class Ball extends GraphicsObject {
      */
     public double detectAngle(double x1, double y1, double x2, double y2) {
         if (y1 == y2) return 0;
-        /*x1 = Math.abs(x1);
-        x2 = Math.abs(x2);
-        y1 = y1;
-        y2 = y2;*/
-         /*
-        double x = Math.sqrt(Math.pow(x2-x1,2));
-        double y = Math.sqrt(Math.pow(y2-y1,2));
-        */
 
         double x = x2 - x1;
         double y = y2 - y1;
@@ -755,12 +750,10 @@ public class Ball extends GraphicsObject {
      */
 
     private boolean intersecting(Ball ball2) {
-
-        double tolerance = 5;
+        double tolerance = 1;
         // der Abstand zwichen den Mittelpunkte ist kleiner als sie Summe der Radien (+ einem Toleranzwert)
         if (calculator.computeDistance(this.getXPosition(), this.getYPosition(), ball2.getXPosition(), ball2.getYPosition())
                 <= this.radius() + ball2.radius() + tolerance) {
-
             return true;
         } else return false;
     }
@@ -770,22 +763,22 @@ public class Ball extends GraphicsObject {
      *
      * @param vx_2    - x-Geschwindikeit des zweiten Objekts
      * @param vy_2    - y-Geschwindikeit des zweiten Objekts
-     * @param weigth2 - Gewicht des zweiten Objekts
+     * @param weight2 - Gewicht des zweiten Objekts
      * @return _ double[] mit vx1_neu, vy1_neu, vx2_neu, vx3_neu
      */
-    private double[] zentralerStoss(double vx_1, double vy_1, double weigth1, double vx_2, double vy_2, double weigth2) {
+    private double[] zentralerStoss(double vx_1, double vy_1, double weight1, double vx_2, double vy_2, double weight2) {
 
         double[] vnew = {0, 0, 0, 0};
         // Falls beide Objekte das gleiche Gewicht haben, werden die Geschwindigkeiten getauscht
-        if (weigth1 == weigth2) {
+        if (weight1 == weight2) {
             vnew[0] = vx_2;
             vnew[1] = vy_2;
             vnew[2] = vx_1;
             vnew[3] = vy_1;
         } else {
             // Berechnung gemäß der Formeln für den elastischen Stoß
-            double xFactor = (weigth1 * vx_1 + weigth2 * vx_2) / (weigth1 + weigth2);
-            double yFactor = (weigth1 * vy_1 + weigth2 * vy_2) / (weigth1 + weigth2);
+            double xFactor = (weight1 * vx_1 + weight2 * vx_2) / (weight1 + weight2);
+            double yFactor = (weight1 * vy_1 + weight2 * vy_2) / (weight1 + weight2);
 
             vnew[0] = 2 * xFactor - vx_1;
             vnew[1] = 2 * yFactor - vy_2;

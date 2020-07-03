@@ -9,8 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
-import javax.swing.event.ChangeListener;
-
 /**
  * Parentklasse aller Elemente in der Szene
  *
@@ -26,7 +24,6 @@ public abstract class GraphicsObject {
     private Lighting woodSurface, metalSurface, rubberSurface, defaultSurface, defaultBallSurface, woodSurfaceBlock, metalSurfaceBlock, rubberSurfaceBlock;
     protected ImageInput woodImage, metalImage, rubberImage, woodImageBlock, metalImageBlock, rubberImageBlock;
 
-
     // Werte für das Reset
     protected double  startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
 
@@ -41,7 +38,6 @@ public abstract class GraphicsObject {
     protected final BooleanProperty isSelected;
 
 
-
     public GraphicsObject(double initialX, double initialY) {
         //die Properties des GraphicsObject werden erzeugt
         this.xPosition = new SimpleDoubleProperty(this, "xPosition", initialX);
@@ -53,13 +49,13 @@ public abstract class GraphicsObject {
         this.xScale = new SimpleDoubleProperty(this, "xScale", 1.0);
         this.yScale = new SimpleDoubleProperty(this, "yScale", 1.0);
         this.weight = new SimpleDoubleProperty(this,"weight",0.0);
-        this.friction = new SimpleDoubleProperty(this, "friction", 0.6);
+        this.friction = new SimpleDoubleProperty(this, "friction", 0.2);
         this.angle = new SimpleDoubleProperty(this,"angle", 0.0);
         this.isSelected = new SimpleBooleanProperty(this, "isSelected", true);
         this.width = new SimpleDoubleProperty(this, "width", 0.0);
         this.height = new SimpleDoubleProperty(this, "height", 0.0);
         this.radius = new SimpleDoubleProperty(this, "radius", 0.0);
-        this.material = new SimpleStringProperty(this,"material","Rubber");
+        this.material = new SimpleStringProperty(this,"material","Wood");
 
         woodImage = new ImageInput(new Image("img/Patterns/wood.png",400,400,false,true));
         woodImage.setX(getXPosition()-50);
@@ -234,7 +230,7 @@ public abstract class GraphicsObject {
 
         defaultBallSurface = new Lighting(pointLight);
         defaultBallSurface.setSpecularExponent(5);
-        defaultBallSurface.setSurfaceScale(5);
+        defaultBallSurface.setSurfaceScale(10);
 
         metalSurface = new Lighting(pointLight);
         metalSurface.setSurfaceScale(5);
@@ -243,7 +239,7 @@ public abstract class GraphicsObject {
         metalSurface.setBumpInput(metalImage);
 
         rubberSurface = new Lighting(pointLight);
-        rubberSurface.setSurfaceScale(20);
+        rubberSurface.setSurfaceScale(5);
         rubberSurface.setSpecularExponent(5);
         rubberSurface.setContentInput(innerShadow);
         rubberSurface.setBumpInput(rubberImage);
