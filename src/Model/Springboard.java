@@ -130,7 +130,7 @@ public class Springboard extends Block
             // [m] Federweg
             s = (-1*(-weight*GRAVITY)+ Math.sqrt(Math.pow(weight*GRAVITY,2)-4*((0.5)*k*(-0.5)*weight*Math.pow(velocityY,2)))/(k));
 
-            System.out.println(s);
+            //System.out.println(s);
             //[N] Federkraft F = m * a  als: F = k * s
             double Fk = k * s;
 
