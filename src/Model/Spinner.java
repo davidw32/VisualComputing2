@@ -6,6 +6,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
+/**
+ * Modellierung eines motorgetriebenen Rotors
+ */
 public class Spinner extends GraphicsObject {
 
     private DoubleProperty rotationalSpeed;

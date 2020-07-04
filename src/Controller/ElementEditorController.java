@@ -15,15 +15,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
-
-import java.text.FieldPosition;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import static javafx.scene.paint.Color.rgb;
+/**
+ *  Der Controller für den Editor
+ *  Anzeige und Steuerung der Werte für ein ausgewähltes Element
+ */
 
 public class ElementEditorController {
 

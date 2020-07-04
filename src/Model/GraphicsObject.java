@@ -21,8 +21,8 @@ public abstract class GraphicsObject {
     protected double time = 0.01666;
     protected StringProperty material;
 
-    private Lighting woodSurface, metalSurface, rubberSurface, defaultSurface, defaultBallSurface, woodSurfaceBlock, metalSurfaceBlock, rubberSurfaceBlock;
-    protected ImageInput woodImage, metalImage, rubberImage, woodImageBlock, metalImageBlock, rubberImageBlock;
+    private Lighting woodSurface, rubberSurface, defaultSurface, defaultBallSurface, woodSurfaceBlock, rubberSurfaceBlock;
+    protected ImageInput woodImage,  rubberImage, woodImageBlock, rubberImageBlock;
 
     // Werte für das Reset
     protected double  startX, startY, startVelX, startVelY, startAccX, startAccY, startAngle, startScaleX, startScaleY, startWeight, startWidth, startHeight;
@@ -60,36 +60,26 @@ public abstract class GraphicsObject {
         woodImage = new ImageInput(new Image("img/Patterns/wood.png",400,400,false,true));
         woodImage.setX(getXPosition()-50);
         woodImage.setY(getYPosition()-50);
-        metalImage = new ImageInput(new Image("img/Patterns/metal.png",360,200,false,true));
-        metalImage.setX(getXPosition()-100);
-        metalImage.setY(getYPosition()-50);
         rubberImage = new ImageInput(new Image("img/Patterns/rubber.png",350,350,false, true));
         rubberImage.setX(getXPosition()-100);
         rubberImage.setY(getYPosition()-100);
         woodImageBlock = new ImageInput(new Image("img/Patterns/wood.png",1000,400,false,true));
         woodImageBlock.setX(getXPosition()-10);
         woodImageBlock.setY(getYPosition()-10);
-        metalImageBlock = new ImageInput(new Image("img/Patterns/metal.png",1000,200,false,true));
-        metalImageBlock.setX(getXPosition()-50);
-        metalImageBlock.setY(getYPosition()-50);
         rubberImageBlock = new ImageInput(new Image("img/Patterns/rubber.png",800,800,false, true));
         rubberImageBlock.setX(getXPosition()-10);
         rubberImageBlock.setY(getYPosition()-10);
 
         xPositionProperty().addListener(observable -> {
             woodImage.setX(getXPosition() - getWidth());
-            metalImage.setX(getXPosition() - getWidth());
             rubberImage.setX(getXPosition() - getWidth());
             woodImageBlock.setX(getXPosition() - 10);
-            metalImageBlock.setX(getXPosition() - 50);
             rubberImageBlock.setX(getXPosition() - 10);
         });
         yPositionProperty().addListener(observable -> {
             woodImage.setY(getYPosition() - getHeight());
-            metalImage.setY(getYPosition() - getHeight());
             rubberImage.setY(getYPosition() - getHeight());
             woodImageBlock.setY(getYPosition() - 10);
-            metalImageBlock.setY(getYPosition() - 50);
             rubberImageBlock.setY(getYPosition() - 10);
         });
         createSurfaces();
@@ -232,12 +222,6 @@ public abstract class GraphicsObject {
         defaultBallSurface.setSpecularExponent(5);
         defaultBallSurface.setSurfaceScale(10);
 
-        metalSurface = new Lighting(pointLight);
-        metalSurface.setSurfaceScale(5);
-        metalSurface.setSpecularExponent(5);
-        metalSurface.setContentInput(innerShadow);
-        metalSurface.setBumpInput(metalImage);
-
         rubberSurface = new Lighting(pointLight);
         rubberSurface.setSurfaceScale(5);
         rubberSurface.setSpecularExponent(5);
@@ -248,12 +232,6 @@ public abstract class GraphicsObject {
         woodSurface.setSurfaceScale(10);
         woodSurface.setSpecularExponent(5);
         woodSurface.setBumpInput(woodImage);
-
-        metalSurfaceBlock = new Lighting(distantLight);
-        metalSurfaceBlock.setSurfaceScale(5);
-        metalSurfaceBlock.setSpecularExponent(5);
-        metalSurfaceBlock.setContentInput(innerShadow);
-        metalSurfaceBlock.setBumpInput(metalImageBlock);
 
         rubberSurfaceBlock = new Lighting(distantLight);
         rubberSurfaceBlock.setSurfaceScale(10);
@@ -269,16 +247,11 @@ public abstract class GraphicsObject {
 
     }
     public Lighting getDefaultSurface(){ return defaultSurface;}
-    public Lighting getMetalSurface(){return metalSurface;}
+
     public Lighting getDefaultBallSurface(){ return defaultBallSurface;}
     public Lighting getRubberSurface(){return rubberSurface;}
     public Lighting getWoodSurface(){return woodSurface;}
-
-
     public Lighting getWoodSurfaceBlock() { return woodSurfaceBlock; }
-
-    public Lighting getMetalSurfaceBlock() { return metalSurfaceBlock; }
-
     public Lighting getRubberSurfaceBlock() { return rubberSurfaceBlock; }
 
     public void moveElement(){
