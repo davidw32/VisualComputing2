@@ -34,6 +34,8 @@ import java.util.Locale;
 public class ElementEditorController {
 
 
+    @FXML private Label degreeLabel;
+    @FXML private Label beaufortLabel;
     @FXML private Label labelRotate;
     @FXML private Label labelWeight;
     @FXML private Label labelMovement;
@@ -121,7 +123,9 @@ public class ElementEditorController {
         spinnerSlider.setDisable(true);
         spinnerSlider.setVisible(false);
         labelSpinner.setVisible(false);
-        windEditor.setOpacity(0.6);
+        windDirectionCircle.setOpacity(0.5);
+        degreeLabel.setOpacity(0.5);
+        beaufortLabel.setOpacity(0.5);
         windDirectionSlider.setDisable(true);
         windForceSlider.setDisable(true);
         textFieldElasticity.setVisible(false);
@@ -385,13 +389,17 @@ public class ElementEditorController {
     //schaltet den Wind an
     public void setOnWind(ActionEvent actionEvent) {
         if (checkBoxWind.isSelected()) {
-            windEditor.setOpacity(1.0);
+            windDirectionCircle.setOpacity(1.0);
+            degreeLabel.setOpacity(1.0);
+            beaufortLabel.setOpacity(1.0);
             windDirectionSlider.setDisable(false);
             windForceSlider.setDisable(false);
             graphicScene.getWind().setIsActivated(true);
 
         } else {
-            windEditor.setOpacity(0.6);
+            windDirectionCircle.setOpacity(0.5);
+            degreeLabel.setOpacity(0.5);
+            beaufortLabel.setOpacity(0.5);
             windForceSlider.setDisable(true);
             windDirectionSlider.setDisable(true);
             graphicScene.getWind().setIsActivated(false);

@@ -59,6 +59,16 @@ public class Block extends GraphicsObject {
             updateOutlines();
         });
 
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            xMiddle = getXPosition() + getWidth() / 2;
+            updateOutlines();
+        });
+
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            yMiddle = getYPosition() + getHeight() / 2;
+            updateOutlines();
+        });
+
         xScaleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
