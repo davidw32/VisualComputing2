@@ -21,7 +21,6 @@ public class StartScreenController {
 
     public void initialize() {
 
-        //System.out.println("Init StartScreenController");
     }
 
     /**
@@ -95,7 +94,6 @@ public class StartScreenController {
         graphicScene.getGraphicSceneController().getGraphicPane().setVisible(true);
         graphicScene.getOptionBarController().getOptionBar().setVisible(true);
         graphicScene.getPlayerController().getPlayer().setVisible(true);
-        System.out.println("Szene 1 geladen");
 
     }
 
@@ -109,7 +107,6 @@ public class StartScreenController {
         graphicScene.getGraphicSceneController().getGraphicPane().setVisible(true);
         graphicScene.getOptionBarController().getOptionBar().setVisible(true);
         graphicScene.getPlayerController().getPlayer().setVisible(true);
-        System.out.println("Szene 2 geladen");
     }
 
     public void setGraphicScene(GraphicScene myGraphicScene) {

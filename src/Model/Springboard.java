@@ -21,7 +21,6 @@ import static Helpers.Config.GRAVITY;
 public class Springboard extends Block
 {
 
-    private double acceleration = 0;
     private double startHeight;
     private boolean down = false;
     private boolean activated = false;
@@ -131,6 +130,11 @@ public class Springboard extends Block
                 activated = false;
                 down = false;
             }
+
+            this.initOutlines();
+            this.updateOutlines();
+            board.initOutlines();
+            board.updateOutlines();
         }
 
         /**
@@ -168,21 +172,17 @@ public class Springboard extends Block
                 {
                     setHeight(15);
                     ((Rectangle) elementView).setHeight(15);
-                    setYPosition(this.startY + startHeight);
+                    setYPosition(getYPosition() + difference);
                     board.setYPosition(getYPosition() - board.getHeight() );
-                    ball.setYPosition(board.getYPosition() - ball.getRadius());
+                    ball.setYPosition(board.getYPosition() - ball.getRadius() );
                     down = true;
                     setYVelocity(0);
-                    try
-                    {
-                  //      Thread.sleep(1000);
-                    }
-                    catch(Exception E){}
                 }
                 else if (getHeight() > startHeight - s && getYVelocity() > 0)
                 {
                     setYVelocity(getYVelocity() + getYAcceleration() * time);
-                    if(getYVelocity() < 0){
+                    if(getYVelocity() < 0)
+                    {
                         setYVelocity(0);
                     }
                     ((Rectangle) elementView).setHeight(getHeight() - difference);
@@ -192,7 +192,7 @@ public class Springboard extends Block
                 else
                 {
                     down = true;
-                    ball.setYPosition(board.getYPosition()-ball.getRadius());
+                    ball.setYPosition(board.getYPosition()-ball.getRadius() );
                     setYVelocity(0);
                 }
                 ball.setYVelocity(this.getYVelocity());
@@ -219,10 +219,6 @@ public class Springboard extends Block
                 }
 
             }
-            this.initOutlines();
-            this.updateOutlines();
-            board.initOutlines();
-            board.updateOutlines();
         }
 
     @Override

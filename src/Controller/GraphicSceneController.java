@@ -24,7 +24,6 @@ public class GraphicSceneController {
             public void handle(DragEvent event) {
                 if(event.getGestureSource() != graphicPane && event.getDragboard().hasString()){
                     event.acceptTransferModes(TransferMode.COPY);
-                    System.out.println("hi");
                 }
                 event.consume();
             }
@@ -34,7 +33,6 @@ public class GraphicSceneController {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                //System.out.println("Drag dropped: "+ db.getString());
                 boolean success = false;
                 if(db.hasString()){
 
@@ -60,6 +58,7 @@ public class GraphicSceneController {
                     if(db.getString().equals("springboardDummy")){
                         Springboard springboard = new Springboard(event.getX(),event.getY());
                         addListenersToObject(springboard);
+                        addListenersToObject(springboard.getBoard());
                         graphicScene.addElement(springboard);
                         graphicScene.addElement(springboard.getBoard());
                         graphicPane.getChildren().addAll(springboard.getElementView(),springboard.getBoard().getElementView());
