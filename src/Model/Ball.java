@@ -14,6 +14,10 @@ import java.util.Locale;
 import static Helpers.Config.GRAVITY;
 import static Helpers.Frictions.*;
 
+/**
+ * Modellierung der Klasse Ball
+ * zuständig für die Bewegung des Balls und die Kollision mit anderen Elementen
+ */
 public class Ball extends GraphicsObject {
 
     // private DoubleProperty radius;
@@ -882,6 +886,8 @@ public class Ball extends GraphicsObject {
                 // die neue Geschwindigkeit ergibte sich aus den veränderteren Anteilen + dem Tangentialan (unveränderten) Anteil
                 this.setXVelocity(vneu[0] + this.getXVelocity() - v1_z[0]);
                 this.setYVelocity(vneu[1] + this.getYVelocity() - v1_z[1]);
+                this.setXAcceleration(0);
+                this.setYAcceleration(0);
             }
 
         } else { // falls nicht die obere Kante getroffen wird, teste die restlichen Kanten auf Kollision

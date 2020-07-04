@@ -1,20 +1,16 @@
 package Model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+
+/**
+ * Datenobjekt für den Wind
+ */
 
 public class Wind {
-
-
 
     private double windForce, windDirection;
     private boolean isActivated;
 
-    public Wind(){
-
-    }
+    public Wind(){ }
 
 
     public void setWindForce(double windForce) {

@@ -6,6 +6,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+/**
+ * Modellierung Fester Objekte und Rampen der Kugelbahn
+ */
 public class Block extends GraphicsObject {
 
     private DoubleProperty width, height;
@@ -28,7 +31,7 @@ public class Block extends GraphicsObject {
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setStrokeWidth(3);
-        elementView.setEffect(getRubberSurfaceBlock());
+        elementView.setEffect(getWoodSurfaceBlock());
 
         // Bindings zwischen View und Objekt
         ((Rectangle) elementView).xProperty().bindBidirectional(xPositionProperty());
