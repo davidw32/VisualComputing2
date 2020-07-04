@@ -309,6 +309,9 @@ public class Ball extends GraphicsObject {
                             if (line instanceof Block.BlockLine) {
                                 this.collisionMaterial = ((Block.BlockLine) line).getParentBlock().getMaterial();
                             }
+                            else{
+                                this.collisionMaterial = "Wood";
+                            }
                         }
                     }
                 } else { // bei der schiefen Ebene
@@ -349,6 +352,9 @@ public class Ball extends GraphicsObject {
                             bounced = true;
                             if (line instanceof Block.BlockLine) {
                                 this.collisionMaterial = ((Block.BlockLine) line).getParentBlock().getMaterial();
+                            }
+                            else{
+                                this.collisionMaterial = "Wood";
                             }
                         }
                     }
@@ -1072,6 +1078,7 @@ public class Ball extends GraphicsObject {
         this.collision = false;
         this.bounce = false;
         this.slowed = false;
+        this.springboardCollision = false;
     }
 
     public void setSpringboardCollision(boolean springboardCollision) {
