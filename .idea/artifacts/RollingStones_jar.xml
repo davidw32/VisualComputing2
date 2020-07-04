@@ -12,7 +12,6 @@
       <element id="extracted-dir" path="C:/Program Files/AdoptOpenJDK/javafx-sdk-14.0.1/lib/javafx.swing.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/AdoptOpenJDK/javafx-sdk-14.0.1/lib/javafx.controls.jar" path-in-jar="/" />
       <element id="extracted-dir" path="C:/Program Files/AdoptOpenJDK/javafx-sdk-14.0.1/lib/javafx.graphics.jar" path-in-jar="/" />
-      <element id="library" level="project" name="lib" />
     </root>
   </artifact>
 </component>

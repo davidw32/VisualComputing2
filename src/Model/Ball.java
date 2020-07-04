@@ -59,7 +59,6 @@ public class Ball extends GraphicsObject {
         elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
-        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setEffect(getWoodSurface());
 
         directionLine = new Line();
@@ -117,14 +116,17 @@ public class Ball extends GraphicsObject {
             switch (getMaterial()) {
                 case "Metal":
                     this.elasticity = 0.1;
+                    elementView.setFill(Color.GREY);
                     elementView.setEffect(getDefaultBallSurface());
                     break;
                 case "Wood":
                     this.elasticity = 0.2;
+                    getElementView().setFill(Color.web("#b3661a"));
                     elementView.setEffect(getWoodSurface());
                     break;
                 case "Rubber":
                     this.elasticity = 0.6;
+                    elementView.setFill(Color.SEAGREEN);
                     elementView.setEffect(getRubberSurface());
                     break;
             }

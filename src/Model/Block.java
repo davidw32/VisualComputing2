@@ -27,9 +27,7 @@ public class Block extends GraphicsObject {
         setIsMoving(false);
         // Initialisierung der View
         elementView = new Rectangle(_initX, _initY, 150, 20);
-        elementView.setFill(Color.SEAGREEN);
         elementView.setStroke(Color.ORANGE);
-        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setStrokeWidth(3);
         elementView.setEffect(getWoodSurfaceBlock());
 
@@ -83,12 +81,15 @@ public class Block extends GraphicsObject {
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
+                    elementView.setFill(Color.GREY);
                     elementView.setEffect(getDefaultSurface());
                     break;
                 case "Wood":
+                    elementView.setFill(Color.web("#b3661a"));
                     elementView.setEffect(getWoodSurfaceBlock());
                     break;
                 case "Rubber":
+                    elementView.setFill(Color.SEAGREEN);
                     elementView.setEffect(getRubberSurfaceBlock());
                     break;
             }
@@ -163,7 +164,6 @@ public class Block extends GraphicsObject {
         if (getIsSelected()) {
 
             elementView.setStroke(Color.ORANGE);
-            elementView.setStrokeType(StrokeType.INSIDE);
             elementView.setStrokeWidth(3);
 
         } else elementView.setStroke(null);
