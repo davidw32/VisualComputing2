@@ -7,6 +7,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 import java.util.LinkedList;
 
@@ -26,6 +27,8 @@ public class Springboard extends Block
     private boolean activated = false;
     private double s = 0;
     private boolean collided = false;
+    private boolean boarddragged = false;
+    private boolean featherdragged = false;
 
     private ChangeListener changeX;
     private ChangeListener changeY;
@@ -36,9 +39,9 @@ public class Springboard extends Block
     {
         super(initialX, initialY);
 
-        elementView.setStroke(Color.BLUE);
         ((Rectangle)elementView).setHeight(100);
         ((Rectangle)elementView).setWidth(100);
+        ((Rectangle)elementView).setStroke(Color.TRANSPARENT);
         board = new Board(0,0,this);
         initOutlines();
         updateOutlines();
@@ -50,23 +53,34 @@ public class Springboard extends Block
         elementView.setFill(new ImagePattern(img));
 
         changeX = (observable, oldValue, newValue) -> {
-            if(oldValue != newValue )
+            featherdragged = true;
+            if(oldValue != newValue && !boarddragged )
             {
                 board.setXPosition(getXPosition() );
             }
+            featherdragged = false;
         };
 
         changeY = (observable, oldValue, newValue) -> {
-            if(oldValue != newValue )
+            featherdragged = true;
+            if(oldValue != newValue && !boarddragged )
             {
                 board.setYPosition(getYPosition() - board.getHeight() );
             }
+            featherdragged = false;
         };
 
         xPosition.addListener(changeX);
         yPosition.addListener(changeY);
 
+        //hier ändert sich die Farbe wenn das Objekt angeklickt wird
+        isSelectedProperty().addListener((observable, oldValue, newValue) -> {
+            setIsSelectedColor();
+            board.setIsSelectedColor();
+        });
+
     }
+
 
     /**
      * Hier werden die Bewegungne + Kollisione aussgeführt
@@ -150,15 +164,20 @@ public class Springboard extends Block
             double difference = ball.getYPosition()+ball.radius() - board.getYPosition();
             if(!down)
             {
-                if(getHeight() <= 0)
+                if(getHeight() <= 15)
                 {
-                    setHeight(0);
-                    ((Rectangle) elementView).setHeight(0);
+                    setHeight(15);
+                    ((Rectangle) elementView).setHeight(15);
                     setYPosition(this.startY + startHeight);
                     board.setYPosition(getYPosition() - board.getHeight() );
                     ball.setYPosition(board.getYPosition() - ball.getRadius());
                     down = true;
                     setYVelocity(0);
+                    try
+                    {
+                  //      Thread.sleep(1000);
+                    }
+                    catch(Exception E){}
                 }
                 else if (getHeight() > startHeight - s && getYVelocity() > 0)
                 {
@@ -221,6 +240,7 @@ public class Springboard extends Block
 
 
 
+
     /**
      * Klasse des Brettes des Springboards
      * Dadurch kann gezielter beide Teile des Springboards bei Kollisionen verglichen werden
@@ -229,6 +249,10 @@ public class Springboard extends Block
     {
 
         private Springboard parentSpringboard;
+
+        private ChangeListener changeXBoard;
+        private ChangeListener changeYBoard;
+
 
         public Board(double x,double y,Springboard springboard)
         {
@@ -241,6 +265,33 @@ public class Springboard extends Block
             setXPosition(springboard.getXPosition());
             setYPosition(springboard.getYPosition() - getHeight() );
             parentSpringboard = springboard;
+
+            changeXBoard = (observable, oldValue, newValue) -> {
+                boarddragged = true;
+                if(oldValue != newValue && !featherdragged)
+                {
+                    parentSpringboard.setXPosition(getXPosition() );
+                }
+                boarddragged = false;
+            };
+
+            changeYBoard = (observable, oldValue, newValue) -> {
+                boarddragged = true;
+                if(oldValue != newValue && !featherdragged)
+                {
+                    parentSpringboard.setYPosition(getYPosition() + getHeight() );
+                }
+                boarddragged = false;
+            };
+
+            xPosition.addListener(changeXBoard);
+            yPosition.addListener(changeYBoard);
+
+            //hier ändert sich die Farbe wenn das Objekt angeklickt wird
+            isSelectedProperty().addListener((observable, oldValue, newValue) -> {
+                setIsSelectedColor();
+                parentSpringboard.setIsSelectedColor();
+            });
         }
 
         public Springboard getParentSpringboard() { return parentSpringboard; }

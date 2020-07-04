@@ -13,8 +13,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.util.StringConverter;
 import javafx.util.converter.NumberStringConverter;
+
+import javax.swing.text.html.ImageView;
+import java.text.FieldPosition;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -42,6 +49,8 @@ public class ElementEditorController {
     private Slider flexibilitySlider;
     @FXML
     private VBox windEditor;
+    @FXML
+    private Circle windDirectionCircle;
     @FXML
     private CheckBox checkBoxWind;
     @FXML
@@ -117,7 +126,10 @@ public class ElementEditorController {
         windForceSlider.setDisable(true);
         textFieldElasticity.setVisible(false);
 
-        windDirectionSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindDirection((Double) newValue)));
+        windDirectionSlider.valueProperty().addListener(((observable, oldValue, newValue) ->{
+            graphicScene.getWind().setWindDirection((Double) newValue);
+            windDirectionCircle.setRotate((Double)newValue);
+        } ));
         windForceSlider.valueProperty().addListener(((observable, oldValue, newValue) -> graphicScene.getWind().setWindForce((Double) newValue)));
 
         //Converter für die Textfelder

@@ -28,6 +28,7 @@ public class GraphicSceneController {
             public void handle(DragEvent event) {
                 if(event.getGestureSource() != graphicPane && event.getDragboard().hasString()){
                     event.acceptTransferModes(TransferMode.COPY);
+                    System.out.println("hi");
                 }
                 event.consume();
             }
@@ -103,7 +104,8 @@ public class GraphicSceneController {
      *
      * @param _graphicsObject
      */
-    public void addListenersToObject(GraphicsObject _graphicsObject){
+    public void addListenersToObject(GraphicsObject _graphicsObject)
+    {
         _graphicsObject.getElementView().addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
                     //Element als Actives Element definieren
                     graphicScene.setActiveElement(_graphicsObject);

@@ -5,6 +5,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 /**
  * Die Main Klasse für unser Programm
  */
@@ -30,9 +32,9 @@ public class Main extends Application {
     public void init() throws Exception {
         super.init();
 
-        mainPane = (BorderPane)initFXML(mainPaneLoader,"./View/mainView.fxml", mainPane);
+        mainPane = (BorderPane)initFXML(mainPaneLoader,"View/mainView.fxml", mainPane);
         mainScene = new Scene(mainPane,1700,980);
-        initCSS(mainScene,"./css/style.css");
+        initCSS(mainScene,"css/style.css");
     }
 
     @Override
@@ -58,7 +60,7 @@ public class Main extends Application {
     {
         try
         {
-            pane = loader.load(getClass().getResource("./View/mainView.fxml"));
+            pane = loader.load(getClass().getClassLoader().getResourceAsStream(fxmlPath));
         }
         catch(Exception e)
         {

@@ -145,12 +145,11 @@ public class GraphicScene {
      * die Listener vom Vorgänger müssen entfernt und auf das neue Objekt gesetzt werden.
      * @param _graphicsObject - das per Mausklick ausgewählte Element
      */
-    public final void setActiveElement(GraphicsObject _graphicsObject) {
-
+    public final void setActiveElement(GraphicsObject _graphicsObject)
+    {
         this.getActiveElement().setIsSelected(false);
         _graphicsObject.setIsSelected(true);
         this.activeElement.set(_graphicsObject);
-        //System.out.println("GraphicScene setActiveElement");
 
     }
 
