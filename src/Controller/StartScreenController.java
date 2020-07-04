@@ -59,6 +59,7 @@ public class StartScreenController {
         ball4.setRadius(25);
         ball4.setMaterial("Metal");
         ball4.setIsSelected(false);
+        ball4.getElementView().setFill(Color.GREY);
         ball4.setWeight(1);
         Block block1 = new Block(30, 190);
         block1.setWidth(150);
@@ -84,12 +85,14 @@ public class StartScreenController {
         block4.setAngle(0);
         block4.setMaterial("Metal");
         block4.setIsSelected(false);
+        block4.getElementView().setFill(Color.GREY);
         Block block5 = new Block(180, 301);
-        block5.setWidth(440);
+        block5.setWidth(420);
         block5.setHeight(20);
         block5.setAngle(0);
         block5.setMaterial("Wood");
         block5.setIsSelected(false);
+        block5.getElementView().setFill(Color.web("#b3661a"));
         Block block6 = new Block(180, 390);
         block6.setWidth(340);
         block6.setHeight(20);
@@ -102,18 +105,21 @@ public class StartScreenController {
         block7.setAngle(-15);
         block7.setMaterial("Wood");
         block7.setIsSelected(false);
+        block7.getElementView().setFill(Color.web("#b3661a"));
         Block block8 = new Block(1035, 440);
         block8.setWidth(30);
         block8.setHeight(20);
         block8.setAngle(-20);
         block8.setMaterial("Wood");
         block8.setIsSelected(false);
+        block8.getElementView().setFill(Color.web("#b3661a"));
         Block block9 = new Block(1037, 698);
         block9.setWidth(100);
         block9.setHeight(20);
         block9.setAngle(-30);
         block9.setMaterial("Wood");
         block9.setIsSelected(false);
+        block9.getElementView().setFill(Color.web("#b3661a"));
         Spinner spinner1 = new Spinner(741, 92);
         spinner1.setRotationalSpeed(-2);
         spinner1.setIsSelected(false);
@@ -122,6 +128,7 @@ public class StartScreenController {
         Seesaw seesaw2 = new Seesaw(-1, 707);
         seesaw2.setIsSelected(false);
         Springboard springboard = new Springboard(865, 610);
+        springboard.getBoard().getElementView().setFill(Color.web("#b3661a"));
 
         elementsInScene1.add(ball1);
         elementsInScene1.add(ball2);
