@@ -60,7 +60,7 @@ public class Ball extends GraphicsObject {
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeType(StrokeType.INSIDE);
-        elementView.setEffect(getRubberSurface());
+        elementView.setEffect(getWoodSurface());
 
         directionLine = new Line();
         directionLine.setStrokeWidth(3);
