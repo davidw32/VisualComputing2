@@ -126,7 +126,7 @@ public class Ball extends GraphicsObject {
                     break;
                 case "Rubber":
                     this.elasticity = 0.6;
-                    elementView.setFill(Color.SEAGREEN);
+                    elementView.setFill(Color.web("#dda0dd"));
                     elementView.setEffect(getRubberSurface());
                     break;
             }
