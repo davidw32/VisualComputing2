@@ -1,21 +1,16 @@
 <component name="libraryTable">
   <library name="lib">
     <CLASSES>
-      <root url="file:///Library/javafx-sdk-14/lib" />
+      <root url="file://$USER_HOME$/iCloud Drive (Archiv) - 1/Desktop/Schreibtisch - Leilas MacBook Pro/schreibtisch/java/javafx-sdk-14/lib" />
     </CLASSES>
     <JAVADOC />
     <NATIVE>
-      <root url="file:///Library/javafx-sdk-14/lib" />
+      <root url="file://$USER_HOME$/iCloud Drive (Archiv) - 1/Desktop/Schreibtisch - Leilas MacBook Pro/schreibtisch/java/javafx-sdk-14/lib" />
     </NATIVE>
     <SOURCES>
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.base" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.controls" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.fxml" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.graphics" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.media" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.swing" />
-      <root url="file:///Library/javafx-sdk-14/lib/src/javafx.web" />
+      <root url="file://$USER_HOME$/iCloud Drive (Archiv) - 1/Desktop/Schreibtisch - Leilas MacBook Pro/schreibtisch/java/javafx-sdk-14/lib" />
     </SOURCES>
-    <jarDirectory url="file:///Library/javafx-sdk-14/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/iCloud Drive (Archiv) - 1/Desktop/Schreibtisch - Leilas MacBook Pro/schreibtisch/java/javafx-sdk-14/lib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/iCloud Drive (Archiv) - 1/Desktop/Schreibtisch - Leilas MacBook Pro/schreibtisch/java/javafx-sdk-14/lib" recursive="false" type="SOURCES" />
   </library>
 </component>
