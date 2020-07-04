@@ -56,7 +56,7 @@ public class Ball extends GraphicsObject {
         setWidth(2 * getRadius());
         setHeight(2 * getRadius());
 
-        elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.PLUM);
+        elementView = new Circle(getXPosition(), getYPosition(), radius(), Color.web("#b3661a"));
         elementView.setStrokeWidth(3);
         elementView.setStroke(Color.ORANGE);
         elementView.setEffect(getWoodSurface());

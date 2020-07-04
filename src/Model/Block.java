@@ -30,6 +30,7 @@ public class Block extends GraphicsObject {
         elementView.setStroke(Color.ORANGE);
         elementView.setStrokeWidth(3);
         elementView.setEffect(getWoodSurfaceBlock());
+        elementView.setFill(Color.web("#b3661a"));
 
         // Bindings zwischen View und Objekt
         ((Rectangle) elementView).xProperty().bindBidirectional(xPositionProperty());
