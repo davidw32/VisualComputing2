@@ -218,7 +218,7 @@ public class StartScreenController {
         block3.getElementView().setFill(Color.web("#b3661a"));
         block3.setIsSelected(false);
 
-        Block block4 = new Block(450, 664);
+        Block block4 = new Block(450, 650);
         block4.setWidth(300);
         block4.setMaterial("Wood");
         block4.getElementView().setFill(Color.web("#b3661a"));
