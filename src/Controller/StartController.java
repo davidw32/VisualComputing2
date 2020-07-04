@@ -4,6 +4,9 @@ import Model.GraphicScene;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
+/**
+ * Start und Initialisierung des Programms
+ */
 public class StartController {
 
     @FXML ElementBarController elementBarController;

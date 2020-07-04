@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
- * @author Patrick Pavlenko,Pamela Trowe
- * Globale Klasse, welche über mehrere Klassen gepassed wird,um essenzielle
- * Werte / Objekte zuzugreifen zu können
+ * Schnittstelle zwischen der Gui und Datenklassen der Simulation
  */
 public class GraphicScene {
 

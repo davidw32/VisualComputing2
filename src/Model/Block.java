@@ -6,6 +6,9 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+/**
+ * Modellierung Fester Objekte und Rampen der Kugelbahn
+ */
 public class Block extends GraphicsObject {
 
     private DoubleProperty width, height;
@@ -24,11 +27,10 @@ public class Block extends GraphicsObject {
         setIsMoving(false);
         // Initialisierung der View
         elementView = new Rectangle(_initX, _initY, 150, 20);
-        elementView.setFill(Color.SEAGREEN);
         elementView.setStroke(Color.ORANGE);
-        elementView.setStrokeType(StrokeType.INSIDE);
         elementView.setStrokeWidth(3);
-        elementView.setEffect(getRubberSurfaceBlock());
+        elementView.setEffect(getWoodSurfaceBlock());
+        elementView.setFill(Color.web("#b3661a"));
 
         // Bindings zwischen View und Objekt
         ((Rectangle) elementView).xProperty().bindBidirectional(xPositionProperty());
@@ -56,6 +58,16 @@ public class Block extends GraphicsObject {
             updateOutlines();
         });
 
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            xMiddle = getXPosition() + getWidth() / 2;
+            updateOutlines();
+        });
+
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            yMiddle = getYPosition() + getHeight() / 2;
+            updateOutlines();
+        });
+
         xScaleProperty().addListener((observable, oldValue, newValue) -> {
             updateOutlines();
         });
@@ -70,12 +82,15 @@ public class Block extends GraphicsObject {
         materialProperty().addListener((observable -> {
             switch (getMaterial()) {
                 case "Metal":
+                    elementView.setFill(Color.GREY);
                     elementView.setEffect(getDefaultSurface());
                     break;
                 case "Wood":
+                    elementView.setFill(Color.web("#b3661a"));
                     elementView.setEffect(getWoodSurfaceBlock());
                     break;
                 case "Rubber":
+                    elementView.setFill(Color.SEAGREEN);
                     elementView.setEffect(getRubberSurfaceBlock());
                     break;
             }
@@ -150,7 +165,6 @@ public class Block extends GraphicsObject {
         if (getIsSelected()) {
 
             elementView.setStroke(Color.ORANGE);
-            elementView.setStrokeType(StrokeType.INSIDE);
             elementView.setStrokeWidth(3);
 
         } else elementView.setStroke(null);

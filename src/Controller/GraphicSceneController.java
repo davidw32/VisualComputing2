@@ -7,7 +7,11 @@ import javafx.scene.Cursor;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 
-
+/**
+ * Steuerung der Elemente in der Szene,
+ * Einfügen und Verschieben der Element,
+ * Grafische Anzeige der Simulation
+ */
 public class GraphicSceneController {
     @FXML
     private Pane graphicPane;
