@@ -37,8 +37,8 @@ public class PlayerController {
 
     public void initialize(){
         //System.out.println("Init PlayerController");
-        pauseI = new Image(getClass().getResourceAsStream("../img/Icons/Pause.png"));
-        playI = new Image(getClass().getResourceAsStream("../img/Icons/Play.png"));
+        pauseI = new Image(getClass().getResourceAsStream("/img/Icons/Pause.png"));
+        playI = new Image(getClass().getResourceAsStream("/img/Icons/Play.png"));
         playPauseIcon.setImage(playI);
     }
 
