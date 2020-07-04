@@ -16,8 +16,7 @@ import javafx.scene.control.Label;
 import javafx.util.Duration;
 
 /**
- * @author Patrick Pavlenko,Pamela Trowe
- * Zustaendig fuer Bereich wo die Animation gesteuert wird (starten,pausieren..etc)
+ * Zustaendig fuer die Steuerung der Animation
  */
 public class PlayerController {
 

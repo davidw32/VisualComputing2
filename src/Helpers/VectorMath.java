@@ -1,5 +1,8 @@
 package Helpers;
 
+/**
+ * für die zweidimensionale Vektorrechnung
+ */
 public class VectorMath {
 
     /**

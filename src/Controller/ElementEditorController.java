@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,7 +26,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Locale;
 
-import static javafx.scene.paint.Color.rgb;
+/**
+ *  Der Controller für den Editor
+ *  Anzeige und Steuerung der Werte für ein ausgewähltes Element
+ */
 
 public class ElementEditorController {
 

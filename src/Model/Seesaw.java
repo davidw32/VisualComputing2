@@ -6,7 +6,9 @@ import javafx.scene.shape.*;
 
 import static Helpers.Config.GRAVITY;
 
-
+/**
+ * Modellierung einer Wippe / zweiseitigen Hebels
+ */
 public class Seesaw extends GraphicsObject {
 
     private double heightOfRectangle, lengthOfRectangle, heightOfTriangle, alpha, pivotX, pivotY, omega;

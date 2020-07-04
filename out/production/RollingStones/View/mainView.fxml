@@ -13,29 +13,31 @@
 
                 <fx:include BorderPane.alignment="CENTER_LEFT" fx:id="elementEditor" source="elementEditorView.fxml"></fx:include>
 
+
+
     </right>
 
     <center>
         <StackPane>
             <children>
-                <fx:include BorderPane.alignment="CENTER" fx:id="startScreen" source="../View/startScreenView.fxml"></fx:include>
-                <fx:include BorderPane.alignment="CENTER" fx:id="graphicScene" source="../View/graphicSceneView.fxml"></fx:include>
+                <fx:include fx:id="startScreen" source="../View/startScreenView.fxml"></fx:include>
+                <fx:include fx:id="graphicScene" source="../View/graphicSceneView.fxml"></fx:include>
             </children>
         </StackPane>
     </center>
 
     <left>
 
-        <fx:include BorderPane.alignment="CENTER" fx:id="elementBar" source="../View/elementBarView.fxml"></fx:include>
+        <fx:include fx:id="elementBar" source="../View/elementBarView.fxml"></fx:include>
 
 
     </left>
 
     <top>
-        <fx:include BorderPane.alignment="CENTER" fx:id="optionBar" source="../View/optionBarView.fxml"></fx:include>
+        <fx:include fx:id="optionBar" source="../View/optionBarView.fxml"></fx:include>
     </top>
 
     <bottom>
-        <fx:include BorderPane.alignment="CENTER" fx:id="player" source="../View/playerView.fxml"></fx:include>
+        <fx:include fx:id="player" source="../View/playerView.fxml"></fx:include>
     </bottom>
 </BorderPane>
