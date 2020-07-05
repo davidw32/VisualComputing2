@@ -67,7 +67,6 @@ public class OptionBarController {
 
     @FXML
     public void closeApplication(ActionEvent actionEvent) {
-        System.out.println("Auf Wiedersehen!");
         eventType = "close";
         showWarning();
     }
@@ -78,7 +77,6 @@ public class OptionBarController {
     @FXML
     public void copyObject(ActionEvent actionEvent) {
         // clone() funktionert nicht mit den ganzen Listenern
-        System.out.println("Aktives Element kopiert");
         GraphicsObject copy = null;
         GraphicsObject active = graphicScene.getActiveElement();
 
@@ -152,7 +150,6 @@ public class OptionBarController {
     {
         //System.out.println("lösche das aktive Element, setze den Platzhaler als neues Aktives Element");
         graphicScene.deleteActiveElement();
-        System.out.println("Aktives Element gelöscht!");
     }
 
     //Die Menu_Items von Options
