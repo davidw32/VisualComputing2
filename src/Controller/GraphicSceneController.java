@@ -37,7 +37,6 @@ public class GraphicSceneController {
             @Override
             public void handle(DragEvent event) {
                 Dragboard db = event.getDragboard();
-                //System.out.println("Drag dropped: "+ db.getString());
                 boolean success = false;
                 if(db.hasString()){
 

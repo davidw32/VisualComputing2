@@ -45,7 +45,7 @@ public class OptionBarController {
     public void initialize()
     {
        // System.out.println("Init OptionBarController");
-        text.setStyle("-fx-font-size: 20");
+        text.setStyle("-fx-font-size: 14");
     }
 
 
@@ -67,7 +67,6 @@ public class OptionBarController {
 
     @FXML
     public void closeApplication(ActionEvent actionEvent) {
-        System.out.println("Auf Wiedersehen!");
         eventType = "close";
         showWarning();
     }
@@ -78,7 +77,6 @@ public class OptionBarController {
     @FXML
     public void copyObject(ActionEvent actionEvent) {
         // clone() funktionert nicht mit den ganzen Listenern
-        System.out.println("Aktives Element kopiert");
         GraphicsObject copy = null;
         GraphicsObject active = graphicScene.getActiveElement();
 
@@ -152,7 +150,6 @@ public class OptionBarController {
     {
         //System.out.println("lösche das aktive Element, setze den Platzhaler als neues Aktives Element");
         graphicScene.deleteActiveElement();
-        System.out.println("Aktives Element gelöscht!");
     }
 
     //Die Menu_Items von Options
@@ -182,6 +179,8 @@ public class OptionBarController {
 
     private void showWarning()
     {
+
+        graphicScene.getPlayerController().stopSimulation();
 
         VBox Vbox_Modal = new VBox();
         Vbox_Modal.setAlignment(Pos.CENTER);
@@ -213,6 +212,19 @@ public class OptionBarController {
             warningWindow.hide();
         });
 
+        if(eventType.equals("clear"))
+        {
+            text.setText("Do you really want to clear the scene?");
+        }
+        else if(eventType.equals("close"))
+        {
+            text.setText("Do you really want to exit the program?");
+        }
+        else if(eventType.equals("open"))
+        {
+            text.setText("Do you really want to open another scene?");
+        }
+
         continue_btn.setOnMouseClicked(e ->
         {
             if(eventType.equals("clear"))
@@ -222,15 +234,16 @@ public class OptionBarController {
             }
             else if(eventType.equals("close"))
             {
-                System.exit(0);
                 warningWindow.hide();
+                System.exit(0);
+
             }
             else if(eventType.equals("open"))
             {
+                graphicScene.getPlayerController().resetSimulation();
                 graphicScene.clearScene();
                 graphicScene.getStartController().showStartScreen();
                 warningWindow.hide();
-
             }
         });
 

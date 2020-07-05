@@ -51,7 +51,15 @@ public class SceneTime
         }
         milSecond += 16.66;
 
-        if(minute == 0)
+        if(minute == 0 && second < 10)
+        {
+            text.setText("0" + Integer.toString((int)minute) + ":" + "0" + Integer.toString((int)second) + ":" + Integer.toString((int)milSecond));
+        }
+        else if(second < 10)
+        {
+            text.setText(Integer.toString((int)minute) + ":" + "0" + Integer.toString((int)second) + ":" + Integer.toString((int)milSecond));
+        }
+        else if(minute == 0)
         {
             text.setText("0" + Integer.toString((int)minute) + ":" + Integer.toString((int)second) + ":" + Integer.toString((int)milSecond));
         }

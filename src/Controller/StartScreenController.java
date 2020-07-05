@@ -21,7 +21,6 @@ public class StartScreenController {
 
     public void initialize() {
 
-        //System.out.println("Init StartScreenController");
     }
 
     /**
@@ -47,11 +46,11 @@ public class StartScreenController {
         ball1.setRadius(25);
         ball1.setIsSelected(true);
         ball1.setMaterial("Rubber");
-        Ball ball2 = new Ball(55, 246);
+        Ball ball2 = new Ball(55, 245);
         ball2.setRadius(25);
         ball2.setMaterial("Rubber");
         ball2.setIsSelected(false);
-        Ball ball3 = new Ball(55, 334);
+        Ball ball3 = new Ball(55, 336);
         ball3.setRadius(25);
         ball3.setMaterial("Rubber");
         ball3.setIsSelected(false);
@@ -187,7 +186,6 @@ public class StartScreenController {
         graphicScene.getGraphicSceneController().getGraphicPane().setVisible(true);
         graphicScene.getOptionBarController().getOptionBar().setVisible(true);
         graphicScene.getPlayerController().getPlayer().setVisible(true);
-        System.out.println("Szene 1 geladen");
 
     }
 
@@ -285,7 +283,6 @@ public class StartScreenController {
         graphicScene.getGraphicSceneController().getGraphicPane().setVisible(true);
         graphicScene.getOptionBarController().getOptionBar().setVisible(true);
         graphicScene.getPlayerController().getPlayer().setVisible(true);
-        System.out.println("Szene 2 geladen");
     }
 
     public void setGraphicScene(GraphicScene myGraphicScene) {
