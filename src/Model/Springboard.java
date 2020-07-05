@@ -139,14 +139,14 @@ public class Springboard extends Block
 
         /**
          * @param velocityY Geschwindigkeit der Y-Achse
-         * @param weight gewicht
-         *
+         * @param weight Gewicht des Ball
          * @return
          */
         public double energy(double velocityY,double weight)
         {
             // [N/m] Federkonstante
             double k = 2.7;
+
             // [m] Federweg
             s = (-1*(-weight*GRAVITY)+ Math.sqrt(Math.pow(weight*GRAVITY,2)-4*((0.5)*k*(-0.5)*weight*Math.pow(velocityY,2)))/(k));
 
