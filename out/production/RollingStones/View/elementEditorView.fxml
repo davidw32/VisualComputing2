@@ -45,9 +45,9 @@
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
-            <RowConstraints maxHeight="57.0" minHeight="21.0" prefHeight="57.0" />
-            <RowConstraints maxHeight="196.0" minHeight="160.0" prefHeight="160.0" />
-            <RowConstraints maxHeight="0.0" minHeight="0.0" prefHeight="0.0" />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
             <RowConstraints />
             <RowConstraints />
             <RowConstraints />
@@ -96,13 +96,14 @@
             <Label fx:id ="labelAcceleration" text="Acceleration" GridPane.rowIndex="14" />
             <TextField fx:id="textFieldAccelerationX" prefHeight="27.0" minWidth="80.0"  maxWidth="95" text="0.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
             <TextField fx:id="textFieldAccelerationY" prefHeight="27.0" minWidth="80.0"  maxWidth="95" text="0.0" GridPane.columnIndex="2" GridPane.rowIndex="14" />
-            <VBox prefHeight="52.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="15">
+            <Label fx:id="infoLabel" GridPane.columnSpan="3" GridPane.rowIndex="15" />
+            <VBox prefHeight="52.0" prefWidth="331.0" GridPane.columnSpan="3" GridPane.rowIndex="16">
                 <children>
                     <Label fx:id ="labelSpinner" prefHeight="17.0" text="Rotational Speed" />
                     <Slider fx:id="spinnerSlider" majorTickUnit="1" max="3.0" maxWidth="326.0" min="-3.0" minorTickCount="0" prefHeight="38.0" prefWidth="326.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                 </children>
             </VBox>
-            <VBox fx:id="windEditor" prefHeight="148.0" maxWidth="350" minWidth="250" GridPane.columnSpan="3" GridPane.rowIndex="16">
+            <VBox fx:id="windEditor" prefHeight="148.0" maxWidth="350" minWidth="250" GridPane.columnSpan="3" GridPane.rowIndex="17">
                 <children>
                     <CheckBox fx:id="checkBoxWind" mnemonicParsing="false" onAction="#setOnWind" prefHeight="34.0" prefWidth="157.0" text="Wind" />
                     <Circle fx:id="windDirectionCircle" radius="20" stroke="black">
@@ -114,13 +115,13 @@
                             </ImagePattern>
                         </fill>
                     </Circle>
-                            <Label fx:id ="degreeLabel" prefHeight="17.0" text="Degree" />
-                            <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="359" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
-                            <Label fx:id ="beaufortLabel" prefHeight="17.0" text="Beaufort Scale" />
-                            <Slider fx:id="windForceSlider" majorTickUnit="1.0" max="12.0" minorTickCount="0" prefHeight="38.0" prefWidth="278.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+                    <Label fx:id ="degreeLabel" prefHeight="17.0" text="Degree" />
+                    <Slider fx:id="windDirectionSlider" majorTickUnit="45.0" max="359" minorTickCount="2" prefHeight="38.0" prefWidth="282.0" showTickLabels="true" showTickMarks="true" />
+                    <Label fx:id ="beaufortLabel" prefHeight="17.0" text="Beaufort Scale" />
+                    <Slider fx:id="windForceSlider" majorTickUnit="1.0" max="12.0" minorTickCount="0" prefHeight="38.0" prefWidth="278.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
                 </children>
             </VBox>
-            <Label fx:id="infoLabel" GridPane.columnSpan="3" GridPane.rowIndex="14" />
+
 
         </children>
         <StackPane.margin>
@@ -176,3 +177,4 @@ You can also pause the simulation or play it in slow motion or time-lapse which 
 
 
 </StackPane>
+
