@@ -129,6 +129,8 @@
 
 .text-field.error {
   -fx-text-box-border: red ;
+  -fx-text-fill: red;
+  -fx-background-color: #fae8e8;
   -fx-focus-color: red ;
 }
 
